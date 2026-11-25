@@ -121,6 +121,30 @@ function setGameActionsEnabled(enabled) {
 }`;
         html = html.replace(oldHydrate, newHydrate);
       }
+      // Surface browser-side startup failures instead of leaving the connection label stuck.
+      const startupProbe = `<script>
+      (function(){
+        function showStartupError(message){
+          var el=document.getElementById('connectionStatus');
+          if(!el)return;
+          el.className='connection-status error';
+          el.innerHTML='<b>Ошибка запуска игры</b>'+String(message||'Неизвестная ошибка').slice(0,500);
+        }
+        window.addEventListener('error',function(e){showStartupError((e.message||'JavaScript error')+' ('+(e.filename||'')+':'+(e.lineno||0)+')');});
+        window.addEventListener('unhandledrejection',function(e){var r=e.reason;showStartupError('Необработанная ошибка: '+(r&&r.message||r||'Promise rejection'));});
+        setTimeout(function(){
+          var el=document.getElementById('connectionStatus');
+          if(el && el.textContent.indexOf('Проверка подключения')!==-1){
+            showStartupError('Скрипт игры не запустил проверку сервера. Возможна ошибка при запуске JavaScript.');
+          }
+        },5000);
+      })();
+      <\/script>`;
+      if (!html.includes('id="connectionStatus"')) {
+        html = html.replace('</body>', startupProbe + '</body>');
+      } else {
+        html = html.replace('</body>', startupProbe + '</body>');
+      }
       // Add a bounded wait to the current HTML hydration request, even when the asset
       // already contains its own connection-status UI.
       const oldStateFetch = "  const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});\n  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));";
