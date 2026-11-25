@@ -162,7 +162,7 @@ function renderFeaturePanels(){
  const products=f.products||[],owned=f.cosmetics||[],catalog=document.getElementById('starsCatalog');
  const icons={starter_bundle:'🎁',plate_neon:'💠',effect_aurora:'🌌',theme_royal:'👑',vip_week:'💎'};
  if(catalog)catalog.innerHTML=products.map(p=>{const has=p.cosmetic&&owned.includes(p.cosmetic);return '<article class="shop-product '+(has?'owned':'')+'"><div class="emoji">'+(icons[p.id]||'✨')+'</div><div><b>'+p.title+'</b><div class="sub">'+p.description+'</div><div class="asset-price">'+p.stars+' ★</div></div><button class="btn '+(has?'secondary':'gold')+'" data-buy-stars="'+p.id+'" '+(has?'disabled':'')+'>'+(has?'Уже куплено':'Купить за '+p.stars+' ★')+'</button></article>'}).join('');
- const collection=document.getElementById('cosmeticsCollection');if(collection)collection.innerHTML=owned.length?owned.map(x=>'<span class="pill" style="display:inline-block;margin:4px">'+(icons[x]||'✨')+' '+x+'</span>').join(''):'<div class="sub">Пока нет косметических предметов.</div>';
+ const collection=document.getElementById('cosmeticsCollection');if(collection)collection.innerHTML=owned.length?owned.map(x=>'<div class="listrow"><span>'+(icons[x]||'✨')+' '+x+'</span><button class="btn secondary" data-equip-cosmetic="'+x+'" style="width:auto;padding:7px 10px;font-size:11px">Надеть</button></div>').join(''):'<div class="sub">Пока нет косметических предметов.</div>';
 }
 async function buyStarsProduct(productId){
  try{
@@ -182,6 +182,7 @@ document.getElementById('claimSpinTask')?.addEventListener('click',async()=>{try
 document.getElementById('claimWheelTask')?.addEventListener('click',async()=>{try{await apiAction('claimTask',{taskId:'wheel1'});await refreshFeatureState();toast('Задание выполнено!')}catch(e){toast(e.message)}});
 document.getElementById('redeemPromo')?.addEventListener('click',async()=>{try{const code=document.getElementById('promoCode').value;await apiAction('redeemPromo',{code});document.getElementById('promoCode').value='';await refreshFeatureState();toast('🎉 Промокод активирован!')}catch(e){toast(e.message)}});
 document.getElementById('starsCatalog')?.addEventListener('click',event=>{const b=event.target.closest('[data-buy-stars]');if(b)buyStarsProduct(b.dataset.buyStars)});
+document.getElementById('cosmeticsCollection')?.addEventListener('click',async event=>{const b=event.target.closest('[data-equip-cosmetic]');if(!b)return;try{await apiAction('equipCosmetic',{cosmeticId:b.dataset.equipCosmetic});await refreshFeatureState();toast('✨ Косметика применена')}catch(e){toast(e.message)}});
 
 async function hydrateServerState(){
  setGameActionsEnabled(false);
