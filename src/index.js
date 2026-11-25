@@ -12,20 +12,38 @@ async function verifyTelegramInitData(initData, botToken) {
 }
 async function loadPlayer(db,id){const now=Math.floor(Date.now()/1000);await db.prepare('INSERT OR IGNORE INTO players (telegram_id) VALUES (?)').bind(id).run();await db.prepare('UPDATE players SET balance=balance+1000000,starter_granted=1,updated_at=? WHERE telegram_id=? AND starter_granted=0').bind(now,id).run();let p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();const gained=Math.floor(Math.max(0,now-p.energy_updated_at)/300);if(gained>0){const energy=Math.min(25,p.energy+gained),updatedAt=energy===25?now:p.energy_updated_at+gained*300;await db.prepare('UPDATE players SET energy=?,energy_updated_at=?,updated_at=? WHERE telegram_id=?').bind(energy,updatedAt,now,id).run();p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first()}return p}
 
-async function sendMessage(token, chatId, text) {
+async function sendMessage(token, chatId, text, replyMarkup) {
+  const payload = { chat_id: chatId, text };
+  if (replyMarkup) payload.reply_markup = replyMarkup;
   const response = await fetch(
     `https://api.telegram.org/bot${token}/sendMessage`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text
-      })
+      body: JSON.stringify(payload)
     }
   );
-
   return response.ok;
+}
+
+function adminKeyboard() {
+  return { inline_keyboard: [
+    [{ text: "📊 Статистика", callback_data: "admin:stats" }],
+    [{ text: "🆘 Команды и помощь", callback_data: "admin:help" }]
+  ] };
+}
+
+async function adminStats(db) {
+  const row = await db.prepare(
+    "SELECT COUNT(*) AS players, COALESCE(SUM(balance),0) AS balance, COALESCE(SUM(energy),0) AS energy FROM players"
+  ).first();
+  return row || { players: 0, balance: 0, energy: 0 };
+}
+
+async function adminPlayer(db, id) {
+  return db.prepare(
+    "SELECT telegram_id,balance,energy,trial_at,house_level,garage_json,cars_json FROM players WHERE telegram_id=?"
+  ).bind(String(id)).first();
 }
 
 export default {
@@ -120,7 +138,7 @@ export default {
       return Response.json(await result.json());
     }
 
-    // Получение сообщений от Telegram
+    // Получение сообщений и callback-запросов от Telegram
     if (url.pathname === "/api/telegram/webhook") {
       if (
         request.headers.get("X-Telegram-Bot-Api-Secret-Token") !==
@@ -130,30 +148,117 @@ export default {
       }
 
       const update = await request.json();
-      const message = update.message;
-      const chatId = message?.chat?.id;
-      const text = message?.text || "";
-
-      const senderId = message?.from?.id ? String(message.from.id) : "";
       const admins = (env.ADMIN_IDS || "").split(",").map(x => x.trim()).filter(Boolean);
-      if (chatId && text.startsWith("/admin")) {
+      const message = update.message;
+      const callback = update.callback_query;
+      const senderId = String(message?.from?.id || callback?.from?.id || "");
+      const chatId = message?.chat?.id || callback?.message?.chat?.id;
+      const rawText = message?.text || "";
+      const command = rawText.trim().split(/\s+/)[0].split("@")[0];
+
+      if (callback) {
+        if (admins.includes(senderId) && callback.data?.startsWith("admin:")) {
+          let responseText = "Неизвестный раздел.";
+          if (callback.data === "admin:stats") {
+            const stats = await adminStats(env.DB);
+            responseText = "📊 Статистика тестовой игры\n\n" +
+              "Игроков: " + stats.players + "\n" +
+              "Денег на балансах: " + Number(stats.balance).toLocaleString("ru-RU") + "\n" +
+              "Энергии у игроков: " + Number(stats.energy).toLocaleString("ru-RU");
+          } else if (callback.data === "admin:help") {
+            responseText = "🛠 Команды администратора\n\n" +
+              "/admin — открыть панель\n" +
+              "/stats — статистика\n" +
+              "/player ID — карточка игрока\n" +
+              "/give ID СУММА — начислить деньги\n" +
+              "/energy ID КОЛИЧЕСТВО — добавить энергию (максимум 25)";
+          }
+          await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/answerCallbackQuery`, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ callback_query_id: callback.id })
+          });
+          await sendMessage(env.BOT_TOKEN, chatId, responseText, adminKeyboard());
+        } else {
+          await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/answerCallbackQuery`, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ callback_query_id: callback.id, text: "Нет доступа", show_alert: true })
+          });
+        }
+        return Response.json({ ok: true });
+      }
+
+      if (chatId && command === "/admin") {
         if (admins.includes(senderId)) {
-          await sendMessage(env.BOT_TOKEN, chatId, "🛡 Админ-доступ подтверждён. Панель тестовой игры активна.");
+          await sendMessage(env.BOT_TOKEN, chatId,
+            "🛡 Админ-панель тестовой игры\n\nДоступ разрешён для вашего аккаунта. Выберите действие:",
+            adminKeyboard());
         } else {
           await sendMessage(env.BOT_TOKEN, chatId, "⛔ У вас нет доступа к админ-панели.");
         }
-      } else if (chatId && text.startsWith("/start")) {
-        await sendMessage(
-          env.BOT_TOKEN,
-          chatId,
-          "Добро пожаловать в «Крути Номера»! 🎮\n\nНажми кнопку «Играть», чтобы открыть игру.\n\nСкоро здесь появится привязка браузера."
-        );
-      } else if (chatId && text.startsWith("/help")) {
-        await sendMessage(
-          env.BOT_TOKEN,
-          chatId,
-          "Помощь по игре «Крути Номера» 🎮\n\n/start — запуск бота\n/help — помощь\n\nИгру можно открыть кнопкой «Играть»."
-        );
+      } else if (chatId && command === "/stats") {
+        if (!admins.includes(senderId)) {
+          await sendMessage(env.BOT_TOKEN, chatId, "⛔ Нет доступа.");
+        } else {
+          const stats = await adminStats(env.DB);
+          await sendMessage(env.BOT_TOKEN, chatId,
+            "📊 Статистика тестовой игры\n\nИгроков: " + stats.players +
+            "\nДенег на балансах: " + Number(stats.balance).toLocaleString("ru-RU") +
+            "\nЭнергии у игроков: " + Number(stats.energy).toLocaleString("ru-RU"),
+            adminKeyboard());
+        }
+      } else if (chatId && command === "/player") {
+        if (!admins.includes(senderId)) {
+          await sendMessage(env.BOT_TOKEN, chatId, "⛔ Нет доступа.");
+        } else {
+          const targetId = rawText.trim().split(/\s+/)[1];
+          const player = targetId ? await adminPlayer(env.DB, targetId) : null;
+          if (!player) await sendMessage(env.BOT_TOKEN, chatId, "Игрок не найден. Формат: /player ID");
+          else {
+            const garage = JSON.parse(player.garage_json || "[]");
+            const cars = JSON.parse(player.cars_json || "[]");
+            await sendMessage(env.BOT_TOKEN, chatId,
+              "👤 Игрок " + player.telegram_id + "\nБаланс: " + Number(player.balance).toLocaleString("ru-RU") +
+              "\nЭнергия: " + player.energy + "/25\nДом: уровень " + player.house_level +
+              "\nНомеров в гараже: " + garage.length + "\nМашин: " + cars.length +
+              "\nПробная энергия доступна: " + (Math.floor(Date.now()/1000)-player.trial_at >= 3600 ? "да" : "нет"));
+          }
+        }
+      } else if (chatId && command === "/give") {
+        if (!admins.includes(senderId)) {
+          await sendMessage(env.BOT_TOKEN, chatId, "⛔ Нет доступа.");
+        } else {
+          const parts = rawText.trim().split(/\s+/), targetId = parts[1], amount = Number(parts[2]);
+          if (!targetId || !Number.isSafeInteger(amount) || amount <= 0 || amount > 1000000000) {
+            await sendMessage(env.BOT_TOKEN, chatId, "Формат: /give ID СУММА (от 1 до 1 000 000 000)");
+          } else {
+            const result = await env.DB.prepare("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=?")
+              .bind(amount, Math.floor(Date.now()/1000), targetId).run();
+            await sendMessage(env.BOT_TOKEN, chatId, result.meta?.changes
+              ? "✅ Начислено " + amount.toLocaleString("ru-RU") + " игроку " + targetId
+              : "Игрок не найден. Сначала он должен открыть игру.");
+          }
+        }
+      } else if (chatId && command === "/energy") {
+        if (!admins.includes(senderId)) {
+          await sendMessage(env.BOT_TOKEN, chatId, "⛔ Нет доступа.");
+        } else {
+          const parts = rawText.trim().split(/\s+/), targetId = parts[1], amount = Number(parts[2]);
+          if (!targetId || !Number.isSafeInteger(amount) || amount <= 0 || amount > 25) {
+            await sendMessage(env.BOT_TOKEN, chatId, "Формат: /energy ID КОЛИЧЕСТВО (от 1 до 25)");
+          } else {
+            const result = await env.DB.prepare("UPDATE players SET energy=MIN(25,energy+?),updated_at=? WHERE telegram_id=?")
+              .bind(amount, Math.floor(Date.now()/1000), targetId).run();
+            await sendMessage(env.BOT_TOKEN, chatId, result.meta?.changes
+              ? "⚡ Энергия добавлена игроку " + targetId
+              : "Игрок не найден. Сначала он должен открыть игру.");
+          }
+        }
+      } else if (chatId && command === "/start") {
+        await sendMessage(env.BOT_TOKEN, chatId,
+          "Добро пожаловать в «Крути Номера»! 🎮\n\nОткрой тестовую игру по ссылке:\nhttps://kruti-nomera-neon-test.malovtoni.workers.dev");
+      } else if (chatId && command === "/help") {
+        await sendMessage(env.BOT_TOKEN, chatId,
+          "Помощь по игре «Крути Номера» 🎮\n/start — запуск бота\nОткрой игру по ссылке из сообщения /start.");
       }
 
       return Response.json({ ok: true });
