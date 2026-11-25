@@ -292,6 +292,27 @@ body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;bac
 @media(max-height:700px){#caseModal .case-modal-inner{min-height:0}#caseModal .case-big{font-size:105px}#caseModal .result{padding:17px 14px!important}#caseModal .result .plate{min-height:76px}}
 @media(prefers-reduced-motion:reduce){#caseModal *,#caseModal *:before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
+
+/* Smooth automotive case presentation */
+.crate-icon{height:112px!important;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#667da833,transparent 58%),linear-gradient(145deg,#202c43,#101522)!important;border:1px solid #53627d;perspective:700px}
+.crate-icon:after{content:'';position:absolute;inset:auto 12% 9px;height:2px;border-radius:50%;background:#c9dcff66;filter:blur(5px)}
+.car-art{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 9px #0009);transform:translateY(3px);transition:transform .65s cubic-bezier(.2,.8,.2,1),filter .65s ease}
+.crate:hover .car-art{transform:translateY(-3px) scale(1.055);filter:drop-shadow(0 0 13px #b8caff66)}
+#caseModal .case-big{width:min(100%,520px);height:clamp(170px,43vw,250px);display:grid;place-items:center;font-size:0;filter:none;animation:carFloat 4.8s ease-in-out infinite;transform-origin:50% 75%}
+#caseModal .case-big .car-art{width:100%;height:100%;filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 24px #a5c8ff55);transform:scale(1.06)}
+#caseModal.opening .case-big{animation:carApproach 2.6s cubic-bezier(.22,.72,.18,1) both}
+#caseModal.opening .case-big .car-art{animation:carPaintGlow 2.6s ease-in-out both}
+#caseModal .case-big.car-reveal{animation:carWinner 1.05s cubic-bezier(.16,1,.3,1) both}
+#caseModal .case-pedestal{width:min(82%,390px);height:26px;background:linear-gradient(90deg,transparent,#a8d7ff99,#c39affaa,#a8d7ff99,transparent);filter:blur(12px);box-shadow:0 0 55px #86aaff88}
+#caseModal.opening .case-pedestal{animation:pedestalDrift 2.6s ease-in-out both}
+#caseModal .case-open-copy{font-size:13px;letter-spacing:.3px;color:#dce7ff;transition:opacity .35s ease}
+#caseModal .case-result-host{transition:opacity .4s ease}
+@keyframes carFloat{0%,100%{transform:translate3d(0,0,0) rotateX(0) rotateZ(-.5deg)}50%{transform:translate3d(0,-9px,0) rotateX(2deg) rotateZ(.5deg)}}
+@keyframes carApproach{0%{opacity:0;transform:translate3d(0,28px,0) scale(.72) rotateY(-12deg)}18%{opacity:1}42%{transform:translate3d(0,-8px,0) scale(1.035) rotateY(5deg)}63%{transform:translate3d(0,2px,0) scale(.99) rotateY(-2deg)}82%{transform:translate3d(0,-4px,0) scale(1.015) rotateY(1deg)}100%{opacity:1;transform:translate3d(0,0,0) scale(1) rotateY(0)}}
+@keyframes carPaintGlow{0%,100%{filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 15px #a5c8ff22)}45%{filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 36px #c5dfffbb) brightness(1.18)}72%{filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 23px #c5dfff77)}}
+@keyframes carWinner{0%{opacity:.5;transform:translateY(20px) scale(.9);filter:blur(5px)}65%{opacity:1;transform:translateY(-4px) scale(1.035);filter:blur(0)}100%{transform:none;filter:none}}
+@keyframes pedestalDrift{0%,100%{transform:scaleX(.82);opacity:.55}45%{transform:scaleX(1.18);opacity:1}75%{transform:scaleX(1.04);opacity:.8}}
+@media(prefers-reduced-motion:reduce){#caseModal .case-big,#caseModal.opening .case-big,#caseModal .case-big.car-reveal,#caseModal .case-big .car-art,.crate:hover .car-art{animation:none!important;transition:none!important;transform:none!important}}
 </style><script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -733,19 +754,39 @@ function randomPlate(){
  return a+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+b+c;
 }
 
+const CAR_PAINTS={
+ any:['#aebbd2','#eef5ff','#596a86'],unusual:['#35d66f','#b5ffd0','#167f4b'],
+ rare:['#318bff','#c6e5ff','#164a9a'],epic:['#b34dff','#efd1ff','#5b248f'],
+ legend:['#ffb629','#fff0b2','#986018'],myth:['#ff4d83','#ffd0df','#9c2450'],
+ secret:['#20e9e8','#c5ffff','#087f91'],free:['#57e6ff','#d7fbff','#2561a8']
+};
+function carArtwork(tier='any',large=false){
+ const p=CAR_PAINTS[tier]||CAR_PAINTS.any;
+ const isSuper=['epic','legend','myth','secret'].includes(tier);
+ const roof=isSuper?'M166 142 L211 82 Q222 67 246 65 L342 65 Q364 67 382 91 L424 142':'M166 142 L207 91 Q220 75 244 75 L337 75 Q360 76 380 99 L420 142';
+ return '<svg class="car-art'+(large?' car-art-large':'')+'" viewBox="0 0 560 260" role="img" aria-label="Спортивный автомобиль" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="paint-'+tier+'" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="'+p[1]+'"/><stop offset=".24" stop-color="'+p[0]+'"/><stop offset=".72" stop-color="'+p[2]+'"/><stop offset="1" stop-color="'+p[0]+'"/></linearGradient><linearGradient id="glass-'+tier+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f5ff" stop-opacity=".9"/><stop offset=".45" stop-color="#526d91"/><stop offset="1" stop-color="#101b31"/></linearGradient><linearGradient id="shine-'+tier+'" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="glow-'+tier+'"><feGaussianBlur stdDeviation="7"/></filter></defs><ellipse cx="288" cy="213" rx="205" ry="20" fill="'+p[0]+'" opacity=".28" filter="url(#glow-'+tier+')"/><path d="M75 173 Q91 148 140 143 L'+(isSuper?'168':'166')+' 142 '+roof.slice(roof.indexOf('M166')+1)+' L424 142 Q463 146 483 169 L494 190 Q494 202 474 205 L91 205 Q65 201 68 188Z" fill="url(#paint-'+tier+')" stroke="'+p[1]+'" stroke-width="3"/><path d="'+roof+' L420 142 L166 142Z" fill="url(#glass-'+tier+')" stroke="#d7eaff" stroke-opacity=".65" stroke-width="3"/><path d="M280 69 L280 142" stroke="#dcecff" stroke-opacity=".5" stroke-width="3"/><path d="M94 174 Q166 158 250 161 Q370 158 466 175" fill="none" stroke="url(#shine-'+tier+')" stroke-width="7" opacity=".8"/><path d="M83 178 L131 169 L149 178 L134 186 L82 187Z" fill="#effaff"/><path d="M430 171 L478 180 L483 189 L438 188Z" fill="#ff416e"/><path d="M206 151 L365 151" stroke="#fff" stroke-opacity=".35" stroke-width="2"/><path d="M167 195 L401 195" stroke="#09111e" stroke-opacity=".65" stroke-width="5"/><path d="M245 190 L315 190" stroke="#eaf4ff" stroke-opacity=".8" stroke-width="3"/><circle cx="166" cy="198" r="34" fill="#080d17" stroke="#a9b8ce" stroke-width="5"/><circle cx="166" cy="198" r="20" fill="#34445e" stroke="#dce8f8" stroke-width="4"/><circle cx="166" cy="198" r="7" fill="#a9bdd7"/><circle cx="408" cy="198" r="34" fill="#080d17" stroke="#a9b8ce" stroke-width="5"/><circle cx="408" cy="198" r="20" fill="#34445e" stroke="#dce8f8" stroke-width="4"/><circle cx="408" cy="198" r="7" fill="#a9bdd7"/><path d="M107 151 Q140 132 173 132" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/><path d="M385 151 Q430 151 460 164" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><path d="M110 207 Q280 224 462 207" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/></svg>';
+}
+function paintCrateCars(){
+ document.querySelectorAll('.crate[data-tier]').forEach(card=>{
+  const tier=card.dataset.tier||'any',icon=card.querySelector('.crate-icon');
+  if(icon){icon.innerHTML=carArtwork(tier);icon.setAttribute('aria-label','Изображение автомобиля');}
+ });
+}
+paintCrateCars();
 let caseResultPlaceholder=null;
 function showCaseModal(type,freeSpin=false){
  const modal=document.getElementById('caseModal'),scene=document.getElementById('caseScene'),big=document.getElementById('caseBig'),copy=document.getElementById('caseOpenCopy'),result=document.getElementById('result'),host=document.getElementById('caseResultHost');
- const icons={any:'📦',unusual:'🟢',rare:'💎',epic:'🔮',legend:'👑',myth:'💗',secret:'🌌'};
- big.textContent=freeSpin?'⚡':(icons[type]||'📦');
- copy.textContent=freeSpin?'Заряжаем бесплатное открытие…':'Контейнер вибрирует. Сейчас узнаем, что внутри…';
+ const tier=freeSpin?'free':(type||'any');
+ big.innerHTML=carArtwork(tier,true);
+ big.classList.remove('car-reveal');
+ copy.textContent=freeSpin?'Заводим мотор. Бесплатный заезд уже начинается…':'Двигатель набирает обороты. Готовим ваш автомобиль…';
  modal.classList.add('active','opening');scene.classList.remove('hidden');
  if(!caseResultPlaceholder)caseResultPlaceholder=document.createComment('case-result-home');
  result.parentNode.insertBefore(caseResultPlaceholder,result);
  host.appendChild(result);
  result.classList.remove('show');
  document.body.style.overflow='hidden';
- setTimeout(()=>{if(!modal.classList.contains('active'))return;modal.classList.remove('opening');scene.classList.add('hidden');result.classList.add('show');},1450);
+ window.setTimeout(()=>{if(!modal.classList.contains('active'))return;modal.classList.remove('opening');big.classList.add('car-reveal');copy.textContent='Готово! Ваш номер уже найден.';scene.classList.add('hidden');result.classList.add('show');},2600);
 }
 function closeCaseModal(){
  const modal=document.getElementById('caseModal'),result=document.getElementById('result');
