@@ -121,6 +121,25 @@ function setGameActionsEnabled(enabled) {
 }`;
         html = html.replace(oldHydrate, newHydrate);
       }
+      if (!html.includes('id="telegramLaunchDataBridge"')) {
+        const bridge = `<script id="telegramLaunchDataBridge">
+(function(){
+ try {
+  var hash=window.location.hash||'';
+  var params=new URLSearchParams(hash.charAt(0)==='#'?hash.slice(1):hash);
+  var initData=params.get('tgWebAppData')||'';
+  if(!initData)return;
+  window.Telegram=window.Telegram||{};
+  if(!window.Telegram.WebApp){
+   var unsafe={};
+   try{var u=new URLSearchParams(initData).get('user');if(u)unsafe.user=JSON.parse(u);}catch(e){}
+   window.Telegram.WebApp={initData:initData,initDataUnsafe:unsafe,platform:'unknown',version:'',colorScheme:'dark',ready:function(){},expand:function(){},isExpanded:true};
+  }
+ } catch(e) {}
+})();
+</script>`;
+        html = html.replace('<head>', '<head>' + bridge);
+      }
       if (!html.includes('id="telegramConnectionProbe"')) {
         const probe = `<script id="telegramConnectionProbe">
 (async function(){
