@@ -255,7 +255,8 @@ export default {
         }
       } else if (chatId && command === "/start") {
         await sendMessage(env.BOT_TOKEN, chatId,
-          "Добро пожаловать в «Крути Номера»! 🎮\n\nОткрой тестовую игру по ссылке:\nhttps://kruti-nomera-neon-test.malovtoni.workers.dev");
+          "Добро пожаловать в «Крути Номера»! 🎮\n\nНажми кнопку ниже, чтобы открыть игру внутри Telegram и создать игровой профиль.",
+          { inline_keyboard: [[{ text: "🎮 Играть", web_app: { url: "https://kruti-nomera-neon-test.malovtoni.workers.dev" } }]] });
       } else if (chatId && command === "/help") {
         await sendMessage(env.BOT_TOKEN, chatId,
           "Помощь по игре «Крути Номера» 🎮\n/start — запуск бота\nОткрой игру по ссылке из сообщения /start.");
