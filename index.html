@@ -1158,7 +1158,7 @@ async function spin(type){
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
   if(openingCrate){openingCrate.classList.remove('opening');openingCrate.removeAttribute('aria-busy');}
-  lastWonIndex=serverMode?state.garage.findIndex(x=>x.plate===finalPlate&&x.region===finalRegion):-1;
+  lastWonIndex=serverMode?state.garage.findIndex(x=>x.plate===finalPlate&&x.region===finalRegion&&Number(x.value)===Number(value)&&x.cls===cls):-1;
   if(!serverMode){state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});lastWonIndex=0;}
   const sellWon=document.getElementById('sellWonNumber'),listWon=document.getElementById('listWonNumber');
   if(sellWon){sellWon.disabled=lastWonIndex<0;sellWon.textContent='Продать за '+fmt(value)+' ₽';}
