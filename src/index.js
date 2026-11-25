@@ -443,7 +443,7 @@ function setGameActionsEnabled(enabled) {
         const results=await env.DB.batch([
           env.DB.prepare("UPDATE market_listings SET status='sold',buyer_telegram_id=?,sold_at=? WHERE id=? AND status='active' AND EXISTS(SELECT 1 FROM players WHERE telegram_id=? AND balance>=? AND garage_json=?)").bind(telegramId,now,listingId,telegramId,listing.asking_price,p.garage_json),
           env.DB.prepare("UPDATE players SET balance=balance-?,garage_json=?,updated_at=? WHERE telegram_id=? AND balance>=? AND garage_json=? AND changes()=1").bind(listing.asking_price,JSON.stringify(buyerGarage),now,telegramId,listing.asking_price,p.garage_json),
-          env.DB.prepare("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=? AND changes()=1").bind(listing.asking_price,now,listing.seller_telegram_id)
+          env.DB.prepare("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=? AND changes()=1").bind(Math.floor(Number(listing.asking_price)*93/100),now,listing.seller_telegram_id)
         ]);
         if(!results[0]?.meta?.changes||!results[1]?.meta?.changes||!results[2]?.meta?.changes)return Response.json({error:'Лот уже купили или баланс изменился. Обнови рынок.'},{status:409});
       } else if(action==='marketCancel'){
