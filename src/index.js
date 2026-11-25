@@ -89,7 +89,15 @@ export default {
       const chatId = message?.chat?.id;
       const text = message?.text || "";
 
-      if (chatId && text.startsWith("/start")) {
+      const senderId = message?.from?.id ? String(message.from.id) : "";
+      const admins = (env.ADMIN_IDS || "").split(",").map(x => x.trim()).filter(Boolean);
+      if (chatId && text.startsWith("/admin")) {
+        if (admins.includes(senderId)) {
+          await sendMessage(env.BOT_TOKEN, chatId, "🛡 Админ-доступ подтверждён. Панель тестовой игры активна.");
+        } else {
+          await sendMessage(env.BOT_TOKEN, chatId, "⛔ У вас нет доступа к админ-панели.");
+        }
+      } else if (chatId && text.startsWith("/start")) {
         await sendMessage(
           env.BOT_TOKEN,
           chatId,
