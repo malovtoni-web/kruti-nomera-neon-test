@@ -47,6 +47,51 @@ export default {
       const p=await loadPlayer(env.DB,telegramId); return Response.json({ok:true,player:{telegramId:p.telegram_id,balance:p.balance,coins:p.coins,stars:p.stars,energy:p.energy,energyUpdatedAt:p.energy_updated_at,trialAt:p.trial_at,garage:JSON.parse(p.garage_json||'[]'),houseLevel:p.house_level,cars:JSON.parse(p.cars_json||'[]')}});
     }
 
+    if (url.pathname === '/api/action') {
+      if (request.method !== 'POST' || !env.DB || !env.BOT_TOKEN) return Response.json({error:'Service unavailable'},{status:503});
+      let body; try { body=await request.json(); } catch (_) { return Response.json({error:'Invalid JSON'},{status:400}); }
+      const telegramId=await verifyTelegramInitData(body.initData,env.BOT_TOKEN);
+      if(!telegramId) return Response.json({error:'Telegram authentication required'},{status:401});
+      const p=await loadPlayer(env.DB,telegramId), now=Math.floor(Date.now()/1000), action=body.action;
+      const save=async (sql,args)=>env.DB.prepare(sql).bind(...args).run();
+      if(action==='trial'){
+        if(now-p.trial_at<3600) return Response.json({error:'Trial energy cooldown',player:{energy:p.energy,trialAt:p.trial_at}},{status:429});
+        const energy=Math.min(25,p.energy+10);
+        await save('UPDATE players SET energy=?,trial_at=?,updated_at=? WHERE telegram_id=?',[energy,now,now,telegramId]);
+      } else if(action==='spin'){
+        const prices={any:2000000,unusual:4000000,rare:7000000,epic:19000000,legend:45000000,myth:100000000,secret:250000000};
+        const weights={secret:[0,0,0,.08,.42,.35,.15],myth:[0,0,.03,.17,.35,.35,.10],legend:[.02,.08,.22,.35,.25,.075,.005],epic:[.08,.22,.35,.25,.08,.018,.002],rare:[.18,.37,.30,.12,.025,.004,.001],unusual:[.38,.42,.16,.035,.004,.0009,.0001],any:[.58,.27,.11,.032,.007,.0009,.0001]};
+        const tiers=[['Обычный','common',35000],['Необычный','unusual',80000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000],['Секретный','secret',100000000]];
+        const type=prices[body.type]!==undefined?body.type:'any', count=Number(body.count||1);
+        if(![1,3].includes(count)) return Response.json({error:'Invalid spin count'},{status:400});
+        const cost=prices[type]*count;
+        if(p.energy<count||p.balance<cost) return Response.json({error:'Недостаточно энергии или денег'},{status:409});
+        const numbers=[];
+        for(let n=0;n<count;n++){
+          const w=weights[type], roll=Math.random(); let sum=0,index=0;
+          for(let i=0;i<w.length;i++){sum+=w[i];if(roll<sum){index=i;break;}}
+          const letters='АВЕКМНОРСТУХ', regions=['77','97','99','178','777','05','116','02','174','750'];
+          const plate=Array.from({length:3},()=>letters[Math.floor(Math.random()*letters.length)]).join('').replace(/^(.)(.)(.)$/,(_,a,b,c)=>a+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+b+c);
+          const [rarity,cls,value]=tiers[index];
+          numbers.push({plate,region:regions[Math.floor(Math.random()*regions.length)],rarity,cls,value});
+        }
+        const garage=[...JSON.parse(p.garage_json||'[]'),...numbers].slice(-500);
+        const result=await save('UPDATE players SET balance=balance-?,energy=energy-?,garage_json=?,updated_at=? WHERE telegram_id=? AND balance>=? AND energy>=?',[cost,count,JSON.stringify(garage),now,telegramId,cost,count]);
+        if(!result.meta?.changes) return Response.json({error:'Недостаточно ресурсов'},{status:409});
+      } else if(action==='upgradeHouse'){
+        const costs=[500000,2500000,12000000,50000000,150000000], level=p.house_level;
+        if(level>=5||p.balance<costs[level-1]) return Response.json({error:'Недостаточно денег или максимальный уровень'},{status:409});
+        await save('UPDATE players SET balance=balance-?,house_level=house_level+1,updated_at=? WHERE telegram_id=? AND balance>=? AND house_level=?',[costs[level-1],now,telegramId,costs[level-1],level]);
+      } else if(action==='buyCar'){
+        const cars={'Городской седан':{cost:1200000,emoji:'🚗'},'Спорткар':{cost:12000000,emoji:'🏎️'},'Премиум внедорожник':{cost:35000000,emoji:'🚙'}};
+        const car=cars[body.name]; if(!car||p.balance<car.cost) return Response.json({error:'Недостаточно денег или неизвестная машина'},{status:409});
+        const owned=JSON.parse(p.cars_json||'[]');owned.push({name:body.name,emoji:car.emoji,cost:car.cost});
+        await save('UPDATE players SET balance=balance-?,cars_json=?,updated_at=? WHERE telegram_id=? AND balance>=?',[car.cost,JSON.stringify(owned),now,telegramId,car.cost]);
+      } else return Response.json({error:'Unknown action'},{status:400});
+      const updated=await loadPlayer(env.DB,telegramId);
+      return Response.json({ok:true,player:{telegramId:updated.telegram_id,balance:updated.balance,coins:updated.coins,stars:updated.stars,energy:updated.energy,energyUpdatedAt:updated.energy_updated_at,trialAt:updated.trial_at,garage:JSON.parse(updated.garage_json||'[]'),houseLevel:updated.house_level,cars:JSON.parse(updated.cars_json||'[]')}});
+    }
+
     // Настройка webhook
     if (url.pathname === "/api/setup-webhook") {
       if (url.searchParams.get("key") !== env.SETUP_SECRET) {
