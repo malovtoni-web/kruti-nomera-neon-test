@@ -975,18 +975,26 @@ document.getElementById('rouletteMarket').addEventListener('click',()=>{if(lastW
 document.getElementById('rouletteClose').addEventListener('click',()=>{document.getElementById('rouletteResult').style.display='none';document.getElementById('rouletteEmpty').style.display='block';document.getElementById('rouletteSelected').style.display='none';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='garage'));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='garage'));});
 
 async function sellGarageNumber(index,exactNumber=null,skipConfirm=false){
- const item=exactNumber||state.garage[index];if(!item)return;
+ const item=exactNumber||state.garage[index];if(!item)return false;
  const expectedValue=Number(item.value);
- if(!skipConfirm&&!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(expectedValue)+' ₽?'))return;
+ if(!Number.isSafeInteger(expectedValue)||expectedValue<1){toast('Не удалось определить точную стоимость номера.');return false;}
+ if(!skipConfirm&&!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(expectedValue)+' ₽?'))return false;
  try{
   let actualValue=expectedValue;
   if(serverMode){
    const sold=await apiAction('sellNumber',{plate:item.plate,region:item.region,expectedValue});
    actualValue=Number(sold.soldNumber?.value);
-   if(!Number.isSafeInteger(actualValue)||actualValue<1)throw new Error('Сервер не подтвердил сумму продажи. Обнови гараж.');
+   if(!Number.isSafeInteger(actualValue)||actualValue!==expectedValue)throw new Error('Сервер не подтвердил точную сумму продажи. Номер не удалён из окна.');
   }else{state.garage.splice(index,1);state.rub+=expectedValue;sync();}
-  lastWonIndex=-1;lastWonNumber=null;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
- }catch(e){toast(e.message);}
+  lastWonIndex=-1;lastWonNumber=null;
+  const wonSell=document.getElementById('sellWonNumber');
+  if(wonSell){wonSell.disabled=true;wonSell.textContent='Продано';}
+  const wonList=document.getElementById('listWonNumber');if(wonList)wonList.disabled=true;
+  renderGarage();sync();
+  toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
+  try{await refreshFeatureState();renderGarage();sync();}catch(refreshError){console.warn('После продажи не удалось обновить состояние:',refreshError);}
+  return true;
+ }catch(e){toast(e.message||'Не удалось продать номер.');return false;}
 }
 
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
@@ -1048,6 +1056,17 @@ function showCaseModal(type,freeSpin=false){
  if(!caseResultPlaceholder)caseResultPlaceholder=document.createComment('case-result-home');
  result.parentNode.insertBefore(caseResultPlaceholder,result);
  host.appendChild(result);
+ const sellWonButton=document.getElementById('sellWonNumber');
+ if(sellWonButton){
+  sellWonButton.onclick=async event=>{
+   event.preventDefault();event.stopPropagation();
+   if(sellWonButton.disabled||!lastWonNumber||window.__sellingWonNumber)return;
+   window.__sellingWonNumber=true;sellWonButton.disabled=true;sellWonButton.textContent='Продаём…';
+   const sold=await sellGarageNumber(lastWonIndex,lastWonNumber,true);
+   window.__sellingWonNumber=false;
+   if(!sold&&lastWonNumber){sellWonButton.disabled=false;sellWonButton.textContent='Продать за '+fmt(lastWonNumber.value)+' ₽';}
+  };
+ }
  result.classList.remove('show');
  document.body.style.overflow='hidden';
  window.setTimeout(()=>{if(!modal.classList.contains('active'))return;caseLightCue=true;big.classList.add('car-reveal');copy.textContent='Фары вспыхивают… номер проявляется!';finishCaseReveal();},2400);
@@ -1060,7 +1079,7 @@ function closeCaseModal(){
  document.body.style.overflow='';
 }
 document.getElementById('caseClose')?.addEventListener('click',()=>{if(!isSpinning)closeCaseModal()});
-document.getElementById('sellWonNumber')?.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();if(lastWonNumber)sellGarageNumber(lastWonIndex,lastWonNumber,true);});
+// The sell handler is attached in showCaseModal after the result node is moved into the modal.
 document.getElementById('listWonNumber')?.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();if(lastWonIndex>=0)openMarketForSale(lastWonIndex);});
 document.getElementById('caseModal')?.addEventListener('click',e=>{if(e.target.id==='caseModal'&&!isSpinning)closeCaseModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!isSpinning&&document.getElementById('caseModal')?.classList.contains('active'))closeCaseModal()});
