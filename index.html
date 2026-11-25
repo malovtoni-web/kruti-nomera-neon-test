@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#101019"><title>Крути Номера</title>
+<style>
+:root{--bg:#0d0d15;--panel:#191923;--panel2:#222230;--muted:#89899c;--text:#f5f4fb;--purple:#9477ff;--gold:#ffbf45;--green:#27d477;--line:#30303d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#30244e 0,#11111b 42%,var(--bg) 75%);color:var(--text);font:15px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.app{max-width:520px;margin:auto;padding:18px 16px 106px}.top{display:flex;align-items:center;justify-content:space-between;margin:8px 0 17px}.brand{font-weight:900;font-size:23px;letter-spacing:-.7px}.brand span{color:var(--purple)}.avatar{background:linear-gradient(145deg,#ffc64c,#f18b24);color:#21182a;width:42px;height:42px;border-radius:15px;display:grid;place-items:center;font-weight:900;font-size:20px;box-shadow:0 5px 24px #ffb32c33}
+.stats{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:7px;margin-bottom:17px}.stat{background:#1a1a26;border:1px solid #393746;border-radius:14px;padding:10px 9px;text-align:center;font-weight:800}.stat small{display:block;color:var(--muted);font-size:10px;font-weight:600}.stat b{font-size:15px}.stat .star{color:var(--gold)}
+.tabs{display:flex;gap:7px;overflow:auto;margin:0 -2px 16px;padding-bottom:3px}.tab{border:1px solid var(--line);background:#1a1a25;color:#aaa9b9;padding:10px 14px;border-radius:13px;white-space:nowrap;font-weight:750}.tab.active{background:#30264e;border-color:#6652a8;color:#c3b4ff}
+.page{display:none}.page.active{display:block}.section-title{font-size:20px;font-weight:900;margin:10px 0 12px}.sub{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(135deg,#27213b,#1a1a28 65%,#282039);border:1px solid #554477;border-radius:20px;padding:17px;margin-bottom:13px;box-shadow:0 12px 32px #0004}.hero-row{display:flex;justify-content:space-between;align-items:center}.pill{font-size:11px;font-weight:800;padding:5px 9px;border-radius:20px;background:#49366d;color:#d6caff}.price{font-size:23px;font-weight:900;color:#c19aff}
+.plate{background:linear-gradient(#fff,#e8e8e8);color:#171717;border:5px solid #b7bbc5;border-radius:13px;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:inset 0 0 0 2px #4b4b4b,0 7px 18px #0005;margin:16px auto;max-width:330px}.plate .mainnum{font-size:clamp(30px,9vw,46px);font-weight:950;letter-spacing:1px;line-height:1}.plate .region{border-left:2px solid #777;padding-left:7px;font-size:22px;font-weight:900}.plate .rus{font-size:9px;display:block;text-align:center}
+.rarity{font-size:12px;font-weight:900;border-radius:20px;padding:5px 9px;display:inline-block}.common{background:#393943;color:#c5c5ce}.rare{background:#163d73;color:#7db5ff}.epic{background:#42215f;color:#d6a0ff}.legend{background:#5a4315;color:#ffd56e}.myth{background:#5b243a;color:#ff9cb9}
+.meter{height:8px;background:#33333f;border-radius:20px;overflow:hidden;margin:9px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#39d783,#5a9dff,#bd76ff,#ffc34b);width:72%}
+.btn{border:0;border-radius:15px;padding:14px 16px;background:linear-gradient(180deg,#36df83,#0ca957);color:#062616;font-size:17px;font-weight:950;width:100%;box-shadow:0 5px 0 #087d42;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#292936;color:#eee;box-shadow:none;border:1px solid #414151}.btn.gold{background:linear-gradient(180deg,#ffd15d,#f5a91f);color:#2c1c04;box-shadow:0 5px 0 #b87513}
+.energy{display:flex;justify-content:space-between;color:#b7b5c4;font-size:12px;margin:10px 2px}.crate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.crate{background:#1b1b27;border:1px solid #343442;border-radius:17px;padding:13px;min-width:0}.crate-icon{height:95px;border-radius:12px;display:grid;place-items:center;font-size:48px;margin-bottom:9px;background:linear-gradient(145deg,#30364b,#191925)}.crate h3{margin:0 0 3px;font-size:15px}.crate .sub{font-size:11px}.crate .btn{font-size:13px;padding:10px;margin-top:9px;border-radius:11px}
+.result{padding:14px;background:#141c1a;border:1px solid #226b49;border-radius:16px;margin:13px 0;text-align:center;display:none}.result.show{display:block;animation:pop .3s ease}@keyframes pop{from{transform:scale(.96);opacity:.5}to{transform:scale(1);opacity:1}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:9px}.item{background:#20202c;border:1px solid #393947;border-radius:13px;padding:10px}.item .plate{margin:5px auto 9px;padding:6px 4px;border-width:3px}.item .mainnum{font-size:20px}.item .region{font-size:13px}.item strong{font-size:13px}
+.listrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.listrow:last-child{border:0}.muted{color:var(--muted)}.notice{font-size:11px;color:#aaa8b7;text-align:center;margin-top:16px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#171721ed;backdrop-filter:blur(16px);border-top:1px solid #343440;display:flex;justify-content:space-around;padding:9px max(8px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:#858596;font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:55px}.nav button span{font-size:21px}.nav button.active{color:#aa91ff}
+.toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#29253a;border:1px solid #6954a7;padding:10px 15px;border-radius:20px;z-index:9;display:none;white-space:nowrap}.toast.show{display:block}
+@media(min-width:520px){.app{padding-top:28px}.plate .mainnum{font-size:46px}}
+</style></head>
+<body>
+<div class="toast" id="toast"></div>
+<main class="app">
+ <header class="top"><div><div class="brand">КРУТИ <span>НОМЕРА</span></div><div class="sub">Коллекционируй редкость</div></div><div class="avatar">К</div></header>
+ <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">240 364 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
+ <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="shop">Магазин</button></nav>
+ <section class="page active" id="spin">
+  <div class="hero"><div class="hero-row"><span class="rarity rare">СЕЗОННЫЙ БОНУС</span><span class="sub">Удача ×<b id="luck">1,0</b></span></div><h2 style="margin:12px 0 2px">Открой свой номер</h2><div class="sub">Каждый контейнер — шанс найти редкий экземпляр</div></div>
+  <div class="section-title">Контейнеры</div>
+  <div class="crate-grid">
+   <article class="crate"><div class="crate-icon">📦</div><h3>Обычный</h3><div class="sub">Легендарный и выше: 0,0047%</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('common')">2 млн ₽ · открыть</button></article>
+   <article class="crate"><div class="crate-icon">🟦</div><h3>Редкий</h3><div class="sub">Легендарный и выше: 0,15%</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">7 млн ₽ · открыть</button></article>
+   <article class="crate"><div class="crate-icon">🟪</div><h3>Эпический</h3><div class="sub">Легендарный и выше: 2,84%</div><div class="meter"><i style="width:75%"></i></div><button class="btn secondary" onclick="spin('epic')">19 млн ₽ · открыть</button></article>
+   <article class="crate"><div class="crate-icon">👑</div><h3>Легендарный</h3><div class="sub">Повышенный шанс редких номеров</div><div class="meter"><i style="width:91%"></i></div><button class="btn gold" onclick="spin('legend')">45 млн ₽ · открыть</button></article>
+  </div>
+  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div></div>
+  <div class="card"><div class="row"><b>Энергия</b><b id="energy">10 / 10 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>1 открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button></div>
+ </section>
+ <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров</span><b id="garagecount">0 номеров</b></div><div class="inventory" id="inventory"></div><div class="card"><b>Апгрейд номеров</b><p class="sub">Выбери два номера в гараже — в полной версии можно будет объединять их и повышать редкость.</p><button class="btn secondary" onclick="toast('Апгрейд появится в следующем этапе разработки')">Перейти к апгрейду</button></div></section>
+ <section class="page" id="market"><div class="section-title">Рынок игроков</div><div class="sub">Демо-лотами можно торговать внутри прототипа</div><div class="card"><div class="listrow"><div><b>А777АА · 777</b><div class="sub">Легендарный номер</div></div><b>8 500 000 ₽</b></div><div class="listrow"><div><b>М001ММ · 99</b><div class="sub">Эпический номер</div></div><b>1 200 000 ₽</b></div><div class="listrow"><div><b>О555ОО · 178</b><div class="sub">Редкий номер</div></div><b>420 000 ₽</b></div><button class="btn secondary" onclick="toast('Подключение реального рынка — после настройки сервера')">Выставить свой номер</button></div></section>
+ <section class="page" id="rating"><div class="section-title">Рейтинг игроков</div><div class="card"><div class="listrow"><span>🥇 АвтоКороль</span><b>98 400 000 ₽</b></div><div class="listrow"><span>🥈 NumberOne</span><b>76 120 000 ₽</b></div><div class="listrow"><span>🥉 Turbo777</span><b>51 900 000 ₽</b></div><div class="listrow"><span>4. Ты</span><b id="myrating">240 364 ₽</b></div></div></section>
+ <section class="page" id="shop"><div class="section-title">Магазин</div><div class="hero"><span class="pill">ОДИН РАЗ</span><h2>Стартовый набор</h2><p class="sub">Бонусные монеты, энергия и редкий номер</p><div class="price">19 ★</div><button class="btn gold" onclick="toast('Платежи Telegram Stars подключаются через бота')">Купить за ★ 19</button></div><div class="card"><b>Первая покупка — всё ×2</b><p class="sub">Удвоенные игровые награды при первой покупке за Telegram Stars.</p></div><div class="card"><div class="listrow"><b>Удача ×2 на 24 часа</b><b>49 ★</b></div><div class="listrow"><b>Энергия +10</b><b>25 ★</b></div><div class="listrow"><b>VIP на 7 дней</b><b>99 ★</b></div></div><div class="notice">В прототипе покупки отключены. Рубли и монеты — виртуальные игровые единицы.</div></section>
+</main>
+<nav class="nav"><button class="active" data-page="spin"><span>▤</span>Крутить</button><button data-page="garage"><span>⌂</span>Гараж</button><button data-page="market"><span>▣</span>Рынок</button><button data-page="rating"><span>♜</span>Рейтинг</button><button data-page="shop"><span>▢</span>Магазин</button></nav>
+<script>
+const tgUserId = (() => {
+ try { return window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'local'; }
+ catch (_) { return 'local'; }
+})();
+const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
+const DEFAULT_STATE = {rub:240364,coins:1250,stars:0,energy:10,garage:[]};
+function loadState(){
+ try {
+  const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
+  if (saved && typeof saved === 'object') {
+   return {...DEFAULT_STATE, ...saved, garage:Array.isArray(saved.garage)?saved.garage:[]};
+  }
+ } catch (_) {}
+ return {...DEFAULT_STATE};
+}
+let state=loadState();
+function saveState(){
+ try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }
+ catch (_) { toast('Не удалось сохранить прогресс на этом устройстве'); }
+}
+const names=['А','В','Е','К','М','Н','О','Р','С','Т','У','Х'];
+const regions=['77','97','99','178','777','05','116','02','174','750'];
+const fmt=n=>Math.round(n).toLocaleString('ru-RU');
+function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2100)}
+function sync(){saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 10 ⚡';document.getElementById('energybar').style.width=(state.energy*10)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage()}
+function renderGarage(){let el=document.getElementById('inventory');el.innerHTML=state.garage.length?state.garage.map(x=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>'}
+function spin(type){if(state.energy<1){toast('Недостаточно энергии');return}state.energy--;let r=Math.random(),tier='Обычный',cls='common',value=35000;
+ let weights=type==='legend'?[.15,.25,.35,.20,.05]:type==='epic'?[.42,.35,.18,.045,.005]:type==='rare'?[.68,.25,.06,.009,.001]:[.88,.105,.014,.0009,.0001];
+ let c=0;for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){let a=[['Обычный','common',35000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000]][i];[tier,cls,value]=a;break}}
+ let plate=names[Math.floor(Math.random()*names.length)]+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+names[Math.floor(Math.random()*names.length)]+names[Math.floor(Math.random()*names.length)],region=regions[Math.floor(Math.random()*regions.length)];
+ let item={plate,region,rarity:tier,cls,value};state.garage.unshift(item);document.getElementById('wonplate').textContent=plate;document.getElementById('wonregion').textContent=region;document.getElementById('wonrarity').textContent=tier.toUpperCase();document.getElementById('wonrarity').className='rarity '+cls;document.getElementById('wonvalue').textContent='Стоимость: '+fmt(value)+' ₽';document.getElementById('wonmsg').textContent='Номер добавлен в гараж';document.getElementById('result').classList.add('show');sync()}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{let p=b.dataset.page;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p))}));
+sync();
+</script>
+</body></html>
