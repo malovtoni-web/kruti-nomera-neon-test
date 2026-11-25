@@ -22,6 +22,15 @@
 .nav{position:fixed;bottom:0;left:0;right:0;background:#171721ed;backdrop-filter:blur(16px);border-top:1px solid #343440;display:flex;justify-content:space-around;padding:9px max(8px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:#858596;font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:55px}.nav button span{font-size:21px}.nav button.active{color:#aa91ff}
 .toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#29253a;border:1px solid #6954a7;padding:10px 15px;border-radius:20px;z-index:9;display:none;white-space:nowrap}.toast.show{display:block}
 @media(min-width:520px){.app{padding-top:28px}.plate .mainnum{font-size:46px}}
+.feature-controls{display:flex;gap:8px;align-items:center;margin:0 0 14px;flex-wrap:wrap}
+.sound-toggle,.mode-btn{border:1px solid #49405f;background:#201b2d;color:#d9c9ff;border-radius:12px;padding:9px 12px;font-weight:800;font-size:12px}
+.mode-btn.active{background:#55328a;border-color:#bd8cff;box-shadow:0 0 14px #9b5cff55}
+.confetti-piece{position:fixed;top:-12px;width:8px;height:12px;z-index:20;pointer-events:none;animation:confettiFall 1.8s linear forwards}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.result.win-flash{animation:winFlash .8s ease 2}
+@keyframes winFlash{0%,100%{filter:brightness(1);box-shadow:0 0 18px #9b5cff33}50%{filter:brightness(1.65);box-shadow:0 0 38px #c28cffbb,0 0 70px #8c4dff77}}
+.secret-glow{animation:secretGlow .7s ease 3}
+@keyframes secretGlow{50%{text-shadow:0 0 18px #ffd76b,0 0 32px #b879ff}}
 
 /* Neon refresh: visual layer only */
 body{background:radial-gradient(ellipse at 50% -18%,#31205a 0,#11101d 42%,#080910 82%);--panel:#151523;--panel2:#202035;--purple:#a77bff;--line:#34314a}
@@ -47,6 +56,7 @@ body{background:radial-gradient(ellipse at 50% -18%,#31205a 0,#11101d 42%,#08091
  <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="shop">Магазин</button></nav>
  <section class="page active" id="spin">
   <div class="hero"><div class="hero-row"><span class="rarity rare">СЕЗОННЫЙ БОНУС</span><span class="sub">Удача ×<b id="luck">1,0</b></span></div><h2 style="margin:12px 0 2px">Открой свой номер</h2><div class="sub">Каждый контейнер — шанс найти редкий экземпляр</div></div>
+  <div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
   <div class="section-title">Контейнеры</div>
   <div class="crate-grid">
    <article class="crate"><div class="crate-icon">📦</div><h3>Обычный</h3><div class="sub">Легендарный и выше: 0,0047%</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('common')">2 млн ₽ · открыть</button></article>
@@ -80,6 +90,46 @@ function loadState(){
  return {...DEFAULT_STATE};
 }
 let state=loadState();
+state.soundOn = state.soundOn !== false;
+state.mode = ['classic','turbo','celebration'].includes(state.mode) ? state.mode : 'classic';
+let audioContext=null;
+function playTone(freq=520,duration=.09,type='sine',volume=.035){
+ if(!state.soundOn)return;
+ try{
+  audioContext=audioContext||new (window.AudioContext||window.webkitAudioContext)();
+  if(audioContext.state==='suspended')audioContext.resume();
+  const osc=audioContext.createOscillator(),gain=audioContext.createGain();
+  osc.type=type;osc.frequency.value=freq;gain.gain.setValueAtTime(volume,audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
+  osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+duration);
+ }catch(_){}
+}
+function setMode(mode){
+ state.mode=mode;saveState();
+ document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+ toast(mode==='turbo'?'Турбо: быстрая анимация':mode==='celebration'?'Праздник: больше эффектов':'Классический режим');
+}
+function confetti(){
+ for(let i=0;i<48;i++){
+  const p=document.createElement('i');p.className='confetti-piece';
+  p.style.left=(Math.random()*100)+'vw';p.style.background=['#b88cff','#ffd45c','#4ee69a','#ff7db5','#65c7ff'][i%5];
+  p.style.animationDelay=(Math.random()*.45)+'s';p.style.transform='rotate('+(Math.random()*180)+'deg)';
+  document.body.appendChild(p);setTimeout(()=>p.remove(),2400);
+ }
+}
+let logoTaps=0,logoReset;
+document.querySelector('.brand').addEventListener('click',()=>{
+ logoTaps++;clearTimeout(logoReset);logoReset=setTimeout(()=>logoTaps=0,1800);
+ if(logoTaps>=7){logoTaps=0;document.querySelector('.brand').classList.add('secret-glow');toast('✨ Секрет найден: удача любит настойчивых!');setTimeout(()=>document.querySelector('.brand').classList.remove('secret-glow'),2200);}
+});
+document.getElementById('soundToggle').addEventListener('click',()=>{
+ state.soundOn=!state.soundOn;saveState();
+ document.getElementById('soundToggle').textContent=state.soundOn?'🔊 Звук: ВКЛ':'🔇 Звук: ВЫКЛ';
+ if(state.soundOn)playTone(660,.12);
+});
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+document.getElementById('soundToggle').textContent=state.soundOn?'🔊 Звук: ВКЛ':'🔇 Звук: ВЫКЛ';
+document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===state.mode));
 function saveState(){
  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }
  catch (_) { toast('Не удалось сохранить прогресс на этом устройстве'); }
@@ -134,9 +184,10 @@ function spin(type){
  function roll(){
   if(tick<delays.length){
    document.getElementById('wonplate').textContent=randomPlate();
+   playTone(420+Math.random()*260,.055,'triangle',.018);
    document.getElementById('wonregion').textContent=regions[Math.floor(Math.random()*regions.length)];
    const delay=delays[tick++];
-   setTimeout(roll,delay);
+   setTimeout(roll,Math.max(18,Math.round(delay*(state.mode==='turbo'?.48:1))));
    return;
   }
   document.getElementById('wonplate').textContent=finalPlate;
@@ -145,6 +196,10 @@ function spin(type){
   document.getElementById('wonrarity').className='rarity '+cls;
   document.getElementById('wonvalue').textContent='Стоимость: '+fmt(value)+' ₽';
   document.getElementById('wonmsg').textContent='Номер добавлен в гараж';
+  result.classList.remove('win-flash');void result.offsetWidth;result.classList.add('win-flash');
+  playTone(cls==='myth'?880:cls==='legend'?740:cls==='epic'?620:520,.24,'sine',.055);
+  setTimeout(()=>playTone(880,.3,'triangle',.04),130);
+  if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
   state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
   sync();
