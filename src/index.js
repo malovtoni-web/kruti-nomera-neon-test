@@ -424,17 +424,21 @@ function setGameActionsEnabled(enabled) {
           }
         }
       } else if (chatId && command === "/start") {
-        // Keep Telegram's persistent Play menu button in sync with the current test WebApp URL.
+        // Update the persistent Play button for this exact chat, not only the bot-wide default.
         try {
-          await fetch("https://api.telegram.org/bot" + env.BOT_TOKEN + "/setChatMenuButton", {
+          const menuResponse = await fetch("https://api.telegram.org/bot" + env.BOT_TOKEN + "/setChatMenuButton", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ menu_button: {
+            body: JSON.stringify({ chat_id: chatId, menu_button: {
               type: "web_app", text: "Play",
               web_app: { url: "https://kruti-nomera-neon-test.malovtoni.workers.dev/api/game" }
             } })
           });
-        } catch (_) {}
+          const menuResult = await menuResponse.json();
+          if (!menuResponse.ok || !menuResult.ok) console.error("setChatMenuButton failed:", menuResult);
+        } catch (menuError) {
+          console.error("setChatMenuButton request failed:", menuError);
+        }
         await sendMessage(env.BOT_TOKEN, chatId,
           "Добро пожаловать в «Крути Номера»! 🎮\n\nНажми кнопку ниже, чтобы открыть игру внутри Telegram и создать игровой профиль.",
           { inline_keyboard: [[{ text: "🎮 Играть", web_app: { url: "https://kruti-nomera-neon-test.malovtoni.workers.dev/api/game" } }]] });
