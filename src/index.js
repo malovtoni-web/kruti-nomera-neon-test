@@ -160,7 +160,7 @@ function setGameActionsEnabled(enabled) {
           }
         },5000);
       })();
-      <\\/script>`;
+      <\/script>`;
       // Run diagnostics before the external Telegram SDK, which may stall or fail to load.
       if (html.includes('<head>')) {
         html = html.replace('<head>', '<head>' + startupProbe);
