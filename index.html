@@ -67,12 +67,12 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
   <div class="section-title">Выбери редкость</div><div class="rarity-tabs" id="rarityTabs"><button class="active" data-rarity="any">✨ Любые</button><button data-rarity="unusual">🟢 Необычные</button><button data-rarity="rare">🔵 Редкие</button><button data-rarity="epic">🟣 Эпические</button><button data-rarity="legend">🟡 Легендарные</button><button data-rarity="myth">💗 Мифические</button><button data-rarity="secret">🌌 Секретные</button></div><div class="spin-options" id="spinOptions"><button class="active" data-count="1">×1</button><button data-count="3">×3</button><button data-count="5" disabled title="Только VIP">👑 ×5 VIP</button></div><button class="speed-toggle" id="speedToggle" type="button"><span>⚡ Ускоренная прокрутка</span><span id="speedState">ВЫКЛ</span></button><div class="section-title">Контейнеры</div>
   <div class="crate-grid">
    <article class="crate" data-tier="any"><div class="crate-icon">📦</div><h3>Любые</h3><div class="sub">Все категории номеров</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('any')">50 000 ₽ · открыть</button></article>
-   <article class="crate" data-tier="unusual"><div class="crate-icon">🟢</div><h3>Необычные</h3><div class="sub">Повышенный шанс необычных</div><div class="meter"><i style="width:38%"></i></div><button class="btn secondary" onclick="spin('unusual')">100 000 ₽ · открыть</button></article>
-   <article class="crate" data-tier="rare"><div class="crate-icon">🔵</div><h3>Редкие</h3><div class="sub">Повышенный шанс редких</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">250 000 ₽ · открыть</button></article>
-   <article class="crate" data-tier="epic"><div class="crate-icon">🟣</div><h3>Эпические</h3><div class="sub">Шанс эпических и выше</div><div class="meter"><i style="width:68%"></i></div><button class="btn secondary" onclick="spin('epic')">500 000 ₽ · открыть</button></article>
-   <article class="crate" data-tier="legend"><div class="crate-icon">🟡</div><h3>Легендарные</h3><div class="sub">Повышенный шанс легендарных</div><div class="meter"><i style="width:78%"></i></div><button class="btn gold" onclick="spin('legend')">1 млн ₽ · открыть</button></article>
-   <article class="crate" data-tier="myth"><div class="crate-icon">💗</div><h3>Мифические</h3><div class="sub">Очень редкие номера</div><div class="meter"><i style="width:88%"></i></div><button class="btn gold" onclick="spin('myth')">2,5 млн ₽ · открыть</button></article>
-   <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Эксклюзивная категория</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">5 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="unusual"><div class="crate-icon">🟢</div><h3>Необычные</h3><div class="sub">Необычные и выше</div><div class="meter"><i style="width:38%"></i></div><button class="btn secondary" onclick="spin('unusual')">100 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="rare"><div class="crate-icon">🔵</div><h3>Редкие</h3><div class="sub">Редкие и выше</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">250 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="epic"><div class="crate-icon">🟣</div><h3>Эпические</h3><div class="sub">Эпические и выше</div><div class="meter"><i style="width:68%"></i></div><button class="btn secondary" onclick="spin('epic')">500 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="legend"><div class="crate-icon">🟡</div><h3>Легендарные</h3><div class="sub">Легендарные и выше</div><div class="meter"><i style="width:78%"></i></div><button class="btn gold" onclick="spin('legend')">1 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="myth"><div class="crate-icon">💗</div><h3>Мифические</h3><div class="sub">Мифические и выше</div><div class="meter"><i style="width:88%"></i></div><button class="btn gold" onclick="spin('myth')">2,5 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Только секретные</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">5 млн ₽ · открыть</button></article>
   </div>
   <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div></div>
   <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>1 открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
@@ -225,7 +225,7 @@ async function buyCar(name,emoji,cost){if(serverMode){try{await apiAction('buyCa
 let upgradeSelection=[];
 const rarityOrder=['common','unusual','rare','epic','legend','myth','secret'];
 const rarityNames=['Обычный','Необычный','Редкий','Эпический','Легендарный','Мифический','Секретный'];
-const rarityValues=[35000,80000,180000,850000,4500000,25000000,100000000];
+const rarityValues=[50000,100000,250000,500000,1000000,2500000,5000000];
 const upgradeFees=[10000,25000,60000,150000,400000,1000000];
 function upgradeFeeFor(cls){return upgradeFees[rarityOrder.indexOf(cls)]||0}
 function renderUpgrader(){
@@ -291,7 +291,7 @@ async function spin(type){
  sync();
 
  let r=Math.random(),tier='Обычный',cls='common',value=35000;
- let weights=type==='secret'?[0,0,0,.08,.42,.35,.15]:type==='myth'?[0,0,.03,.17,.35,.35,.10]:type==='legend'?[.02,.08,.22,.35,.25,.075,.005]:type==='epic'?[.08,.22,.35,.25,.08,.018,.002]:type==='rare'?[.18,.37,.30,.12,.025,.004,.001]:type==='unusual'?[.38,.42,.16,.035,.004,.0009,.0001]:[.58,.27,.11,.032,.007,.0009,.0001];
+ let weights=type==='secret'?[0,0,0,0,0,0,1]:type==='myth'?[0,0,0,0,0,.9,.1]:type==='legend'?[0,0,0,0,.85,.13,.02]:type==='epic'?[0,0,0,.78,.19,.028,.002]:type==='rare'?[0,0,.70,.23,.06,.009,.001]:type==='unusual'?[0,.65,.25,.08,.019,.0009,.0001]:[.58,.27,.11,.032,.007,.0009,.0001];
  let c=0;
  const tierData=[['Обычный','common',35000],['Необычный','unusual',80000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000],['Секретный','secret',100000000]];
  for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){[tier,cls,value]=tierData[i];break;}}
