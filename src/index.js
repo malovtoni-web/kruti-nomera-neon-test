@@ -50,17 +50,33 @@ async function loadPlayer(db,id){
     await db.prepare('UPDATE players SET energy=?,energy_updated_at=?,updated_at=? WHERE telegram_id=?').bind(energy,updatedAt,now,id).run();
     p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();
   }
-  // Keep the displayed value of every existing garage item consistent with its rarity.
-  const values={common:50000,unusual:100000,rare:250000,epic:500000,legend:1000000,myth:2500000,secret:5000000};
+  // Case payouts are custom amounts, not fixed rarity face values.
+  // Restore historical spin values if an earlier build overwrote them with rarity defaults.
   let garage=[];
   try{garage=JSON.parse(p.garage_json||'[]')}catch(_){garage=[]}
-  let normalized=false;
+  const historyResult=await db.prepare(
+    'SELECT plate,region,cls,value FROM spin_history WHERE telegram_id=? ORDER BY rowid DESC LIMIT 1000'
+  ).bind(id).all();
+  const historyRows=(historyResult?.results||[]).slice().reverse();
+  const historyByNumber=new Map();
+  for(const row of historyRows){
+    const key=[row.plate,row.region,row.cls].join('|');
+    if(!historyByNumber.has(key))historyByNumber.set(key,[]);
+    historyByNumber.get(key).push(Number(row.value));
+  }
+  let repaired=false;
   garage=garage.map(item=>{
-    const value=values[item.cls];
-    if(value!==undefined&&item.value!==value){normalized=true;return {...item,value};}
+    const key=[item.plate,item.region,item.cls].join('|');
+    const values=historyByNumber.get(key);
+    if(!values?.length)return item;
+    const historicalValue=values.shift();
+    if(Number.isSafeInteger(historicalValue)&&Number(item.value)!==historicalValue){
+      repaired=true;
+      return {...item,value:historicalValue};
+    }
     return item;
   });
-  if(normalized){
+  if(repaired){
     await db.prepare('UPDATE players SET garage_json=?,updated_at=? WHERE telegram_id=?').bind(JSON.stringify(garage),now,id).run();
     p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();
   }
