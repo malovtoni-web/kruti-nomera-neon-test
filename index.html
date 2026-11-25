@@ -351,6 +351,35 @@ body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;bac
 @media(max-height:700px){#caseModal .case-modal-inner{gap:4px}#caseModal .case-headline-title{font-size:27px}#caseModal .case-scene{min-height:130px}#caseModal .case-big{height:clamp(112px,27vh,190px)}#caseModal .case-footer-glow{display:none}#caseModal .result{padding:9px 12px!important}#caseModal .result .plate{min-height:62px}}
 @media(prefers-reduced-motion:reduce){#caseModal .case-big{animation:none!important}}
 
+
+/* Neon night-city backdrop across the game */
+html{background:#050813}
+body{position:relative;isolation:isolate;background:linear-gradient(180deg,#070b19 0%,#10152b 42%,#080b18 100%)!important}
+body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 50% 65%,#8c49ff24 0%,transparent 34%),
+ radial-gradient(ellipse at 13% 38%,#ff8b4320 0%,transparent 27%),
+ radial-gradient(ellipse at 88% 34%,#328cff26 0%,transparent 30%),
+ linear-gradient(180deg,#060916 0%,#111a35 52%,#090d1c 100%)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.72;background:
+ linear-gradient(90deg,transparent 0 3%,#ffad5c88 3.2%,transparent 3.6% 8%,#a65cff77 8.2%,transparent 8.6% 91%,#388dff88 91.2%,transparent 91.6% 96%,#56caff66 96.2%,transparent 96.6%),
+ repeating-linear-gradient(90deg,transparent 0 34px,#8dbaff16 35px 37px,transparent 38px 59px),
+ repeating-linear-gradient(0deg,transparent 0 24px,#b8d7ff1a 25px 27px,transparent 28px 45px);
+ mask-image:linear-gradient(180deg,#000 0%,#000 46%,transparent 83%)}
+.app{position:relative;z-index:0}
+#caseModal{background:
+ radial-gradient(ellipse at 50% 70%,#a34cff30 0%,transparent 42%),
+ radial-gradient(ellipse at 12% 42%,#ff9b4a24 0%,transparent 28%),
+ radial-gradient(ellipse at 88% 40%,#368fff30 0%,transparent 30%),
+ linear-gradient(180deg,#060916 0%,#121a35 58%,#070b17 100%)!important}
+#caseModal:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;background:
+ linear-gradient(90deg,transparent 0 4%,#ffb56a66 4.2%,transparent 4.8% 12%,#bb6aff88 12.2%,transparent 12.8% 87%,#4a9dff88 87.2%,transparent 87.8% 96%,#61d7ff66 96.2%,transparent 96.8%),
+ repeating-linear-gradient(90deg,transparent 0 42px,#b5d4ff14 43px 45px,transparent 46px 67px),
+ linear-gradient(180deg,transparent 0%,#060a17 85%)}
+#caseModal .case-scene{background:radial-gradient(ellipse at 50% 72%,#b14cff35 0%,transparent 48%),linear-gradient(180deg,#0c163322,#111c3822)}
+#caseModal .case-scene:after{content:"";position:absolute;left:-18vw;right:-18vw;bottom:2%;height:24%;z-index:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 12%,#9c70ff22 12.2% 12.5%,transparent 12.8% 28%),linear-gradient(180deg,transparent,#9a5dff18 72%,#4a8dff20);filter:blur(3px);transform:perspective(180px) rotateX(58deg)}
+#caseModal .case-big{z-index:2}
+@media(prefers-reduced-motion:reduce){body:before,body:after{animation:none!important}}
+
 </style><script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
