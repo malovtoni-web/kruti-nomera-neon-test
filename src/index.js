@@ -54,12 +54,77 @@ export default {
       const assetUrl = new URL("/", url);
       const assetResponse = await env.ASSETS.fetch(new Request(assetUrl, request));
       if (!assetResponse.ok) return assetResponse;
-      const html = await assetResponse.text();
-      const patched = html.replace("<head>", '<head><script src="https://telegram.org/js/telegram-web-app.js"></script>');
+      let html = await assetResponse.text();
+      if (!html.includes('id="connectionStatus"')) {
+        const diagnosticCss = '.connection-status{margin:0 0 14px;padding:11px 13px;border:1px solid #6b5730;border-radius:13px;background:#302719;color:#ffe0a0;font-size:12px;line-height:1.45}.connection-status.ok{border-color:#286b4b;background:#142b22;color:#9cf0bd}.connection-status.error{border-color:#8b3e50;background:#321923;color:#ffb6c3}.connection-status b{display:block;margin-bottom:3px;font-size:13px}';
+        html = html.replace('</style>', diagnosticCss + '</style>');
+        html = html.replace('<div class="toast" id="toast"></div>', '<div class="toast" id="toast"></div><div class="connection-status" id="connectionStatus" role="status" aria-live="polite"><b>Проверка подключения…</b>Ожидаем ответ Telegram и игрового сервера.</div>');
+        const oldInit = `const tgUserId = (() => {
+ try { return window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'local'; }
+ catch (_) { return 'local'; }
+})();
+const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
+const tgInitData = window.Telegram?.WebApp?.initData || '';
+let serverMode = Boolean(tgInitData);`;
+        const newInit = `const tg = window.Telegram?.WebApp;
+try { tg?.ready(); tg?.expand(); } catch (_) {}
+const tgUserId = (() => {
+ try { return tg?.initDataUnsafe?.user?.id || 'local'; }
+ catch (_) { return 'local'; }
+})();
+const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
+const tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';
+let serverMode = false;
+function connectionStatus(title, message, kind='error') {
+ const el=document.getElementById('connectionStatus');
+ if(!el)return;
+ el.className='connection-status '+kind;
+ el.innerHTML='<b>'+title+'</b>'+message;
+}
+function setGameActionsEnabled(enabled) {
+ document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.asset-card .btn').forEach(b=>b.disabled=!enabled);
+}`;
+        html = html.replace(oldInit, newInit);
+        const oldHydrate = `async function hydrateServerState(){
+ if(!serverMode)return;
+ try{const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
+ const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'Ошибка загрузки');
+ applyServerPlayer(data.player);sync();
+ }catch(e){serverMode=false;toast('Серверная игра недоступна: '+e.message+'. Действия отключены.');document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.car-buy').forEach(b=>b.disabled=true);}
+}`;
+        const newHydrate = `async function hydrateServerState(){
+ setGameActionsEnabled(false);
+ if(!tg) {
+  connectionStatus('Telegram WebApp SDK не найден','Страница открыта не во встроенном режиме Telegram. Открой игру кнопкой «🎮 Играть» в сообщении бота.');
+  return;
+ }
+ if(!tgInitData) {
+  connectionStatus('Telegram не передал данные авторизации','initData пустой. Скорее всего, игра открыта как обычная ссылка, а не через WebApp-кнопку. Вернись в чат с ботом и нажми «🎮 Играть».');
+  return;
+ }
+ connectionStatus('Данные Telegram получены','Проверяем подпись и загружаем игровой профиль с тестового сервера…','');
+ try {
+  const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
+  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));
+  if(!res.ok||!data.ok) {
+   if(res.status===401) throw new Error('Сервер отклонил подпись Telegram. Нужно проверить связку токена бота и WebApp.');
+   if(res.status===503) throw new Error('На тестовом сервере не настроена база данных или токен бота.');
+   throw new Error(data.error||('HTTP '+res.status));
+  }
+  serverMode=true;
+  applyServerPlayer(data.player);sync();setGameActionsEnabled(true);sync();
+  connectionStatus('Подключено к серверу','Профиль загружен. Баланс и энергия теперь берутся из тестовой базы данных.','ok');
+ } catch(e) {
+  serverMode=false;setGameActionsEnabled(false);
+  connectionStatus('Ошибка подключения к игровому серверу',e.message+' Игровые действия отключены, чтобы не сохранять прогресс локально.');
+ }
+}`;
+        html = html.replace(oldHydrate, newHydrate);
+      }
       const headers = new Headers(assetResponse.headers);
       headers.set("Content-Type", "text/html; charset=utf-8");
       headers.delete("Content-Length");
-      return new Response(patched, { status: assetResponse.status, headers });
+      return new Response(html, { status: assetResponse.status, headers });
     }
 
     if (url.pathname === "/api/health") {
