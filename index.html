@@ -12,7 +12,7 @@
 .page{display:none}.page.active{display:block}.section-title{font-size:20px;font-weight:900;margin:10px 0 12px}.sub{color:var(--muted);font-size:13px}
 .hero{background:linear-gradient(135deg,#27213b,#1a1a28 65%,#282039);border:1px solid #554477;border-radius:20px;padding:17px;margin-bottom:13px;box-shadow:0 12px 32px #0004}.hero-row{display:flex;justify-content:space-between;align-items:center}.pill{font-size:11px;font-weight:800;padding:5px 9px;border-radius:20px;background:#49366d;color:#d6caff}.price{font-size:23px;font-weight:900;color:#c19aff}
 .plate{background:linear-gradient(#fff,#e8e8e8);color:#171717;border:5px solid #b7bbc5;border-radius:13px;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:inset 0 0 0 2px #4b4b4b,0 7px 18px #0005;margin:16px auto;max-width:330px}.plate .mainnum{font-size:clamp(30px,9vw,46px);font-weight:950;letter-spacing:1px;line-height:1}.plate .region{border-left:2px solid #777;padding-left:7px;font-size:22px;font-weight:900}.plate .rus{font-size:9px;display:block;text-align:center}
-.rarity{font-size:12px;font-weight:900;border-radius:20px;padding:5px 9px;display:inline-block}.common{background:#393943;color:#c5c5ce}.rare{background:#163d73;color:#7db5ff}.epic{background:#42215f;color:#d6a0ff}.legend{background:#5a4315;color:#ffd56e}.myth{background:#5b243a;color:#ff9cb9}
+.unusual{background:#174d36;color:#75efb1}.secret{background:#27204e;color:#c6a9ff}.rarity{font-size:12px;font-weight:900;border-radius:20px;padding:5px 9px;display:inline-block}.common{background:#393943;color:#c5c5ce}.rare{background:#163d73;color:#7db5ff}.epic{background:#42215f;color:#d6a0ff}.legend{background:#5a4315;color:#ffd56e}.myth{background:#5b243a;color:#ff9cb9}
 .meter{height:8px;background:#33333f;border-radius:20px;overflow:hidden;margin:9px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#39d783,#5a9dff,#bd76ff,#ffc34b);width:72%}
 .btn{border:0;border-radius:15px;padding:14px 16px;background:linear-gradient(180deg,#36df83,#0ca957);color:#062616;font-size:17px;font-weight:950;width:100%;box-shadow:0 5px 0 #087d42;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#292936;color:#eee;box-shadow:none;border:1px solid #414151}.btn.gold{background:linear-gradient(180deg,#ffd15d,#f5a91f);color:#2c1c04;box-shadow:0 5px 0 #b87513}
 .energy{display:flex;justify-content:space-between;color:#b7b5c4;font-size:12px;margin:10px 2px}.crate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.crate{background:#1b1b27;border:1px solid #343442;border-radius:17px;padding:13px;min-width:0}.crate-icon{height:95px;border-radius:12px;display:grid;place-items:center;font-size:48px;margin-bottom:9px;background:linear-gradient(145deg,#30364b,#191925)}.crate h3{margin:0 0 3px;font-size:15px}.crate .sub{font-size:11px}.crate .btn{font-size:13px;padding:10px;margin-top:9px;border-radius:11px}
@@ -20,6 +20,8 @@
 .card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:9px}.item{background:#20202c;border:1px solid #393947;border-radius:13px;padding:10px}.item .plate{margin:5px auto 9px;padding:6px 4px;border-width:3px}.item .mainnum{font-size:20px}.item .region{font-size:13px}.item strong{font-size:13px}
 .listrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.listrow:last-child{border:0}.muted{color:var(--muted)}.notice{font-size:11px;color:#aaa8b7;text-align:center;margin-top:16px}
 .rarity-tabs{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;margin-bottom:8px}.rarity-tabs button{white-space:nowrap;border:1px solid #47405b;background:#1a1928;color:#c5bfd5;border-radius:12px;padding:9px 12px;font-weight:850;font-size:12px}.rarity-tabs button.active{border-color:#b18aff;background:#392452;box-shadow:0 0 14px #9b5cff55}
+.spin-options{display:flex;gap:7px;margin:10px 0}.spin-options button{flex:1;background:#211e30;color:#d9caff;border:1px solid #49405f;border-radius:11px;padding:10px 5px;font-weight:900}.spin-options button.active{background:#503477;border-color:#c49aff}.spin-options button:disabled{opacity:.45}
+.speed-toggle{display:flex;align-items:center;justify-content:space-between;background:#211e30;border:1px solid #49405f;border-radius:12px;padding:10px 12px;margin:8px 0 14px;color:#e3d8ff;font-weight:800;font-size:13px}
 .podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;align-items:end;text-align:center}.podium-person{background:linear-gradient(180deg,#29243b,#191925);border:1px solid #54466e;border-radius:16px;padding:12px 5px}.podium-person.first{padding-top:20px;border-color:#c49a48;box-shadow:0 0 24px #ffc34b22}.podium-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin:0 auto 7px;background:linear-gradient(145deg,#b98cff,#56358c);font-weight:950;font-size:19px}.podium-person.first .podium-avatar{background:linear-gradient(145deg,#ffe38c,#b87b25)}.podium-rank{font-size:21px}.podium-name{font-weight:900;font-size:12px;overflow-wrap:anywhere}.podium-score{font-size:10px;color:#b9afce;margin-top:4px}.asset-card{background:linear-gradient(145deg,#25243a,#171722);border:1px solid #49405f;border-radius:18px;padding:14px;margin:10px 0}.asset-icon{font-size:42px;text-align:center;padding:12px}.asset-price{font-size:18px;font-weight:950;color:#d4b8ff}.asset-card .btn{font-size:13px;padding:10px;margin-top:8px}.house-scene{border-radius:18px;min-height:145px;display:grid;place-items:center;background:linear-gradient(180deg,#18294a,#302345 60%,#171722);border:1px solid #64518c}.house-emoji{font-size:76px;filter:drop-shadow(0 0 18px #b58aff88)}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#171721ed;backdrop-filter:blur(16px);border-top:1px solid #343440;display:flex;justify-content:space-around;padding:9px max(8px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:#858596;font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:55px}.nav button span{font-size:21px}.nav button.active{color:#aa91ff}
 .toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#29253a;border:1px solid #6954a7;padding:10px 15px;border-radius:20px;z-index:9;display:none;white-space:nowrap}.toast.show{display:block}
@@ -59,12 +61,15 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
  <section class="page active" id="spin">
   <div class="hero"><div class="hero-row"><span class="rarity rare">СЕЗОННЫЙ БОНУС</span><span class="sub">Удача ×<b id="luck">1,0</b></span></div><h2 style="margin:12px 0 2px">Открой свой номер</h2><div class="sub">Каждый контейнер — шанс найти редкий экземпляр</div></div>
   <div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
-  <div class="section-title">Выбери редкость</div><div class="rarity-tabs" id="rarityTabs"><button class="active" data-rarity="any">✨ Любые</button><button data-rarity="unusual">🟢 Необычные</button><button data-rarity="rare">🔵 Редкие</button><button data-rarity="epic">🟣 Эпические</button><button data-rarity="legend">🟡 Легендарные</button><button data-rarity="myth">💗 Мифические</button><button data-rarity="secret">🌌 Секретные</button></div><div class="section-title">Контейнеры</div>
+  <div class="section-title">Выбери редкость</div><div class="rarity-tabs" id="rarityTabs"><button class="active" data-rarity="any">✨ Любые</button><button data-rarity="unusual">🟢 Необычные</button><button data-rarity="rare">🔵 Редкие</button><button data-rarity="epic">🟣 Эпические</button><button data-rarity="legend">🟡 Легендарные</button><button data-rarity="myth">💗 Мифические</button><button data-rarity="secret">🌌 Секретные</button></div><div class="spin-options" id="spinOptions"><button class="active" data-count="1">×1</button><button data-count="3">×3</button><button data-count="5" disabled title="Только VIP">👑 ×5 VIP</button></div><button class="speed-toggle" id="speedToggle" type="button"><span>⚡ Ускоренная прокрутка</span><span id="speedState">ВЫКЛ</span></button><div class="section-title">Контейнеры</div>
   <div class="crate-grid">
-   <article class="crate"><div class="crate-icon">📦</div><h3>Обычный</h3><div class="sub">Легендарный и выше: 0,0047%</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('common')">2 млн ₽ · открыть</button></article>
-   <article class="crate"><div class="crate-icon">🟦</div><h3>Редкий</h3><div class="sub">Легендарный и выше: 0,15%</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">7 млн ₽ · открыть</button></article>
-   <article class="crate"><div class="crate-icon">🟪</div><h3>Эпический</h3><div class="sub">Легендарный и выше: 2,84%</div><div class="meter"><i style="width:75%"></i></div><button class="btn secondary" onclick="spin('epic')">19 млн ₽ · открыть</button></article>
-   <article class="crate"><div class="crate-icon">👑</div><h3>Легендарный</h3><div class="sub">Повышенный шанс редких номеров</div><div class="meter"><i style="width:91%"></i></div><button class="btn gold" onclick="spin('legend')">45 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="any"><div class="crate-icon">📦</div><h3>Любые</h3><div class="sub">Все категории номеров</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('any')">2 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="unusual"><div class="crate-icon">🟢</div><h3>Необычные</h3><div class="sub">Повышенный шанс необычных</div><div class="meter"><i style="width:38%"></i></div><button class="btn secondary" onclick="spin('unusual')">4 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="rare"><div class="crate-icon">🔵</div><h3>Редкие</h3><div class="sub">Повышенный шанс редких</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">7 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="epic"><div class="crate-icon">🟣</div><h3>Эпические</h3><div class="sub">Шанс эпических и выше</div><div class="meter"><i style="width:68%"></i></div><button class="btn secondary" onclick="spin('epic')">19 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="legend"><div class="crate-icon">🟡</div><h3>Легендарные</h3><div class="sub">Повышенный шанс легендарных</div><div class="meter"><i style="width:78%"></i></div><button class="btn gold" onclick="spin('legend')">45 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="myth"><div class="crate-icon">💗</div><h3>Мифические</h3><div class="sub">Очень редкие номера</div><div class="meter"><i style="width:88%"></i></div><button class="btn gold" onclick="spin('myth')">100 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Эксклюзивная категория</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">250 млн ₽ · открыть</button></article>
   </div>
   <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div></div>
   <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>1 открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
@@ -151,7 +156,9 @@ document.getElementById('upgradeHouse').addEventListener('click',()=>{const i=Ma
 function renderCars(){document.getElementById('carCount').textContent=(state.cars||[]).length+' машин';document.getElementById('carCollection').innerHTML=(state.cars||[]).length?state.cars.map(c=>'<div class="listrow"><span>'+c.emoji+' '+c.name+'</span><b>'+fmt(c.cost)+' ₽</b></div>').join(''):'Пока здесь пусто — выбери первую машину ниже.'}
 function buyCar(name,emoji,cost){if(state.rub<cost){toast('Не хватает денег');return}state.rub-=cost;state.cars=state.cars||[];state.cars.push({name:name,emoji:emoji,cost:cost});sync();toast('🚘 Покупка: '+name)}
 function renderGarage(){let el=document.getElementById('inventory');el.innerHTML=state.garage.length?state.garage.map(x=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>'}
-let isSpinning=false;
+let isSpinning=false,spinCount=1,fastSpin=false;
+document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
+document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
 function randomPlate(){
  const a=names[Math.floor(Math.random()*names.length)];
  const b=names[Math.floor(Math.random()*names.length)];
@@ -160,24 +167,25 @@ function randomPlate(){
 }
 function spin(type){
  if(isSpinning)return;
- if(state.energy<1){toast('Недостаточно энергии');return}
+ const count=spinCount;
+ if(count===5){toast('×5 доступно только VIP');return}
+ if(state.energy<count){toast('Недостаточно энергии для ×'+count);return}
+ const prices={any:2000000,unusual:4000000,rare:7000000,epic:19000000,legend:45000000,myth:100000000,secret:250000000};
+ const totalCost=(prices[type]||2000000)*count;
+ if(state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
+ state.rub-=totalCost;
  isSpinning=true;
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
- state.energy--;
+ state.energy-=count;
  sync();
 
  let r=Math.random(),tier='Обычный',cls='common',value=35000;
- let weights=type==='legend'?[.15,.25,.35,.20,.05]:type==='epic'?[.42,.35,.18,.045,.005]:type==='rare'?[.68,.25,.06,.009,.001]:[.88,.105,.014,.0009,.0001];
+ let weights=type==='secret'?[0,0,0,.08,.42,.35,.15]:type==='myth'?[0,0,.03,.17,.35,.35,.10]:type==='legend'?[.02,.08,.22,.35,.25,.075,.005]:type==='epic'?[.08,.22,.35,.25,.08,.018,.002]:type==='rare'?[.18,.37,.30,.12,.025,.004,.001]:type==='unusual'?[.38,.42,.16,.035,.004,.0009,.0001]:[.58,.27,.11,.032,.007,.0009,.0001];
  let c=0;
- for(let i=0;i<weights.length;i++){
-  c+=weights[i];
-  if(r<c){
-   let a=[['Обычный','common',35000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000]][i];
-   [tier,cls,value]=a;break;
-  }
- }
+ const tierData=[['Обычный','common',35000],['Необычный','unusual',80000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000],['Секретный','secret',100000000]];
+ for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){[tier,cls,value]=tierData[i];break;}}
  const finalPlate=randomPlate();
  const finalRegion=regions[Math.floor(Math.random()*regions.length)];
  const result=document.getElementById('result');
@@ -199,7 +207,7 @@ function spin(type){
    playTone(420+Math.random()*260,.055,'triangle',.018);
    document.getElementById('wonregion').textContent=regions[Math.floor(Math.random()*regions.length)];
    const delay=delays[tick++];
-   setTimeout(roll,Math.max(18,Math.round(delay*(state.mode==='turbo'?.48:1))));
+   setTimeout(roll,Math.max(12,Math.round(delay*((state.mode==='turbo'?.48:1)*(fastSpin?.38:1)))));
    return;
   }
   document.getElementById('wonplate').textContent=finalPlate;
@@ -222,7 +230,7 @@ function spin(type){
  setTimeout(roll,80);
 }
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{let p=b.dataset.page;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p))}));
-document.querySelectorAll('[data-rarity]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-rarity]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.crate').forEach((c,i)=>{const m={any:[0,1,2,3],unusual:[0],rare:[1],epic:[2],legend:[3],myth:[3],secret:[3]};c.style.display=(m[b.dataset.rarity]||[]).includes(i)?'block':'none'});toast('Выбрана категория: '+b.textContent.trim())}));
+document.querySelectorAll('[data-rarity]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-rarity]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.crate').forEach(c=>{c.style.display=b.dataset.rarity==='any'||c.dataset.tier===b.dataset.rarity?'block':'none'});toast('Выбрана категория: '+b.textContent.trim())}));
 setInterval(()=>sync(),15000);
 sync();
 </script>
