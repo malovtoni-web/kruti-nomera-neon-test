@@ -140,10 +140,11 @@ function setGameActionsEnabled(enabled) {
         },5000);
       })();
       <\/script>`;
-      if (!html.includes('id="connectionStatus"')) {
-        html = html.replace('</body>', startupProbe + '</body>');
+      const gameScriptMarker = '<script>\nconst tg = window.Telegram?.WebApp;';
+      if (html.includes(gameScriptMarker)) {
+        html = html.replace(gameScriptMarker, startupProbe + '\n' + gameScriptMarker);
       } else {
-        html = html.replace('</body>', startupProbe + '</body>');
+        html = html.replace('</head>', startupProbe + '</head>');
       }
       // Add a bounded wait to the current HTML hydration request, even when the asset
       // already contains its own connection-status UI.
