@@ -146,7 +146,7 @@ function connectionStatus(title, message, kind='error') {
  el.innerHTML='<b>'+title+'</b>'+message;
 }
 function setGameActionsEnabled(enabled) {
- document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.asset-card .btn').forEach(b=>b.disabled=!enabled);
+ document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.asset-card .btn,#marketListBtn').forEach(b=>b.disabled=!enabled);
 }
 async function apiAction(action,extra={}) {
  const res=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData,action,...extra})});
@@ -362,9 +362,9 @@ async function upgradeSelectedNumbers(){
  }catch(e){toast(e.message)}
 }
 document.getElementById('upgradeNumbers').addEventListener('click',upgradeSelectedNumbers);
-let garageFilter='all',marketSelectedIndex=null;
+let garageFilter='all',marketSelectedIndex=null,marketSelectedPlate=null,marketSelectedRegion=null;
 function openMarketForSale(index){
- marketSelectedIndex=index;const item=state.garage[index];if(!item)return;
+ marketSelectedIndex=index;const item=state.garage[index];if(!item)return;marketSelectedPlate=item.plate;marketSelectedRegion=item.region;
  document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='market'));
  document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='market'));
  const label=document.getElementById('marketSelectedLabel');if(label)label.textContent='Выбран: '+item.plate+' · '+item.region+' · '+item.rarity;
@@ -391,7 +391,7 @@ document.getElementById('inventory').addEventListener('click',event=>{
 document.getElementById('marketListBtn').addEventListener('click',async()=>{
  const price=Number(document.getElementById('marketPrice').value);
  if(!Number.isInteger(marketSelectedIndex)||!Number.isSafeInteger(price)||price<1){toast('Выбери номер и укажи цену');return;}
- try{await apiAction('marketList',{index:marketSelectedIndex,price});marketSelectedIndex=null;document.getElementById('marketPrice').value='';document.getElementById('marketListBtn').disabled=true;await refreshFeatureState();renderGarage();toast('Номер выставлен на рынок');}
+ try{await apiAction('marketList',{index:marketSelectedIndex,price,plate:marketSelectedPlate,region:marketSelectedRegion});marketSelectedIndex=null;marketSelectedPlate=null;marketSelectedRegion=null;document.getElementById('marketPrice').value='';document.getElementById('marketListBtn').disabled=true;await refreshFeatureState();renderGarage();toast('Номер выставлен на рынок');}
  catch(e){toast(e.message);}
 });
 
