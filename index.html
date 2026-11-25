@@ -110,6 +110,55 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
 .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.profile-stat{margin:0}.profile-stat small{display:block;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.5px}.profile-stat b{display:block;font-size:19px;margin-top:6px;overflow-wrap:anywhere}
 .rarity-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #ffffff0d}.rarity-row:last-child{border:0}.rarity-dot{width:9px;height:9px;border-radius:50%;background:var(--rarity-glow);box-shadow:0 0 12px var(--rarity-glow)}.rarity-row span:nth-child(2){flex:1;font-size:13px}.rarity-row b{font-size:13px}
 
+
+/* Full neon lobby refresh */
+:root{--purple:#a879ff;--gold:#ffc64d;--line:#393453}
+html{background:#080912}
+body{background:radial-gradient(ellipse at 50% -12%,#3b286c 0,transparent 42%),radial-gradient(ellipse at 12% 48%,#103d78aa 0,transparent 32%),radial-gradient(ellipse at 90% 60%,#59206e88 0,transparent 34%),linear-gradient(180deg,#090b18,#080912 75%);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background:repeating-linear-gradient(115deg,transparent 0 78px,#a68cff09 79px 80px),linear-gradient(180deg,transparent 65%,#0b0b17 100%)}
+.app{position:relative;z-index:1;max-width:560px;padding:12px 14px 112px}
+.top{margin:5px 0 12px;padding:9px 11px;border:1px solid #55427d;border-radius:18px;background:linear-gradient(100deg,#19172cdd,#111525ee);box-shadow:0 0 22px #854bff22,inset 0 1px #ffffff18}
+.brand{font-size:21px;letter-spacing:1px;text-shadow:0 0 16px #9d68ff88}.brand span{color:#d5a8ff}
+.top .sub{font-size:10px;letter-spacing:1.4px;text-transform:uppercase}
+.avatar{border-radius:50%;border:2px solid #c18cff;background:radial-gradient(circle at 30% 20%,#f4d2ff,#8048d5 60%,#251747);color:white;box-shadow:0 0 18px #a95dff99}
+.stats{gap:7px;margin-bottom:12px}.stat{background:linear-gradient(145deg,#191b31ed,#101321f2);border:1px solid #454064;border-radius:13px;box-shadow:inset 0 1px #ffffff12}.stat b{font-size:14px}.stat small{letter-spacing:1px}
+#tabs{display:none}
+.page{animation:pageEnter .24s ease both}
+@keyframes pageEnter{from{opacity:.55;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero.plate-hero{min-height:370px;padding:17px 17px 20px;border:1px solid #8661c8;border-radius:24px;background:radial-gradient(ellipse at 50% 78%,#2358a9bb 0,transparent 40%),radial-gradient(ellipse at 50% 20%,#6b35a866 0,transparent 48%),linear-gradient(180deg,#15162c 0%,#10172b 50%,#0a0d1b 100%);box-shadow:0 0 0 1px #b58aff22,0 16px 42px #050611aa,0 0 34px #6e38cf33;isolation:isolate}
+.hero.plate-hero:before{content:"";position:absolute;inset:0;width:auto;height:auto;right:0;bottom:0;border:0;border-radius:inherit;transform:none;opacity:.65;background:repeating-linear-gradient(90deg,transparent 0 17px,#8ab9ff12 18px 19px,transparent 20px 34px),linear-gradient(180deg,transparent 35%,#101a37 78%,#090b16 100%);clip-path:polygon(0 40%,7% 40%,7% 24%,13% 24%,13% 48%,20% 48%,20% 31%,27% 31%,27% 44%,34% 44%,34% 19%,41% 19%,41% 43%,49% 43%,49% 27%,56% 27%,56% 46%,64% 46%,64% 17%,72% 17%,72% 42%,79% 42%,79% 26%,86% 26%,86% 46%,93% 46%,93% 33%,100% 33%,100% 100%,0 100%);z-index:-1}
+.hero.plate-hero:after{inset:auto 0 0;height:2px;background:linear-gradient(90deg,transparent,#50bfff,#c18cff,#50bfff,transparent);box-shadow:0 0 18px #6bbdff}
+.hero-kicker{color:#d6c3ff;letter-spacing:2.5px}
+.hero-title{font-size:26px;line-height:1.06;text-align:center;text-transform:uppercase;text-shadow:0 3px 22px #9c64ff99;margin:12px 0 5px}
+.hero-sub{text-align:center;color:#b9c9ed;font-size:10px;letter-spacing:1.7px;font-weight:800}
+.lobby-city{height:128px;position:relative;margin:0 -4px -4px;overflow:hidden}
+.city-lights{position:absolute;inset:0;background:linear-gradient(180deg,transparent,#172e5c55 70%,#070a14),repeating-linear-gradient(90deg,transparent 0 20px,#9e8dff18 21px 23px,transparent 24px 37px);mask-image:linear-gradient(180deg,transparent,#000 22%,#000)}
+.lobby-car{position:absolute;z-index:2;left:50%;bottom:1px;transform:translateX(-50%);font-size:92px;line-height:1;filter:drop-shadow(0 0 10px #55bfff) drop-shadow(0 0 28px #874dff);animation:carFloat 3.2s ease-in-out infinite}
+@keyframes carFloat{50%{transform:translate(-50%,-5px)}}
+.road-glow{position:absolute;bottom:0;left:5%;right:5%;height:13px;border-radius:50%;background:#48aaff;filter:blur(15px);box-shadow:0 0 26px 8px #8a50ff}
+.hero-plate-wrap{margin:8px auto 4px;max-width:340px;padding:6px;border-radius:12px;background:linear-gradient(130deg,#fff,#a9b5d3,#fff);box-shadow:0 0 0 1px #fff9,0 0 22px #8ecaff99,0 0 48px #8b4fff55}
+.hero-plate{min-height:68px;font-size:clamp(31px,8vw,42px)}
+.hero-plate-caption{font-size:9px;color:#e2d4ff;text-shadow:0 0 12px #a879ff}
+.lobby-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.lobby-shortcuts button{min-width:0;text-align:left;padding:11px 9px;border-radius:15px;border:1px solid #554577;background:linear-gradient(145deg,#211b39,#111522);color:#fff;box-shadow:inset 0 1px #ffffff12,0 7px 18px #0005}
+.lobby-shortcuts button span{display:block;font-size:23px;margin-bottom:5px;filter:drop-shadow(0 0 8px #a879ff)}
+.lobby-shortcuts button b{display:block;font-size:11px;white-space:nowrap}.lobby-shortcuts button small{display:block;color:#a9a4c0;font-size:9px;margin-top:3px}
+.lobby-mission{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 13px;margin:10px 0 16px;border:1px solid #6c5735;border-radius:15px;background:linear-gradient(100deg,#30233a,#19172a);box-shadow:0 0 20px #ffbd4a12}
+.lobby-mission small,.lobby-mission span{display:block;color:#c5b9d8;font-size:9px;letter-spacing:1px}.lobby-mission b{display:block;font-size:13px;margin:3px 0}.lobby-mission button{border:1px solid #a87bff;border-radius:11px;background:#3a245a;color:#f2e7ff;padding:9px;font-size:10px;font-weight:900;white-space:nowrap}
+.feature-controls{padding:10px;border:1px solid #403657;border-radius:15px;background:#111321cc}
+.section-title{font-size:18px;letter-spacing:-.3px;margin:16px 2px 10px;text-shadow:0 0 14px #9d6aff44}
+.rarity-tabs{scrollbar-width:none}.rarity-tabs::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
+.rarity-tabs button{border-color:#4b4266;background:#171728;color:#d9d0ef}
+.rarity-tabs button.active{border-color:#c49aff;background:linear-gradient(135deg,#58328c,#272044);box-shadow:0 0 17px #a15cff44}
+.crate-grid{gap:10px}.crate{background:linear-gradient(145deg,#1d1b31,#111522);border-color:#4c426a;box-shadow:inset 0 1px #ffffff0c,0 8px 20px #0004}.crate-icon{height:100px;border:1px solid #51406e;background:radial-gradient(circle at 50% 40%,#56347b,#171728 72%);font-size:49px;filter:drop-shadow(0 0 9px #b58aff)}
+.crate h3{font-size:14px}.crate .btn{border-radius:11px}
+.card,.asset-card,.item{background:linear-gradient(145deg,#1a1b30,#111522);border-color:#494264;box-shadow:0 9px 22px #0003}
+.nav{left:50%;transform:translateX(-50%);width:min(100%,560px);justify-content:space-around;gap:2px;padding:9px 10px calc(9px + env(safe-area-inset-bottom));background:#0b0d1bed;border:1px solid #51426e;border-bottom:0;border-radius:18px 18px 0 0;box-shadow:0 -8px 32px #0008,0 0 24px #7546bd22;backdrop-filter:blur(20px)}
+.nav button{flex:1;min-width:0;color:#8889a6;font-size:9px}.nav button span{font-size:19px;filter:drop-shadow(0 0 5px #8d5aff55)}
+.nav button.active{color:#e1caff;text-shadow:0 0 12px #a879ff}.nav button.active span{filter:drop-shadow(0 0 9px #b77cff)}
+.btn{border-radius:13px}
+@media(max-width:380px){.hero.plate-hero{min-height:350px}.lobby-car{font-size:78px}.lobby-shortcuts button{padding:9px 7px}.lobby-shortcuts button b{font-size:10px}.stats .stat{padding:8px 5px}}
+@media(prefers-reduced-motion:reduce){.lobby-car{animation:none}.page{animation:none}}
 </style><script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -120,8 +169,8 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
  <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">1 000 000 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
  <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="roulette">🎡 Рулетка</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="home">Дом</button><button class="tab" data-page="cars">Авто</button><button class="tab" data-page="shop">Магазин</button><button class="tab" data-page="bonuses">Бонусы</button><button class="tab" data-page="history">История</button><button class="tab" data-page="profile">Профиль</button></nav>
  <section class="page active" id="spin">
-  <div class="hero plate-hero rarity-glow common"><div class="hero-row"><span class="hero-kicker">Крути номера · сезон</span><span class="sub">Бонус талисмана ×<b id="luck">1,0</b></span></div><div class="hero-title">Твой следующий номер уже близко</div><div class="hero-sub">Выбери контейнер и испытай удачу</div><div class="hero-plate-wrap"><div class="hero-plate"><span>А777АА</span><span class="plate-region">77<small>RUS</small></span></div></div><div class="hero-plate-caption">СОБЕРИ СВОЮ КОЛЛЕКЦИЮ</div></div>
-  <div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
+  <div class="hero plate-hero rarity-glow common"><div class="hero-row"><span class="hero-kicker">Крути номера · сезон</span><span class="sub">Бонус талисмана ×<b id="luck">1,0</b></span></div><div class="hero-title">Твой следующий номер уже близко</div><div class="hero-sub">ТВОЙ ГОРОД · ТВОИ ПРАВИЛА · ТВОЯ КОЛЛЕКЦИЯ</div><div class="lobby-city" aria-hidden="true"><div class="city-lights"></div><div class="lobby-car">🏎️</div><div class="road-glow"></div></div><div class="hero-plate-wrap"><div class="hero-plate"><span>А777АА</span><span class="plate-region">77<small>RUS</small></span></div></div><div class="hero-plate-caption">СОБЕРИ СВОЮ КОЛЛЕКЦИЮ</div></div>
+  <div class="lobby-shortcuts"><button data-page="roulette"><span>🎡</span><b>Рулетка риска</b><small>Испытай удачу</small></button><button data-page="garage"><span>🚘</span><b>Мой гараж</b><small>Коллекция номеров</small></button><button data-page="bonuses"><span>🎁</span><b>Награды</b><small>Забери бонус</small></button></div><div class="lobby-mission"><div><small>ЦЕЛЬ СЕГОДНЯ</small><b>Открой 3 контейнера</b><span>Забери награду в бонусном центре</span></div><button data-page="bonuses">К заданиям&nbsp; ›</button></div><div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
   <div class="section-title">Выбери редкость</div><div class="rarity-tabs" id="rarityTabs"><button class="active" data-rarity="any">✨ Любые</button><button data-rarity="unusual">🟢 Необычные</button><button data-rarity="rare">🔵 Редкие</button><button data-rarity="epic">🟣 Эпические</button><button data-rarity="legend">🟡 Легендарные</button><button data-rarity="myth">💗 Мифические</button><button data-rarity="secret">🌌 Секретные</button></div><div class="spin-options" id="spinOptions"><button class="active" data-count="1">×1</button><button data-count="3">×3</button><button data-count="5" title="Только VIP">👑 ×5 VIP</button></div><button class="speed-toggle" id="speedToggle" type="button"><span>⚡ Ускоренная прокрутка</span><span id="speedState">ВЫКЛ</span></button><div class="section-title">Контейнеры</div>
   <div class="crate-grid">
    <article class="crate" data-tier="any"><div class="crate-icon">📦</div><h3>Любые</h3><div class="sub">Все категории номеров</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('any')">50 000 ₽ · открыть</button></article>
@@ -194,7 +243,7 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
 </section>
 <section class="page" id="history"><div class="section-title">История выпадений</div><div class="sub">Последние 25 результатов открытий — включая пустые кейсы.</div><div class="card" id="spinHistory"><div class="sub">История пока пуста. Открой первый контейнер!</div></div><div class="section-title">История покупок</div><div class="sub">Покупки в Telegram Stars.</div><div class="card" id="purchaseHistory"><div class="sub">Покупок пока нет.</div></div></section>
 </main>
-<nav class="nav"><button class="active" data-page="spin"><span>▤</span>Крутить</button><button data-page="garage"><span>⌂</span>Гараж</button><button data-page="market"><span>▣</span>Рынок</button><button data-page="rating"><span>♜</span>Рейтинг</button><button data-page="home"><span>⌂</span>Дом</button><button data-page="cars"><span>🚘</span>Авто</button><button data-page="shop"><span>▢</span>Магазин</button></nav>
+<nav class="nav"><button class="active" data-page="spin"><span>⌂</span>Главная</button><button data-page="garage"><span>🚘</span>Гараж</button><button data-page="roulette"><span>🎡</span>Рулетка</button><button data-page="bonuses"><span>🎁</span>События</button><button data-page="profile"><span>👤</span>Профиль</button></nav>
 <script>
 const tg = window.Telegram?.WebApp;
 try { tg?.ready(); tg?.expand(); } catch (_) {}
