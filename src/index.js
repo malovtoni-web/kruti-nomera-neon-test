@@ -136,24 +136,31 @@ function setGameActionsEnabled(enabled) {
         html = html.replace(oldHydrate, newHydrate);
       }
       // Surface browser-side startup failures instead of leaving the connection label stuck.
+      // Mark whether the game's inline script actually begins execution.
+      html = html.replace('<script>\\nconst tg = window.Telegram?.WebApp;', '<script>\\nwindow.__krutiMainStarted=true;\\nconst tg = window.Telegram?.WebApp;');
       const startupProbe = `<script>
       (function(){
+        var pendingError='';
         function showStartupError(message){
+          pendingError=String(message||'Неизвестная ошибка').slice(0,500);
           var el=document.getElementById('connectionStatus');
           if(!el)return;
           el.className='connection-status error';
-          el.innerHTML='<b>Ошибка запуска игры</b>'+String(message||'Неизвестная ошибка').slice(0,500);
+          el.innerHTML='<b>Ошибка запуска игры</b>'+pendingError;
         }
         window.addEventListener('error',function(e){showStartupError((e.message||'JavaScript error')+' ('+(e.filename||'')+':'+(e.lineno||0)+')');});
         window.addEventListener('unhandledrejection',function(e){var r=e.reason;showStartupError('Необработанная ошибка: '+(r&&r.message||r||'Promise rejection'));});
+        document.addEventListener('DOMContentLoaded',function(){if(pendingError)showStartupError(pendingError);});
         setTimeout(function(){
           var el=document.getElementById('connectionStatus');
           if(el && el.textContent.indexOf('Проверка подключения')!==-1){
-            showStartupError('Скрипт игры не запустил проверку сервера. Возможна ошибка при запуске JavaScript.');
+            showStartupError(pendingError||(!window.__krutiMainStarted
+              ?'Основной скрипт игры не запустился. Проверьте загрузку JavaScript в Telegram WebView.'
+              :'Основной скрипт запустился, но не начал проверку сервера.'));
           }
         },5000);
       })();
-      <\/script>`;
+      <\\/script>`;
       // Run diagnostics before the external Telegram SDK, which may stall or fail to load.
       if (html.includes('<head>')) {
         html = html.replace('<head>', '<head>' + startupProbe);
