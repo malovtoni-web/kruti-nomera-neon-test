@@ -419,7 +419,6 @@ async function spin(type){
  let serverResult=null;
  if(serverMode){try{serverResult=await apiAction('spin',{type,count});}catch(e){isSpinning=false;toast(e.message);return}}
  else if(!freeSpin)state.rub-=totalCost;
- if(!serverMode&&!freeSpin)state.rub+=cashPrize;
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
@@ -435,6 +434,7 @@ async function spin(type){
  const numberChance=(winChances[type]??winChances.any)*(freeSpin?1:.3077);
  const didWin=serverMode?(serverResult?.won===true):Math.random()<numberChance;
  const cashPrize=Number(serverResult?.cashPrize??(freeSpin?0:Math.round(Math.max(1000,(prices[type]||50000)*.08)+((prices[type]||50000)*1.1-Math.max(1000,(prices[type]||50000)*.08))*Math.pow(Math.random(),1.8))));
+ if(!serverMode&&!freeSpin)state.rub+=cashPrize;
  if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
  const finalPlate=serverNumber?.plate||randomPlate();
  const finalRegion=serverNumber?.region||regions[Math.floor(Math.random()*regions.length)];
