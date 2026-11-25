@@ -268,6 +268,8 @@ function setGameActionsEnabled(enabled) {
       let initData=''; if(request.method==='GET')initData=url.searchParams.get('initData')||''; else if(request.method==='POST'){try{initData=(await request.json()).initData||''}catch(_){return Response.json({error:'Invalid JSON'},{status:400})}} else return new Response('Method Not Allowed',{status:405});
       const telegramId=await verifyTelegramInitData(initData,env.BOT_TOKEN); if(!telegramId)return Response.json({error:'Telegram authentication required'},{status:401});
       const p=await loadPlayer(env.DB,telegramId), now=Math.floor(Date.now()/1000), day=new Date(now*1000).toISOString().slice(0,10);
+      await env.DB.prepare("INSERT OR IGNORE INTO player_profile(telegram_id) VALUES(?)").bind(telegramId).run();
+      await env.DB.prepare("INSERT OR IGNORE INTO player_talismans(telegram_id,talisman_id,acquired_at) VALUES(?,?,?)").bind(telegramId,'luck_charm',now).run();
       await env.DB.prepare("INSERT OR IGNORE INTO player_daily(telegram_id) VALUES(?)").bind(telegramId).run();
       await env.DB.prepare("INSERT OR IGNORE INTO player_tasks(telegram_id,task_date) VALUES(?,?)").bind(telegramId,day).run();
       const daily=await env.DB.prepare("SELECT * FROM player_daily WHERE telegram_id=?").bind(telegramId).first();
@@ -276,8 +278,9 @@ function setGameActionsEnabled(enabled) {
       const purchases=await env.DB.prepare("SELECT product_id,total_amount,created_at FROM star_payments WHERE telegram_id=? ORDER BY created_at DESC LIMIT 20").bind(telegramId).all();
       const market=await env.DB.prepare("SELECT id,seller_telegram_id,plate,region,rarity,cls,value,asking_price,created_at FROM market_listings WHERE status='active' ORDER BY created_at DESC LIMIT 50").all();
       const cosmetics=await env.DB.prepare("SELECT cosmetic_id FROM player_cosmetics WHERE telegram_id=? ORDER BY purchased_at DESC").bind(telegramId).all();
-      const profile=await env.DB.prepare("SELECT equipped_plate,equipped_effect,equipped_theme,vip_until FROM player_profile WHERE telegram_id=?").bind(telegramId).first();
-      return Response.json({ok:true,player:{telegramId:p.telegram_id,balance:p.balance,coins:p.coins,stars:p.stars,energy:p.energy,energyUpdatedAt:p.energy_updated_at,trialAt:p.trial_at,garage:JSON.parse(p.garage_json||'[]'),houseLevel:p.house_level,cars:JSON.parse(p.cars_json||'[]')},features:{daily:daily||{},tasks:tasks||{},history:history.results||[],purchases:purchases.results||[],cosmetics:(cosmetics.results||[]).map(x=>x.cosmetic_id),profile:profile||{vip_until:0},products:Object.entries(STAR_PRODUCTS).map(([id,x])=>({id,title:x.title,description:x.description,stars:x.stars,kind:x.kind,cosmetic:x.cosmetic||null})),market:(market.results||[]).map(x=>({...x,is_mine:x.seller_telegram_id===telegramId}))}});
+      const profile=await env.DB.prepare("SELECT equipped_plate,equipped_effect,equipped_theme,equipped_talisman,vip_until FROM player_profile WHERE telegram_id=?").bind(telegramId).first();
+      const talismans=await env.DB.prepare("SELECT talisman_id,acquired_at FROM player_talismans WHERE telegram_id=? ORDER BY acquired_at ASC").bind(telegramId).all();
+      return Response.json({ok:true,player:{telegramId:p.telegram_id,balance:p.balance,coins:p.coins,stars:p.stars,energy:p.energy,energyUpdatedAt:p.energy_updated_at,trialAt:p.trial_at,garage:JSON.parse(p.garage_json||'[]'),houseLevel:p.house_level,cars:JSON.parse(p.cars_json||'[]')},features:{daily:daily||{},tasks:tasks||{},history:history.results||[],purchases:purchases.results||[],cosmetics:(cosmetics.results||[]).map(x=>x.cosmetic_id),profile:profile||{vip_until:0},talismans:talismans.results||[],products:Object.entries(STAR_PRODUCTS).map(([id,x])=>({id,title:x.title,description:x.description,stars:x.stars,kind:x.kind,cosmetic:x.cosmetic||null})),market:(market.results||[]).map(x=>({...x,is_mine:x.seller_telegram_id===telegramId}))}});
     }
 
     if (url.pathname === '/api/stars/invoice') {
@@ -363,6 +366,15 @@ function setGameActionsEnabled(enabled) {
         if(!redemption?.[0]?.meta?.changes||!redemption?.[1]?.meta?.changes) return Response.json({error:'Промокод уже закончился'},{status:409});
         if(promo.reward_type==='coins') await save("UPDATE players SET coins=coins+?,updated_at=? WHERE telegram_id=?",[promo.reward_amount,now,telegramId]);
         else await save("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=?",[promo.reward_amount,now,telegramId]);
+      } else if(action==='equipTalisman'){
+        const talismanId=body.talismanId===null||body.talismanId===''?null:String(body.talismanId);
+        if(talismanId&&!['luck_charm'].includes(talismanId)) return Response.json({error:'Неизвестный талисман'},{status:400});
+        if(talismanId){
+          const owned=await env.DB.prepare("SELECT 1 FROM player_talismans WHERE telegram_id=? AND talisman_id=?").bind(telegramId,talismanId).first();
+          if(!owned)return Response.json({error:'Этого талисмана нет в коллекции'},{status:403});
+        }
+        await env.DB.prepare("INSERT OR IGNORE INTO player_profile(telegram_id) VALUES(?)").bind(telegramId).run();
+        await env.DB.prepare("UPDATE player_profile SET equipped_talisman=? WHERE telegram_id=?").bind(talismanId,telegramId).run();
       } else if(action==='equipCosmetic'){
         const cosmeticId=String(body.cosmeticId||'');
         const cosmetics={plate_neon:'equipped_plate',effect_aurora:'equipped_effect',theme_royal:'equipped_theme'};
@@ -382,13 +394,17 @@ function setGameActionsEnabled(enabled) {
         const tiers=[['Обычный','common',50000],['Необычный','unusual',100000],['Редкий','rare',250000],['Эпический','epic',500000],['Легендарный','legend',1000000],['Мифический','myth',2500000],['Секретный','secret',5000000]];
         const freeSpin=body.type==='free';
         const type=freeSpin?'any':(prices[body.type]!==undefined?body.type:'any'), count=Number(body.count||1);
-        const vip=await env.DB.prepare("SELECT vip_until FROM player_profile WHERE telegram_id=?").bind(telegramId).first();
+        const vip=await env.DB.prepare("SELECT vip_until,equipped_talisman FROM player_profile WHERE telegram_id=?").bind(telegramId).first();
         if(![1,3,5].includes(count)||(count===5&&Number(vip?.vip_until||0)<=now)) return Response.json({error:'×5 доступно только при активном VIP'},{status:403});
         const cost=freeSpin?0:prices[type]*count;
         if((freeSpin&&p.energy<count)||(!freeSpin&&p.balance<cost)) return Response.json({error:freeSpin?'Недостаточно энергии':'Недостаточно денег'},{status:409});
         const numbers=[];
+        const talismanBoost=vip?.equipped_talisman==='luck_charm'?{from:2,multiplier:1.10}:null;
+        const rawWeights=weights[type].map((weight,index)=>weight*(talismanBoost&&index>=talismanBoost.from?talismanBoost.multiplier:1));
+        const weightTotal=rawWeights.reduce((sum,weight)=>sum+weight,0);
+        const adjustedWeights=rawWeights.map(weight=>weight/weightTotal);
         for(let n=0;n<count;n++){
-          const w=weights[type], roll=Math.random();let sum=0,index=w.length-1;
+          const w=adjustedWeights, roll=Math.random();let sum=0,index=w.length-1;
           for(let i=0;i<w.length;i++){sum+=w[i];if(roll<sum){index=i;break;}}
           const letters='АВЕКМНОРСТУХ',regions=['77','97','99','178','777','05','116','02','174','750'];
           const plate=letters[Math.floor(Math.random()*letters.length)]+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)];
