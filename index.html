@@ -166,7 +166,7 @@ function randomPlate(){
  return a+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+b+c;
 }
 function spin(type){
- if(spinCount>1&&!window.__batchActive){const total=spinCount;window.__batchActive=true;spinCount=1;let left=total;const runNext=()=>{if(left<=0){window.__batchActive=false;return}left--;spin(type);const wait=()=>{if(isSpinning){setTimeout(wait,100)}else{setTimeout(runNext,180)}};wait()};runNext();return;}
+ if(spinCount>1&&!window.__batchActive){const total=spinCount;window.__batchActive=true;spinCount=1;let left=total;const runNext=()=>{if(left<=0){window.__batchActive=false;spinCount=Number(document.querySelector('[data-count].active')?.dataset.count||1);return}left--;spin(type);const wait=()=>{if(isSpinning){setTimeout(wait,100)}else{setTimeout(runNext,180)}};wait()};runNext();return;}
  if(isSpinning)return;
  const count=spinCount;
  if(count===5){toast('×5 доступно только VIP');return}
