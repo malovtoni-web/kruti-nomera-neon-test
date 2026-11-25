@@ -575,7 +575,7 @@ body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-ser
    <article class="crate" data-tier="myth"><div class="crate-icon">💗</div><h3>Мифические</h3><div class="sub">Мифические и выше</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:88%"></i></div><button class="btn gold" onclick="spin('myth')">2,5 млн ₽ · открыть</button></article>
    <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Только секретные</div><div class="sub odds">Номер гарантирован · только секретная редкость</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">5 млн ₽ · открыть</button></article>
   </div>
-  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость номера: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div><div class="row" style="gap:8px;margin-top:12px"><button class="btn gold" id="sellWonNumber" style="flex:1;padding:11px;font-size:14px" disabled>Продать</button><button class="btn secondary" id="listWonNumber" style="flex:1;padding:11px;font-size:14px" disabled>На рынок</button></div></div>
+  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость номера: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div><div class="row" style="gap:8px;margin-top:12px"><button class="btn gold" id="sellWonNumber" type="button" onclick="window.sellWonNumberNow(event)" style="flex:1;padding:11px;font-size:14px;touch-action:manipulation" disabled>Продать</button><button class="btn secondary" id="listWonNumber" style="flex:1;padding:11px;font-size:14px" disabled>На рынок</button></div></div>
   <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>Бесплатное открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
  </section>
  <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров · выбери номер для рулетки</span><b id="garagecount">0 номеров</b></div><div class="rarity-tabs garage-filters"><button class="active" data-garage-filter="all">Все</button><button data-garage-filter="common">Обычные</button><button data-garage-filter="unusual">Необычные</button><button data-garage-filter="rare">Редкие</button><button data-garage-filter="epic">Эпические</button><button data-garage-filter="legend">Легендарные</button><button data-garage-filter="myth">Мифические</button><button data-garage-filter="secret">Секретные</button></div><div class="inventory" id="inventory"></div></section>
@@ -996,6 +996,26 @@ async function sellGarageNumber(index,exactNumber=null,skipConfirm=false){
   return true;
  }catch(e){toast(e.message||'Не удалось продать номер.');return false;}
 }
+window.sellWonNumberNow=async function(event){
+ if(event){event.preventDefault();event.stopPropagation();}
+ const button=document.getElementById('sellWonNumber');
+ const message=document.getElementById('wonmsg');
+ if(!button||button.disabled||!lastWonNumber||window.__sellingWonNumber)return false;
+ window.__sellingWonNumber=true;
+ button.disabled=true;button.textContent='Продаём…';
+ if(message)message.textContent='Отправляем продажу на сервер…';
+ let sold=false;
+ try{sold=await sellGarageNumber(lastWonIndex,lastWonNumber,true);}
+ catch(error){if(message)message.textContent='Ошибка продажи: '+(error?.message||'попробуй ещё раз');}
+ window.__sellingWonNumber=false;
+ if(sold){if(message)message.textContent='Номер продан — деньги зачислены на баланс.';return true;}
+ if(lastWonNumber){
+  button.disabled=false;button.textContent='Продать за '+fmt(lastWonNumber.value)+' ₽';
+  if(message&&message.textContent==='Отправляем продажу на сервер…')message.textContent='Продажа не завершена. Нажми ещё раз.';
+ }
+ return false;
+};
+
 
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
@@ -1056,17 +1076,6 @@ function showCaseModal(type,freeSpin=false){
  if(!caseResultPlaceholder)caseResultPlaceholder=document.createComment('case-result-home');
  result.parentNode.insertBefore(caseResultPlaceholder,result);
  host.appendChild(result);
- const sellWonButton=document.getElementById('sellWonNumber');
- if(sellWonButton){
-  sellWonButton.onclick=async event=>{
-   event.preventDefault();event.stopPropagation();
-   if(sellWonButton.disabled||!lastWonNumber||window.__sellingWonNumber)return;
-   window.__sellingWonNumber=true;sellWonButton.disabled=true;sellWonButton.textContent='Продаём…';
-   const sold=await sellGarageNumber(lastWonIndex,lastWonNumber,true);
-   window.__sellingWonNumber=false;
-   if(!sold&&lastWonNumber){sellWonButton.disabled=false;sellWonButton.textContent='Продать за '+fmt(lastWonNumber.value)+' ₽';}
-  };
- }
  result.classList.remove('show');
  document.body.style.overflow='hidden';
  window.setTimeout(()=>{if(!modal.classList.contains('active'))return;caseLightCue=true;big.classList.add('car-reveal');copy.textContent='Фары вспыхивают… номер проявляется!';finishCaseReveal();},2400);
