@@ -140,7 +140,12 @@ function setGameActionsEnabled(enabled) {
         },5000);
       })();
       <\/script>`;
-      const gameScriptMarker = '<script>\nconst tg = window.Telegram?.WebApp;';
+      // Run diagnostics before the external Telegram SDK, which may stall or fail to load.
+      if (html.includes('<head>')) {
+        html = html.replace('<head>', '<head>' + startupProbe);
+      } else {
+        html = startupProbe + html;
+      }
       if (html.includes(gameScriptMarker)) {
         html = html.replace(gameScriptMarker, startupProbe + '\n' + gameScriptMarker);
       } else {
