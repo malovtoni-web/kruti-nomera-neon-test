@@ -390,8 +390,21 @@ function setGameActionsEnabled(enabled) {
         const changed=await save('UPDATE players SET energy=?,trial_at=?,updated_at=? WHERE telegram_id=? AND trial_at<=?',[energy,now,now,telegramId,now-3600]); if(!changed.meta?.changes) return Response.json({error:'Trial energy cooldown'},{status:429});
       } else if(action==='spin'){
         const prices={any:50000,unusual:100000,rare:250000,epic:500000,legend:1000000,myth:2500000,secret:5000000};
-        const weights={secret:[0,0,0,0,0,0,1],myth:[0,0,0,0,0,.9,.1],legend:[0,0,0,0,.85,.13,.02],epic:[0,0,0,.78,.19,.028,.002],rare:[0,0,.70,.23,.06,.009,.001],unusual:[0,.65,.25,.08,.019,.0009,.0001],any:[.58,.27,.11,.032,.007,.0009,.0001]};
-        const tiers=[['Обычный','common',50000],['Необычный','unusual',100000],['Редкий','rare',250000],['Эпический','epic',500000],['Легендарный','legend',1000000],['Мифический','myth',2500000],['Секретный','secret',5000000]];
+        // One payout curve for every crate: case prices stay fixed, payout is 4%-350% of its price.
+        // Probabilities sum to 100%; weighted expected return is 70.008% before talisman bonus.
+        const outcomes=[
+          {roi:4,weight:.1095,rarity:'Обычный',cls:'common'},
+          {roi:55,weight:.35,rarity:'Необычный',cls:'unusual'},
+          {roi:70,weight:.25,rarity:'Редкий',cls:'rare'},
+          {roi:90,weight:.15,rarity:'Эпический',cls:'epic'},
+          {roi:110,weight:.07,rarity:'Легендарный',cls:'legend'},
+          {roi:140,weight:.0405,rarity:'Мифический',cls:'myth'},
+          {roi:160,weight:.015,rarity:'Секретный',cls:'secret'},
+          {roi:200,weight:.008,rarity:'Секретный',cls:'secret'},
+          {roi:250,weight:.004,rarity:'Секретный',cls:'secret'},
+          {roi:300,weight:.002,rarity:'Секретный',cls:'secret'},
+          {roi:350,weight:.001,rarity:'Секретный',cls:'secret'}
+        ];
         const freeSpin=body.type==='free';
         const type=freeSpin?'any':(prices[body.type]!==undefined?body.type:'any'), count=Number(body.count||1);
         const vip=await env.DB.prepare("SELECT vip_until,equipped_talisman FROM player_profile WHERE telegram_id=?").bind(telegramId).first();
@@ -399,17 +412,19 @@ function setGameActionsEnabled(enabled) {
         const cost=freeSpin?0:prices[type]*count;
         if((freeSpin&&p.energy<count)||(!freeSpin&&p.balance<cost)) return Response.json({error:freeSpin?'Недостаточно энергии':'Недостаточно денег'},{status:409});
         const numbers=[];
-        const talismanBoost=vip?.equipped_talisman==='luck_charm'?{from:2,multiplier:1.10}:null;
-        const rawWeights=weights[type].map((weight,index)=>weight*(talismanBoost&&index>=talismanBoost.from?talismanBoost.multiplier:1));
+        const talismanBoost=vip?.equipped_talisman==='luck_charm'?1.10:1;
+        const rawWeights=outcomes.map((outcome,index)=>outcome.weight*(talismanBoost&&index>=2?talismanBoost:1));
         const weightTotal=rawWeights.reduce((sum,weight)=>sum+weight,0);
         const adjustedWeights=rawWeights.map(weight=>weight/weightTotal);
         for(let n=0;n<count;n++){
-          const w=adjustedWeights, roll=Math.random();let sum=0,index=w.length-1;
-          for(let i=0;i<w.length;i++){sum+=w[i];if(roll<sum){index=i;break;}}
+          const roll=Math.random();let sum=0,index=adjustedWeights.length-1;
+          for(let i=0;i<adjustedWeights.length;i++){sum+=adjustedWeights[i];if(roll<sum){index=i;break;}}
+          const outcome=outcomes[index], casePrice=prices[type];
+          const jitter=outcome.roi===4||outcome.roi===350?0:(Math.random()-.5)*casePrice*.01;
+          const value=Math.max(Math.round(casePrice*.04),Math.min(Math.round(casePrice*3.5),Math.round(casePrice*outcome.roi/100+jitter)));
           const letters='АВЕКМНОРСТУХ',regions=['77','97','99','178','777','05','116','02','174','750'];
           const plate=letters[Math.floor(Math.random()*letters.length)]+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)];
-          const [rarity,cls,value]=tiers[index];
-          numbers.push({plate,region:regions[Math.floor(Math.random()*regions.length)],rarity,cls,value});
+          numbers.push({plate,region:regions[Math.floor(Math.random()*regions.length)],rarity:outcome.rarity,cls:outcome.cls,value,roi:Math.round(value/casePrice*100)});
         }
         actionNumbers=numbers;spinWon=true;
         const garage=[...JSON.parse(p.garage_json||'[]'),...numbers].slice(-500);
