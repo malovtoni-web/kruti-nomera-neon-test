@@ -12,7 +12,33 @@ async function verifyTelegramInitData(initData, botToken) {
  if(actual.length!==suppliedHash.length)return null; let diff=0; for(let i=0;i<actual.length;i++)diff|=actual.charCodeAt(i)^suppliedHash.charCodeAt(i); if(diff!==0)return null;
  try{const user=JSON.parse(params.get('user')||'{}');return user.id?String(user.id):null}catch(_){return null}
 }
-async function loadPlayer(db,id){const now=Math.floor(Date.now()/1000);await db.prepare('INSERT OR IGNORE INTO players (telegram_id) VALUES (?)').bind(id).run();await db.prepare('UPDATE players SET balance=balance+1000000,starter_granted=1,updated_at=? WHERE telegram_id=? AND starter_granted=0').bind(now,id).run();let p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();const gained=Math.floor(Math.max(0,now-p.energy_updated_at)/300);if(gained>0){const energy=Math.min(25,p.energy+gained),updatedAt=energy===25?now:p.energy_updated_at+gained*300;await db.prepare('UPDATE players SET energy=?,energy_updated_at=?,updated_at=? WHERE telegram_id=?').bind(energy,updatedAt,now,id).run();p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first()}return p}
+async function loadPlayer(db,id){
+  const now=Math.floor(Date.now()/1000);
+  await db.prepare('INSERT OR IGNORE INTO players (telegram_id) VALUES (?)').bind(id).run();
+  await db.prepare('UPDATE players SET balance=balance+1000000,starter_granted=1,updated_at=? WHERE telegram_id=? AND starter_granted=0').bind(now,id).run();
+  let p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();
+  const gained=Math.floor(Math.max(0,now-p.energy_updated_at)/300);
+  if(gained>0){
+    const energy=Math.min(25,p.energy+gained),updatedAt=energy===25?now:p.energy_updated_at+gained*300;
+    await db.prepare('UPDATE players SET energy=?,energy_updated_at=?,updated_at=? WHERE telegram_id=?').bind(energy,updatedAt,now,id).run();
+    p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();
+  }
+  // Keep the displayed value of every existing garage item consistent with its rarity.
+  const values={common:50000,unusual:100000,rare:250000,epic:500000,legend:1000000,myth:2500000,secret:5000000};
+  let garage=[];
+  try{garage=JSON.parse(p.garage_json||'[]')}catch(_){garage=[]}
+  let normalized=false;
+  garage=garage.map(item=>{
+    const value=values[item.cls];
+    if(value!==undefined&&item.value!==value){normalized=true;return {...item,value};}
+    return item;
+  });
+  if(normalized){
+    await db.prepare('UPDATE players SET garage_json=?,updated_at=? WHERE telegram_id=?').bind(JSON.stringify(garage),now,id).run();
+    p=await db.prepare('SELECT * FROM players WHERE telegram_id=?').bind(id).first();
+  }
+  return p;
+}
 
 async function sendMessage(token, chatId, text, replyMarkup) {
   const payload = { chat_id: chatId, text };
