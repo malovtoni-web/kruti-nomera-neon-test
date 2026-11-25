@@ -988,8 +988,7 @@ async function sellGarageNumber(index,exactNumber=null){
   lastWonIndex=-1;lastWonNumber=null;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
  }catch(e){toast(e.message);}
 }
-document.getElementById('sellWonNumber').addEventListener('click',()=>{if(lastWonNumber)sellGarageNumber(lastWonIndex,lastWonNumber);});
-document.getElementById('listWonNumber').addEventListener('click',()=>{if(lastWonIndex>=0)openMarketForSale(lastWonIndex);});
+
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
 function randomPlate(){
@@ -1061,6 +1060,12 @@ function closeCaseModal(){
  document.body.style.overflow='';
 }
 document.getElementById('caseClose')?.addEventListener('click',()=>{if(!isSpinning)closeCaseModal()});
+document.getElementById('caseModal')?.addEventListener('click',event=>{
+ const sell=event.target.closest('#sellWonNumber');
+ if(sell){event.preventDefault();event.stopPropagation();if(!sell.disabled&&lastWonNumber)sellGarageNumber(lastWonIndex,lastWonNumber);return;}
+ const list=event.target.closest('#listWonNumber');
+ if(list){event.preventDefault();event.stopPropagation();if(!list.disabled&&lastWonIndex>=0)openMarketForSale(lastWonIndex);}
+});
 document.getElementById('caseModal')?.addEventListener('click',e=>{if(e.target.id==='caseModal'&&!isSpinning)closeCaseModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!isSpinning&&document.getElementById('caseModal')?.classList.contains('active'))closeCaseModal()});
 
