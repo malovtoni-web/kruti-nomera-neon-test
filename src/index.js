@@ -121,6 +121,30 @@ function setGameActionsEnabled(enabled) {
 }`;
         html = html.replace(oldHydrate, newHydrate);
       }
+      if (!html.includes('id="telegramConnectionProbe"')) {
+        const probe = `<script id="telegramConnectionProbe">
+(async function(){
+ const status=document.getElementById('connectionStatus');
+ const show=(title,message,kind='error')=>{if(status){status.className='connection-status '+kind;status.innerHTML='<b>'+title+'</b>'+message;}};
+ const tg=window.Telegram&&window.Telegram.WebApp;
+ if(!tg){show('Telegram WebApp SDK не найден','Не удалось получить объект Telegram.WebApp. Открой игру кнопкой «🎮 Играть» в чате с ботом.');return;}
+ try{tg.ready();tg.expand();}catch(e){}
+ const initData=typeof tg.initData==='string'?tg.initData:'';
+ if(!initData){show('Telegram не передал данные авторизации','initData пустой. Проверь, что открываешь игру через WebApp-кнопку бота, а не обычную ссылку.');return;}
+ show('Данные Telegram получены','Проверяем подпись и тестовый сервер…','');
+ try{
+  const response=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData})});
+  const data=await response.json().catch(()=>({error:'Некорректный ответ сервера'}));
+  if(!response.ok||!data.ok){
+   const message=response.status===401?'Сервер отклонил подпись Telegram. Нужно проверить токен бота и проверку initData.':response.status===503?'На тестовом сервере не настроена база данных или токен бота.':(data.error||('HTTP '+response.status));
+   show('Ошибка авторизации или сервера',message);return;
+  }
+  show('Подключение к серверу успешно','Telegram авторизован, игровой профиль получен из тестовой базы.','ok');
+ }catch(e){show('Нет связи с игровым сервером',String(e&&e.message||e));}
+})();
+</script>`;
+        html = html.replace('</body>', probe + '</body>');
+      }
       const headers = new Headers(assetResponse.headers);
       headers.set("Content-Type", "text/html; charset=utf-8");
       headers.delete("Content-Length");
