@@ -23,7 +23,7 @@ function starsPaymentStatements(db, payment, telegramId, productId, now) {
   } else if (product.kind === "cosmetic") {
     statements.push(db.prepare("INSERT OR IGNORE INTO player_cosmetics(telegram_id,cosmetic_id,purchased_at) SELECT ?,?,? WHERE changes()=1").bind(telegramId,product.cosmetic,now));
   } else if (product.kind === "vip") {
-    statements.push(db.prepare("INSERT INTO player_profile(telegram_id,vip_until) SELECT ?,? WHERE changes()=1 ON CONFLICT(telegram_id) DO UPDATE SET vip_until=MAX(player_profile.vip_until,excluded.vip_until)").bind(telegramId,now+604800));
+    statements.push(db.prepare("INSERT INTO player_profile(telegram_id,vip_until) SELECT ?,? WHERE changes()=1 ON CONFLICT(telegram_id) DO UPDATE SET vip_until=MAX(player_profile.vip_until,?)+604800").bind(telegramId,now+604800,now));
   }
   return statements;
 }
