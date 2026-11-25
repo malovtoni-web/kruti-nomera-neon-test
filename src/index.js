@@ -133,7 +133,7 @@ function plateBlatMultiplier(plate,region){
  else if(d.length===3&&(d[0]===d[1]||d[1]===d[2]))m*=1.5;
  if(l.length>=2&&new Set(l).size===1)m*=1.5;
  const r=String(region||'');
- if(r.length>=2&&new Set(r).size===1)m*=1.5;
+ if(r.length>=3&&new Set(r).size===1)m*=1.5;
  return Math.min(25,m);
 }
 
