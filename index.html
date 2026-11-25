@@ -99,7 +99,7 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
    <article class="crate" data-tier="myth"><div class="crate-icon">💗</div><h3>Мифические</h3><div class="sub">Мифические и выше</div><div class="sub odds">Выигрыш 59,1% · пусто 40,9%</div><div class="meter"><i style="width:88%"></i></div><button class="btn gold" onclick="spin('myth')">2,5 млн ₽ · открыть</button></article>
    <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Только секретные</div><div class="sub odds">Выигрыш 65,0% · пусто 35,0%</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">5 млн ₽ · открыть</button></article>
   </div>
-  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div></div>
+  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость номера: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div><div class="row" style="gap:8px;margin-top:12px"><button class="btn gold" id="sellWonNumber" style="flex:1;padding:11px;font-size:14px">Продать</button><button class="btn secondary" id="listWonNumber" style="flex:1;padding:11px;font-size:14px">На рынок</button></div></div>
   <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>Бесплатное открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
  </section>
  <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров · выбери два одинаковой редкости</span><b id="garagecount">0 номеров</b></div><div class="rarity-tabs garage-filters"><button class="active" data-garage-filter="all">Все</button><button data-garage-filter="common">Обычные</button><button data-garage-filter="unusual">Необычные</button><button data-garage-filter="rare">Редкие</button><button data-garage-filter="epic">Эпические</button><button data-garage-filter="legend">Легендарные</button><button data-garage-filter="myth">Мифические</button><button data-garage-filter="secret">Секретные</button></div><div class="inventory" id="inventory"></div><div class="card" id="upgrader"><div class="row"><b>⚙️ Апгрейдер номеров</b><span class="rarity epic">2 → 1</span></div><p class="sub" id="upgradeHint">Выбери два номера одной редкости. Они объединятся в один номер следующего уровня.</p><div class="row"><span class="sub">Стоимость улучшения</span><b id="upgradeCost">—</b></div><button class="btn gold" id="upgradeNumbers" disabled>Улучшить выбранные номера</button></div></section>
@@ -191,7 +191,7 @@ function renderFeaturePanels(){
  const spins=Number(t.spins_count||0),wheels=Number(t.wheel_count||0);
  const sp=document.getElementById('spinTaskProgress'),wp=document.getElementById('wheelTaskProgress');if(sp)sp.textContent=Math.min(3,spins)+' / 3 · Награда: 250 монет + 25 000 ₽';if(wp)wp.textContent=Math.min(1,wheels)+' / 1 · Награда: 100 монет + 10 000 ₽';
  const sb=document.getElementById('claimSpinTask'),wb=document.getElementById('claimWheelTask');if(sb){sb.disabled=spins<3||claimed.includes('spin3');sb.textContent=claimed.includes('spin3')?'Получено':'Забрать';}if(wb){wb.disabled=wheels<1||claimed.includes('wheel1');wb.textContent=claimed.includes('wheel1')?'Получено':'Забрать';}
- const hist=document.getElementById('spinHistory');if(hist){const rows=f.history||[];hist.innerHTML=rows.length?rows.map(x=>'<div class="history-row"><div><b>'+(x.plate&&x.plate!=='—'?x.plate+' · '+x.region:'Денежный приз')+'</b><div class="sub">'+x.rarity+' · '+new Date(x.created_at*1000).toLocaleString('ru-RU')+'</div></div><b>'+(Number(x.cash_prize||0)?'+'+fmt(x.cash_prize)+' ₽':'—')+(x.value>0?' · номер '+fmt(x.value)+' ₽':'')+'</b></div>').join(''):'<div class="sub">История пока пуста. Открой первый контейнер!</div>';}
+ const hist=document.getElementById('spinHistory');if(hist){const rows=f.history||[];hist.innerHTML=rows.length?rows.map(x=>'<div class="history-row"><div><b>'+(x.plate&&x.plate!=='—'?x.plate+' · '+x.region:'Открытие без номера')+'</b><div class="sub">'+x.rarity+' · '+new Date(x.created_at*1000).toLocaleString('ru-RU')+'</div></div><b>'+(x.value>0?'Стоимость '+fmt(x.value)+' ₽':'—')+'</b></div>').join(''):'<div class="sub">История пока пуста. Открой первый контейнер!</div>';}
  renderMarketListings(f.market||[]);
  const products=f.products||[],owned=f.cosmetics||[],catalog=document.getElementById('starsCatalog'),profile=f.profile||{};
  const purchases=document.getElementById('purchaseHistory');if(purchases){const rows=f.purchases||[];purchases.innerHTML=rows.length?rows.map(x=>{const product=products.find(p=>p.id===x.product_id);return '<div class="history-row"><div><b>'+(product?.title||'Покупка')+'</b><div class="sub">'+new Date(x.created_at*1000).toLocaleString('ru-RU')+'</div></div><b>'+x.total_amount+' ★</b></div>'}).join(''):'<div class="sub">Покупок пока нет.</div>'}
@@ -375,14 +375,16 @@ function renderGarage(){
  const el=document.getElementById('inventory');
  const entries=state.garage.map((x,i)=>({x,i})).filter(({x})=>garageFilter==='all'||x.cls===garageFilter);
  const count=document.getElementById('garagecount');if(count)count.textContent=state.garage.length+' номеров';
- el.innerHTML=entries.length?entries.map(({x,i})=>`<div class="item" data-upgrade-index="${i}" style="cursor:pointer;border-color:${upgradeSelection.includes(i)?'#c49aff':'#393947'};box-shadow:${upgradeSelection.includes(i)?'0 0 0 2px #9b65ff55':''}"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="sub">${upgradeSelection.includes(i)?'✓ Выбран':'Нажми, чтобы выбрать'}</div><button class="btn secondary" data-sell-index="${i}" style="margin-top:8px;padding:8px;width:100%">Продать</button></div>`).join(''):state.garage.length?'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:22px">В этой категории пока нет номеров.</div>':'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
+ el.innerHTML=entries.length?entries.map(({x,i})=>`<div class="item" data-upgrade-index="${i}" style="cursor:pointer;border-color:${upgradeSelection.includes(i)?'#c49aff':'#393947'};box-shadow:${upgradeSelection.includes(i)?'0 0 0 2px #9b65ff55':''}"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="sub">${upgradeSelection.includes(i)?'✓ Выбран':'Нажми, чтобы выбрать'}</div><div class="row" style="gap:6px;margin-top:8px"><button class="btn gold" data-quick-sell="${i}" style="padding:8px 5px;font-size:12px">Продать</button><button class="btn secondary" data-market-index="${i}" style="padding:8px 5px;font-size:12px">На рынок</button></div></div>`).join(''):state.garage.length?'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:22px">В этой категории пока нет номеров.</div>':'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
  document.querySelectorAll('[data-garage-filter]').forEach(b=>b.classList.toggle('active',b.dataset.garageFilter===garageFilter));
  renderUpgrader();
 }
 document.querySelectorAll('[data-garage-filter]').forEach(b=>b.addEventListener('click',()=>{garageFilter=b.dataset.garageFilter;renderGarage();}));
 document.getElementById('inventory').addEventListener('click',event=>{
- const sell=event.target.closest('[data-sell-index]');
- if(sell){event.stopPropagation();openMarketForSale(Number(sell.dataset.sellIndex));return;}
+ const quickSell=event.target.closest('[data-quick-sell]');
+ if(quickSell){event.stopPropagation();sellGarageNumber(Number(quickSell.dataset.quickSell));return;}
+ const marketItem=event.target.closest('[data-market-index]');
+ if(marketItem){event.stopPropagation();openMarketForSale(Number(marketItem.dataset.marketIndex));return;}
  const item=event.target.closest('[data-upgrade-index]');
  if(!item)return;
  const index=Number(item.dataset.upgradeIndex);
@@ -395,8 +397,18 @@ document.getElementById('marketListBtn').addEventListener('click',async()=>{
  catch(e){toast(e.message);}
 });
 
-const winChances={any:.2975,unusual:.3435,rare:.4305,epic:.4924,legend:.5098,myth:.5909,secret:.65};
-let isSpinning=false,spinCount=1,fastSpin=false;
+let isSpinning=false,spinCount=1,fastSpin=false,lastWonIndex=-1;
+async function sellGarageNumber(index){
+ const item=state.garage[index];if(!item)return;
+ if(!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(item.value)+' ₽?'))return;
+ try{
+  if(serverMode)await apiAction('sellNumber',{index,plate:item.plate,region:item.region});
+  else{state.garage.splice(index,1);state.rub+=Number(item.value)||0;sync();}
+  lastWonIndex=-1;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(item.value)+' ₽ зачислено на баланс.');
+ }catch(e){toast(e.message);}
+}
+document.getElementById('sellWonNumber').addEventListener('click',()=>{if(lastWonIndex>=0)sellGarageNumber(lastWonIndex);});
+document.getElementById('listWonNumber').addEventListener('click',()=>{if(lastWonIndex>=0)openMarketForSale(lastWonIndex);});
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
 function randomPlate(){
@@ -431,10 +443,8 @@ async function spin(type){
  const tierData=[['Обычный','common',50000],['Необычный','unusual',100000],['Редкий','rare',250000],['Эпический','epic',500000],['Легендарный','legend',1000000],['Мифический','myth',2500000],['Секретный','secret',5000000]];
  for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){[tier,cls,value]=tierData[i];break;}}
  const serverNumber=serverResult?.numbers?.[0];
- const numberChance=(winChances[type]??winChances.any)*(freeSpin?1:.3077);
- const didWin=serverMode?(serverResult?.won===true):Math.random()<numberChance;
- const cashPrize=Number(serverResult?.cashPrize??(freeSpin?0:Math.round(Math.max(1000,(prices[type]||50000)*.08)+((prices[type]||50000)*1.1-Math.max(1000,(prices[type]||50000)*.08))*Math.pow(Math.random(),1.8))));
- if(!serverMode&&!freeSpin)state.rub+=cashPrize;
+ const didWin=true;
+ const cashPrize=0;
  if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
  const finalPlate=serverNumber?.plate||randomPlate();
  const finalRegion=serverNumber?.region||regions[Math.floor(Math.random()*regions.length)];
@@ -483,14 +493,18 @@ async function spin(type){
   document.getElementById('wonregion').textContent=finalRegion;
   document.getElementById('wonrarity').textContent=tier.toUpperCase();
   document.getElementById('wonrarity').className='rarity '+cls;
-  document.getElementById('wonvalue').textContent='Денежный приз: '+fmt(cashPrize)+' ₽ · Номер: '+fmt(value)+' ₽';
-  document.getElementById('wonmsg').textContent='Номер добавлен в гараж · денежный приз зачислен';
+  document.getElementById('wonvalue').textContent='Стоимость номера: '+fmt(value)+' ₽';
+  document.getElementById('wonmsg').textContent='Номер добавлен в гараж. Продай его сразу или выставь на рынок.';
   result.classList.remove('win-flash');result.classList.remove('rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret');void result.offsetWidth;if(['epic','legend','myth','secret'].includes(cls))result.classList.add('rarity-win-'+cls);result.classList.add('win-flash');
   playTone(cls==='myth'?880:cls==='legend'?740:cls==='epic'?620:520,.24,'sine',.055);
   setTimeout(()=>playTone(880,.3,'triangle',.04),130);
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
   if(!serverMode)state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
+  lastWonIndex=state.garage.findIndex(x=>x.plate===finalPlate&&x.region===finalRegion);
+  const sellWon=document.getElementById('sellWonNumber'),listWon=document.getElementById('listWonNumber');
+  if(sellWon){sellWon.disabled=lastWonIndex<0;sellWon.textContent='Продать за '+fmt(value)+' ₽';}
+  if(listWon)listWon.disabled=lastWonIndex<0;
   sync();
   if(serverMode)refreshFeatureState().catch(()=>{});
   isSpinning=false;
