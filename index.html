@@ -371,10 +371,10 @@ async function spin(type){
  if(!serverMode&&freeSpin)state.energy-=count;
  sync();
 
- let r=Math.random(),tier='Обычный',cls='common',value=35000;
+ let r=Math.random(),tier='Обычный',cls='common',value=50000;
  let weights=type==='secret'?[0,0,0,0,0,0,1]:type==='myth'?[0,0,0,0,0,.9,.1]:type==='legend'?[0,0,0,0,.85,.13,.02]:type==='epic'?[0,0,0,.78,.19,.028,.002]:type==='rare'?[0,0,.70,.23,.06,.009,.001]:type==='unusual'?[0,.65,.25,.08,.019,.0009,.0001]:[.58,.27,.11,.032,.007,.0009,.0001];
  let c=0;
- const tierData=[['Обычный','common',35000],['Необычный','unusual',80000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000],['Секретный','secret',100000000]];
+ const tierData=[['Обычный','common',50000],['Необычный','unusual',100000],['Редкий','rare',250000],['Эпический','epic',500000],['Легендарный','legend',1000000],['Мифический','myth',2500000],['Секретный','secret',5000000]];
  for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){[tier,cls,value]=tierData[i];break;}}
  const serverNumber=serverResult?.numbers?.[0];
  if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
