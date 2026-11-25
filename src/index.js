@@ -342,6 +342,15 @@ function setGameActionsEnabled(enabled) {
         if(!updated.meta?.changes) return Response.json({error:'Промокод уже закончился'},{status:409});
         if(promo.reward_type==='coins') await save("UPDATE players SET coins=coins+?,updated_at=? WHERE telegram_id=?",[promo.reward_amount,now,telegramId]);
         else await save("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=?",[promo.reward_amount,now,telegramId]);
+      } else if(action==='equipCosmetic'){
+        const cosmeticId=String(body.cosmeticId||'');
+        const cosmetics={plate_neon:'equipped_plate',effect_aurora:'equipped_effect',theme_royal:'equipped_theme'};
+        const field=cosmetics[cosmeticId];
+        if(!field) return Response.json({error:'Неизвестный предмет косметики'},{status:400});
+        const owned=await env.DB.prepare("SELECT 1 FROM player_cosmetics WHERE telegram_id=? AND cosmetic_id=?").bind(telegramId,cosmeticId).first();
+        if(!owned) return Response.json({error:'Сначала приобрети этот предмет'},{status:403});
+        await env.DB.prepare("INSERT OR IGNORE INTO player_profile(telegram_id) VALUES(?)").bind(telegramId).run();
+        await env.DB.prepare("UPDATE player_profile SET "+field+"=? WHERE telegram_id=?").bind(cosmeticId,telegramId).run();
       } else if(action==='trial'){
         if(now-p.trial_at<3600) return Response.json({error:'Trial energy cooldown',player:{energy:p.energy,trialAt:p.trial_at}},{status:429});
         const energy=Math.min(25,p.energy+10);
