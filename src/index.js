@@ -392,12 +392,12 @@ function setGameActionsEnabled(enabled) {
         }
         actionNumbers=numbers; const garage=[...JSON.parse(p.garage_json||'[]'),...numbers].slice(-500);
         const day=new Date(now*1000).toISOString().slice(0,10);
-        await env.DB.prepare("INSERT OR IGNORE INTO player_tasks(telegram_id,task_date) VALUES(?,?)").bind(telegramId,day).run();
-        await env.DB.prepare("UPDATE player_tasks SET spins_count=spins_count+? WHERE telegram_id=? AND task_date=?").bind(count,telegramId,day).run();
-        for(const number of numbers) await env.DB.prepare("INSERT INTO spin_history(telegram_id,plate,region,rarity,cls,value,crate_type,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(telegramId,number.plate,number.region,number.rarity,number.cls,number.value,type,now).run();
         const energyCost=freeSpin?count:0;
         const result=await save('UPDATE players SET balance=balance-?,energy=energy-?,garage_json=?,updated_at=? WHERE telegram_id=? AND balance>=? AND energy>=?',[cost,energyCost,JSON.stringify(garage),now,telegramId,cost,energyCost]);
         if(!result.meta?.changes) return Response.json({error:'Недостаточно ресурсов'},{status:409});
+        await env.DB.prepare("INSERT OR IGNORE INTO player_tasks(telegram_id,task_date) VALUES(?,?)").bind(telegramId,day).run();
+        await env.DB.prepare("UPDATE player_tasks SET spins_count=spins_count+? WHERE telegram_id=? AND task_date=?").bind(count,telegramId,day).run();
+        for(const number of numbers) await env.DB.prepare("INSERT INTO spin_history(telegram_id,plate,region,rarity,cls,value,crate_type,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(telegramId,number.plate,number.region,number.rarity,number.cls,number.value,type,now).run();
       } else if(action==='upgradeNumbers'){
         const indices=body.indices;
         if(!Array.isArray(indices)||indices.length!==2||indices.some(i=>!Number.isInteger(i)||i<0)||indices[0]===indices[1]) return Response.json({error:'Выбери два номера'},{status:400});
