@@ -55,6 +55,13 @@ export default {
       const assetResponse = await env.ASSETS.fetch(new Request(assetUrl, request));
       if (!assetResponse.ok) return assetResponse;
       let html = await assetResponse.text();
+      // Load Telegram SDK without blocking the game script; wait for it during hydration.
+      html = html.replace('<script src="https://telegram.org/js/telegram-web-app.js">', '<script async src="https://telegram.org/js/telegram-web-app.js">');
+      html = html.replace('const tg = window.Telegram?.WebApp;', 'let tg = window.Telegram?.WebApp;');
+      html = html.replace("const tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';", "let tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';"); 
+      const hydrateStart = "async function hydrateServerState(){\\n setGameActionsEnabled(false);";
+      const hydrateStartPatched = "async function hydrateServerState(){\\n setGameActionsEnabled(false);\\n if(!tg){\\n  connectionStatus('Подключаем Telegram…','Ожидаем загрузку Telegram WebApp SDK…','');\\n  await new Promise(resolve=>{let attempts=0;const timer=setInterval(()=>{tg=window.Telegram?.WebApp;if(tg||++attempts>=100){clearInterval(timer);resolve();}},100);});\\n  tgInitData=typeof tg?.initData==='string'?tg.initData:'';\\n }";
+      html = html.replace(hydrateStart, hydrateStartPatched);
       if (!html.includes('id="connectionStatus"')) {
         const diagnosticCss = '.connection-status{margin:0 0 14px;padding:11px 13px;border:1px solid #6b5730;border-radius:13px;background:#302719;color:#ffe0a0;font-size:12px;line-height:1.45}.connection-status.ok{border-color:#286b4b;background:#142b22;color:#9cf0bd}.connection-status.error{border-color:#8b3e50;background:#321923;color:#ffb6c3}.connection-status b{display:block;margin-bottom:3px;font-size:13px}';
         html = html.replace('</style>', diagnosticCss + '</style>');
