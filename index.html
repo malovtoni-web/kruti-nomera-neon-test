@@ -69,6 +69,7 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
 .wheel-pointer{font-size:25px;color:#ffe28a;text-shadow:0 2px 6px #000;position:absolute;top:-8px;z-index:2}
 .task-line{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #343044}.task-line:last-child{border:0}.task-icon{font-size:24px}.task-line .btn{width:auto;padding:8px 11px;font-size:12px;white-space:nowrap}
 .promo-row{display:flex;gap:8px}.promo-row input{min-width:0;flex:1;background:#11111d;color:#fff;border:1px solid #51426e;border-radius:12px;padding:12px;font-size:14px}
+.rarity.loss{background:#4a2632;color:#ff9baa;border-color:#713747}
 .history-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid #343044}.history-row:last-child{border:0}
 .shop-product{background:linear-gradient(145deg,#241c37,#151522);border:1px solid #594477;border-radius:17px;padding:14px;margin:10px 0;display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center}.shop-product .emoji{font-size:38px;text-align:center}.shop-product .btn{grid-column:1/-1;font-size:14px;padding:11px}.shop-product.owned{border-color:#2d9864}
 .plate.cosmetic-neon{border-color:#6fe6ff;box-shadow:inset 0 0 0 2px #314d68,0 0 20px #42dfff99,0 0 34px #985aff55}
@@ -115,7 +116,7 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
   <div class="section-title">Ежедневные задания</div><div class="card" id="dailyTasks"><div class="task-line"><span class="task-icon">🎰</span><div style="flex:1"><b>Открой 3 контейнера</b><div class="sub" id="spinTaskProgress">0 / 3 · Награда: 250 монет + 25 000 ₽</div></div><button class="btn secondary" id="claimSpinTask" disabled>Забрать</button></div><div class="task-line"><span class="task-icon">🎡</span><div style="flex:1"><b>Испытай колесо удачи</b><div class="sub" id="wheelTaskProgress">0 / 1 · Награда: 100 монет + 10 000 ₽</div></div><button class="btn secondary" id="claimWheelTask" disabled>Забрать</button></div></div>
   <div class="section-title">Промокод</div><div class="card"><div class="sub" style="margin-bottom:9px">Введи код и получи бонус на баланс или монеты.</div><div class="promo-row"><input id="promoCode" maxlength="32" placeholder="Например, START777" autocomplete="off"><button class="btn gold" id="redeemPromo" style="width:auto;padding:10px 14px">Активировать</button></div></div>
  </section>
- <section class="page" id="history"><div class="section-title">История выпадений</div><div class="sub">Последние 25 номеров, полученных в контейнерах.</div><div class="card" id="spinHistory"><div class="sub">История пока пуста. Открой первый контейнер!</div></div><div class="section-title">История покупок</div><div class="sub">Покупки в Telegram Stars.</div><div class="card" id="purchaseHistory"><div class="sub">Покупок пока нет.</div></div></section>
+ <section class="page" id="history"><div class="section-title">История выпадений</div><div class="sub">Последние 25 результатов открытий — включая пустые кейсы.</div><div class="card" id="spinHistory"><div class="sub">История пока пуста. Открой первый контейнер!</div></div><div class="section-title">История покупок</div><div class="sub">Покупки в Telegram Stars.</div><div class="card" id="purchaseHistory"><div class="sub">Покупок пока нет.</div></div></section>
 </main>
 <nav class="nav"><button class="active" data-page="spin"><span>▤</span>Крутить</button><button data-page="garage"><span>⌂</span>Гараж</button><button data-page="market"><span>▣</span>Рынок</button><button data-page="rating"><span>♜</span>Рейтинг</button><button data-page="home"><span>⌂</span>Дом</button><button data-page="cars"><span>🚘</span>Авто</button><button data-page="shop"><span>▢</span>Магазин</button></nav>
 <script>
@@ -355,6 +356,7 @@ document.getElementById('inventory').addEventListener('click',event=>{
  if(Number.isInteger(index))toggleUpgradeSelection(index);
 });
 
+const winChances={any:.2975,unusual:.3435,rare:.4305,epic:.4924,legend:.5098,myth:.5909,secret:.65};
 let isSpinning=false,spinCount=1,fastSpin=false;
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
@@ -390,6 +392,7 @@ async function spin(type){
  const tierData=[['Обычный','common',50000],['Необычный','unusual',100000],['Редкий','rare',250000],['Эпический','epic',500000],['Легендарный','legend',1000000],['Мифический','myth',2500000],['Секретный','secret',5000000]];
  for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){[tier,cls,value]=tierData[i];break;}}
  const serverNumber=serverResult?.numbers?.[0];
+ const didWin=serverMode?(serverResult?.won===true):Math.random()<(winChances[type]??winChances.any);
  if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
  const finalPlate=serverNumber?.plate||randomPlate();
  const finalRegion=serverNumber?.region||regions[Math.floor(Math.random()*regions.length)];
@@ -413,6 +416,23 @@ async function spin(type){
    document.getElementById('wonregion').textContent=regions[Math.floor(Math.random()*regions.length)];
    const delay=delays[tick++];
    setTimeout(roll,Math.max(12,Math.round(delay*((state.mode==='turbo'?.48:1)*(fastSpin?.38:1)))));
+   return;
+  }
+  if(!didWin){
+   document.getElementById('wonplate').textContent='—';
+   document.getElementById('wonregion').textContent='🎲';
+   document.getElementById('wonrarity').textContent='НЕ ПОВЕЗЛО';
+   document.getElementById('wonrarity').className='rarity loss';
+   document.getElementById('wonvalue').textContent='Выигрыш: 0 ₽';
+   document.getElementById('wonmsg').textContent='В этот раз номер не выпал. Попробуй ещё раз!';
+   result.classList.remove('win-flash','rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret');
+   plateEl.classList.remove('rolling');
+   playTone(155,.32,'triangle',.045);
+   sync();
+   if(serverMode)refreshFeatureState().catch(()=>{});
+   isSpinning=false;
+   spinButtons.forEach(b=>b.disabled=false);
+   document.getElementById('quickspin').disabled=state.energy<1;
    return;
   }
   document.getElementById('wonplate').textContent=finalPlate;
