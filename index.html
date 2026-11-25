@@ -1173,3 +1173,29 @@ sync();
 hydrateServerState();
 </script>
 </body></html>
+<style>
+
+/* Fix: keep the case result and its action buttons in the first screen */
+#caseModal{align-items:flex-start!important;padding:7px 10px calc(7px + env(safe-area-inset-bottom))!important}
+#caseModal .case-modal-inner{min-height:0!important;height:auto!important;width:min(100%,500px);justify-content:flex-start!important;gap:7px!important;padding-top:38px!important;padding-bottom:8px}
+#caseModal .case-headline{margin:0!important}
+#caseModal .case-scene.hidden{height:clamp(88px,14vh,118px)!important;min-height:0!important;flex:0 0 auto!important;gap:0!important;overflow:hidden}
+#caseModal .case-scene.hidden .case-big{height:clamp(88px,14vh,118px)!important;width:min(100%,390px)!important}
+#caseModal .case-result-host{flex:0 0 auto!important;width:100%;margin:0!important}
+#caseModal .result.show{padding:12px 13px 13px!important;gap:7px!important;margin:0!important}
+#caseModal .result .plate{min-height:62px!important;margin:1px auto!important}
+#caseModal .result h2{font-size:17px!important;line-height:1.2;margin:0!important}
+#caseModal .result .sub{font-size:11px!important;line-height:1.25!important}
+#caseModal .result .row{margin-top:5px!important;gap:8px!important}
+#caseModal .result .btn{min-height:52px!important;padding:10px 8px!important;font-size:14px!important;touch-action:manipulation}
+#caseModal .case-footer-glow{display:none!important}
+#caseModal .case-close{top:3px!important;right:3px!important}
+@media(max-height:740px){
+ #caseModal .case-modal-inner{padding-top:34px!important;gap:4px!important}
+ #caseModal .case-scene.hidden,#caseModal .case-scene.hidden .case-big{height:clamp(76px,12vh,96px)!important}
+ #caseModal .result.show{padding:9px 11px 10px!important;gap:5px!important}
+ #caseModal .result .plate{min-height:54px!important}
+ #caseModal .result .btn{min-height:50px!important}
+}
+
+</style>
