@@ -453,6 +453,9 @@ function setGameActionsEnabled(enabled) {
       );
     }
 
+    if (!env.ASSETS) {
+      return new Response(GAME_HTML, {headers:{"Content-Type":"text/html; charset=utf-8"}});
+    }
     const assetResponse = await env.ASSETS.fetch(request);
     if (url.pathname === "/" && assetResponse.headers.get("content-type")?.includes("text/html")) {
       const html = await assetResponse.text();
