@@ -754,7 +754,7 @@ function closeCaseModal(){
  modal.classList.remove('active','opening');
  document.body.style.overflow='';
 }
-document.getElementById('caseClose')?.addEventListener('click',closeCaseModal);
+document.getElementById('caseClose')?.addEventListener('click',()=>{if(!isSpinning)closeCaseModal()});
 document.getElementById('caseModal')?.addEventListener('click',e=>{if(e.target.id==='caseModal'&&!isSpinning)closeCaseModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!isSpinning&&document.getElementById('caseModal')?.classList.contains('active'))closeCaseModal()});
 
