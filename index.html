@@ -65,6 +65,9 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
 .promo-row{display:flex;gap:8px}.promo-row input{min-width:0;flex:1;background:#11111d;color:#fff;border:1px solid #51426e;border-radius:12px;padding:12px;font-size:14px}
 .history-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid #343044}.history-row:last-child{border:0}
 .shop-product{background:linear-gradient(145deg,#241c37,#151522);border:1px solid #594477;border-radius:17px;padding:14px;margin:10px 0;display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center}.shop-product .emoji{font-size:38px;text-align:center}.shop-product .btn{grid-column:1/-1;font-size:14px;padding:11px}.shop-product.owned{border-color:#2d9864}
+.plate.cosmetic-neon{border-color:#6fe6ff;box-shadow:inset 0 0 0 2px #314d68,0 0 20px #42dfff99,0 0 34px #985aff55}
+body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 0 24px #dcae4a22}
+.result.effect-aurora{background:linear-gradient(135deg,#102b3c,#25183e,#163b36);box-shadow:0 0 36px #47e5d488}
 @keyframes wheelGlow{50%{box-shadow:0 0 0 5px #34214e,0 0 55px #ffcf65aa}}
 .wheel.spinning{animation:wheelGlow .6s ease infinite alternate}
 </style><script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -159,7 +162,10 @@ function renderFeaturePanels(){
  const sp=document.getElementById('spinTaskProgress'),wp=document.getElementById('wheelTaskProgress');if(sp)sp.textContent=Math.min(3,spins)+' / 3 · Награда: 250 монет + 25 000 ₽';if(wp)wp.textContent=Math.min(1,wheels)+' / 1 · Награда: 100 монет + 10 000 ₽';
  const sb=document.getElementById('claimSpinTask'),wb=document.getElementById('claimWheelTask');if(sb){sb.disabled=spins<3||claimed.includes('spin3');sb.textContent=claimed.includes('spin3')?'Получено':'Забрать';}if(wb){wb.disabled=wheels<1||claimed.includes('wheel1');wb.textContent=claimed.includes('wheel1')?'Получено':'Забрать';}
  const hist=document.getElementById('spinHistory');if(hist){const rows=f.history||[];hist.innerHTML=rows.length?rows.map(x=>'<div class="history-row"><div><b>'+x.plate+' · '+x.region+'</b><div class="sub">'+x.rarity+' · '+new Date(x.created_at*1000).toLocaleString('ru-RU')+'</div></div><b>'+fmt(x.value)+' ₽</b></div>').join(''):'<div class="sub">История пока пуста. Открой первый контейнер!</div>';}
- const products=f.products||[],owned=f.cosmetics||[],catalog=document.getElementById('starsCatalog');
+ const products=f.products||[],owned=f.cosmetics||[],catalog=document.getElementById('starsCatalog'),profile=f.profile||{};
+ document.body.classList.toggle('theme-royal',profile.equipped_theme==='theme_royal');
+ document.querySelectorAll('.plate').forEach(p=>p.classList.toggle('cosmetic-neon',profile.equipped_plate==='plate_neon'));
+ const resultPanel=document.getElementById('result');if(resultPanel)resultPanel.classList.toggle('effect-aurora',profile.equipped_effect==='effect_aurora');
  const icons={starter_bundle:'🎁',plate_neon:'💠',effect_aurora:'🌌',theme_royal:'👑',vip_week:'💎'};
  if(catalog)catalog.innerHTML=products.map(p=>{const has=p.cosmetic&&owned.includes(p.cosmetic);return '<article class="shop-product '+(has?'owned':'')+'"><div class="emoji">'+(icons[p.id]||'✨')+'</div><div><b>'+p.title+'</b><div class="sub">'+p.description+'</div><div class="asset-price">'+p.stars+' ★</div></div><button class="btn '+(has?'secondary':'gold')+'" data-buy-stars="'+p.id+'" '+(has?'disabled':'')+'>'+(has?'Уже куплено':'Купить за '+p.stars+' ★')+'</button></article>'}).join('');
  const collection=document.getElementById('cosmeticsCollection');if(collection)collection.innerHTML=owned.length?owned.map(x=>'<div class="listrow"><span>'+(icons[x]||'✨')+' '+x+'</span><button class="btn secondary" data-equip-cosmetic="'+x+'" style="width:auto;padding:7px 10px;font-size:11px">Надеть</button></div>').join(''):'<div class="sub">Пока нет косметических предметов.</div>';
@@ -408,6 +414,7 @@ async function spin(type){
   plateEl.classList.remove('rolling');
   if(!serverMode)state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
   sync();
+  if(serverMode)refreshFeatureState().catch(()=>{});
   isSpinning=false;
   spinButtons.forEach(b=>b.disabled=false);
   document.getElementById('quickspin').disabled=state.energy<1;
