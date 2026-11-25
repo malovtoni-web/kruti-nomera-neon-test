@@ -172,6 +172,8 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
  </div>
  <div class="section-title">Состав коллекции</div>
  <div class="card" id="profileRarities"></div>
+ <div class="section-title">Талисманы удачи</div>
+ <div class="card" id="talismansCollection"><div class="sub">Загружаем талисманы…</div></div>
  <div class="section-title">Аккаунт</div>
  <div class="card"><div class="listrow"><span class="sub">Баланс</span><b id="profileBalance">0 ₽</b></div><div class="listrow"><span class="sub">Монеты</span><b id="profileCoins">0 ◈</b></div><div class="listrow"><span class="sub">Энергия</span><b id="profileEnergy">0 / 25</b></div><div class="listrow"><span class="sub">VIP</span><b id="profileVip">Не активен</b></div></div>
 </section>
@@ -231,6 +233,7 @@ document.getElementById('marketListings').addEventListener('click',async event=>
 });
 function renderFeaturePanels(){
  const f=state.features||{},d=f.daily||{},t=f.tasks||{},claimed=(()=>{try{return JSON.parse(t.claimed_json||'[]')}catch(_){return[]}})();
+ const talismans=f.talismans||[],equippedTalisman=f.profile?.equipped_talisman||null;
  const streak=Number(d.streak||0),day=new Date().toISOString().slice(0,10),claimedToday=d.last_claim_day===day,vipActive=Number(f.profile?.vip_until||0)*1000>Date.now();
  const vipButton=document.querySelector('[data-count="5"]');if(vipButton){vipButton.disabled=!vipActive;vipButton.title=vipActive?'VIP активен':'Только для VIP';vipButton.textContent=vipActive?'👑 ×5 VIP · АКТИВЕН':'👑 ×5 VIP';}
  const claim=document.getElementById('dailyClaim');if(claim){claim.disabled=claimedToday;claim.textContent=claimedToday?'Награда получена сегодня':'Забрать ежедневный бонус';}
@@ -250,6 +253,9 @@ function renderFeaturePanels(){
  const icons={starter_bundle:'🎁',plate_neon:'💠',effect_aurora:'🌌',theme_royal:'👑',vip_week:'💎'};
  if(catalog)catalog.innerHTML=products.map(p=>{const has=p.cosmetic&&owned.includes(p.cosmetic);return '<article class="shop-product '+(has?'owned':'')+'"><div class="emoji">'+(icons[p.id]||'✨')+'</div><div><b>'+p.title+'</b><div class="sub">'+p.description+'</div><div class="asset-price">'+p.stars+' ★</div></div><button class="btn '+(has?'secondary':'gold')+'" data-buy-stars="'+p.id+'" '+(has?'disabled':'')+'>'+(has?'Уже куплено':'Купить за '+p.stars+' ★')+'</button></article>'}).join('');
  const collection=document.getElementById('cosmeticsCollection');if(collection)collection.innerHTML=owned.length?owned.map(x=>'<div class="listrow"><span>'+(icons[x]||'✨')+' '+x+'</span><button class="btn secondary" data-equip-cosmetic="'+x+'" style="width:auto;padding:7px 10px;font-size:11px">Надеть</button></div>').join(''):'<div class="sub">Пока нет косметических предметов.</div>';
+ const talismanBox=document.getElementById('talismansCollection');
+ if(talismanBox)talismanBox.innerHTML=talismans.length?talismans.map(x=>'<div class="listrow"><div><b>🍀 Талисман удачи</b><div class="sub">+10% к относительному шансу редких и более высоких номеров</div></div><button class="btn '+(equippedTalisman==='luck_charm'?'secondary':'gold')+'" data-equip-talisman="luck_charm" style="width:auto;padding:8px 11px;font-size:12px">'+(equippedTalisman==='luck_charm'?'Надет':'Надеть')+'</button></div>').join(''):'<div class="sub">Талисманов пока нет.</div>';
+ const luck=document.getElementById('luck');if(luck)luck.textContent=equippedTalisman==='luck_charm'?'1,1':'1,0';
 }
 async function buyStarsProduct(productId){
  try{
@@ -271,6 +277,7 @@ document.getElementById('claimWheelTask')?.addEventListener('click',async()=>{tr
 document.getElementById('redeemPromo')?.addEventListener('click',async()=>{try{const code=document.getElementById('promoCode').value;await apiAction('redeemPromo',{code});document.getElementById('promoCode').value='';await refreshFeatureState();toast('🎉 Промокод активирован!')}catch(e){toast(e.message)}});
 document.getElementById('starsCatalog')?.addEventListener('click',event=>{const b=event.target.closest('[data-buy-stars]');if(b)buyStarsProduct(b.dataset.buyStars)});
 document.getElementById('cosmeticsCollection')?.addEventListener('click',async event=>{const b=event.target.closest('[data-equip-cosmetic]');if(!b)return;try{await apiAction('equipCosmetic',{cosmeticId:b.dataset.equipCosmetic});await refreshFeatureState();toast('✨ Косметика применена')}catch(e){toast(e.message)}});
+document.getElementById('talismansCollection')?.addEventListener('click',async event=>{const b=event.target.closest('[data-equip-talisman]');if(!b)return;try{await apiAction('equipTalisman',{talismanId:b.dataset.equipTalisman});await refreshFeatureState();toast('🍀 Талисман удачи надет')}catch(e){toast(e.message)}});
 
 async function hydrateServerState(){
  setGameActionsEnabled(false);
