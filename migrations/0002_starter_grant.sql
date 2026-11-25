@@ -1,0 +1,1 @@
+ALTER TABLE players ADD COLUMN starter_granted INTEGER NOT NULL DEFAULT 0;
