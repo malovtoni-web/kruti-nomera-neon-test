@@ -78,6 +78,7 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
 @keyframes wheelGlow{50%{box-shadow:0 0 0 5px #34214e,0 0 55px #ffcf65aa}}
 .wheel.spinning{animation:wheelGlow .6s ease infinite alternate}
 
+.wheel{background:conic-gradient(#A7ADB8 0 14.28%,#35D66F 14.28% 28.56%,#318BFF 28.56% 42.84%,#B34DFF 42.84% 57.12%,#FFB629 57.12% 71.4%,#FF4D83 71.4% 85.68%,#20E9E8 85.68% 100%)}
 /* Rarity identity + premium plate hero */
 .rarity-glow{--rarity-glow:#A7ADB8;--rarity-soft:rgba(167,173,184,.18)}
 .rarity-glow.common{--rarity-glow:#A7ADB8;--rarity-soft:rgba(167,173,184,.18)}
@@ -117,7 +118,7 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
 <main class="app">
  <header class="top"><div><div class="brand">КРУТИ <span>НОМЕРА</span></div><div class="sub">Коллекционируй редкость</div></div><div class="avatar">К</div></header>
  <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">1 000 000 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
- <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="home">Дом</button><button class="tab" data-page="cars">Авто</button><button class="tab" data-page="shop">Магазин</button><button class="tab" data-page="bonuses">Бонусы</button><button class="tab" data-page="history">История</button><button class="tab" data-page="profile">Профиль</button></nav>
+ <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="roulette">🎡 Рулетка</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="home">Дом</button><button class="tab" data-page="cars">Авто</button><button class="tab" data-page="shop">Магазин</button><button class="tab" data-page="bonuses">Бонусы</button><button class="tab" data-page="history">История</button><button class="tab" data-page="profile">Профиль</button></nav>
  <section class="page active" id="spin">
   <div class="hero plate-hero rarity-glow common"><div class="hero-row"><span class="hero-kicker">Крути номера · сезон</span><span class="sub">Бонус талисмана ×<b id="luck">1,0</b></span></div><div class="hero-title">Твой следующий номер уже близко</div><div class="hero-sub">Выбери контейнер и испытай удачу</div><div class="hero-plate-wrap"><div class="hero-plate"><span>А777АА</span><span class="plate-region">77<small>RUS</small></span></div></div><div class="hero-plate-caption">СОБЕРИ СВОЮ КОЛЛЕКЦИЮ</div></div>
   <div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
@@ -134,8 +135,22 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
   <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость номера: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div><div class="row" style="gap:8px;margin-top:12px"><button class="btn gold" id="sellWonNumber" style="flex:1;padding:11px;font-size:14px" disabled>Продать</button><button class="btn secondary" id="listWonNumber" style="flex:1;padding:11px;font-size:14px" disabled>На рынок</button></div></div>
   <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>Бесплатное открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
  </section>
- <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров · выбери два одинаковой редкости</span><b id="garagecount">0 номеров</b></div><div class="rarity-tabs garage-filters"><button class="active" data-garage-filter="all">Все</button><button data-garage-filter="common">Обычные</button><button data-garage-filter="unusual">Необычные</button><button data-garage-filter="rare">Редкие</button><button data-garage-filter="epic">Эпические</button><button data-garage-filter="legend">Легендарные</button><button data-garage-filter="myth">Мифические</button><button data-garage-filter="secret">Секретные</button></div><div class="inventory" id="inventory"></div><div class="card" id="upgradeRoulette"><div class="row"><b>🎡 Рулетка номеров</b><span class="rarity epic">НОВЫЙ РЕЖИМ</span></div><p class="sub">Вместо объединения двух номеров — отдельный игровой режим с вращением барабана и шансом получить номер следующей редкости. Механику и стоимость подключу после настройки серверных вероятностей и проверки экономики.</p><div class="row"><span class="sub">Текущий режим</span><b>В разработке</b></div><div hidden><span id="upgradeCost">—</span><span id="upgradeHint"></span><button id="upgradeNumbers" disabled></button></div></div></section>
- <section class="page" id="market">
+ <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров · выбери номер для рулетки</span><b id="garagecount">0 номеров</b></div><div class="rarity-tabs garage-filters"><button class="active" data-garage-filter="all">Все</button><button data-garage-filter="common">Обычные</button><button data-garage-filter="unusual">Необычные</button><button data-garage-filter="rare">Редкие</button><button data-garage-filter="epic">Эпические</button><button data-garage-filter="legend">Легендарные</button><button data-garage-filter="myth">Мифические</button><button data-garage-filter="secret">Секретные</button></div><div class="inventory" id="inventory"></div></section>
+ <section class="page" id="roulette">
+<div class="section-title">🎡 Рулетка улучшений</div>
+<div class="card" id="rouletteEmpty"><b>Выбери номер в гараже</b><p class="sub">Нажми «В рулетку» на карточке номера. При успехе он заменится номером следующей редкости. При неудаче исходный номер сгорит.</p></div>
+<div class="card" id="rouletteSelected" style="display:none;text-align:center">
+<div class="sub">ТВОЙ НОМЕР НА КОНУ</div><div class="plate"><span class="mainnum" id="roulettePlate">А777АА</span><span class="region"><span id="rouletteRegion">77</span><span class="rus">RUS</span></span></div>
+<span class="rarity common" id="rouletteRarity">ОБЫЧНЫЙ</span><div class="row" style="margin:12px 0"><span class="sub">Номинал номера</span><b id="rouletteValue">50 000 ₽</b></div>
+<div class="wheel-wrap"><div class="wheel-pointer">▼</div><div class="wheel" id="upgradeWheel"></div></div><div class="sub" id="rouletteChance"></div>
+<p class="sub">При запуске номер сгорает в любом случае. Успех даёт один номер следующей редкости; при неудаче награды нет.</p>
+<button class="btn gold" id="rouletteStart">🎡 Запустить рулетку</button>
+<div class="result" id="rouletteResult" style="display:none"><h2 id="rouletteOutcome"></h2>
+<div class="plate" id="roulettePrizePlate" style="display:none"><span class="mainnum" id="roulettePrizeNumber"></span><span class="region"><span id="roulettePrizeRegion"></span><span class="rus">RUS</span></span></div>
+<div id="roulettePrizeRarity" class="rarity" style="display:none"></div><h3 id="roulettePrizeValue"></h3><div class="sub" id="rouletteOutcomeText"></div>
+<div class="row" id="roulettePrizeActions" style="gap:8px;margin-top:12px;display:none"><button class="btn secondary" id="rouletteKeep" style="flex:1;padding:10px;font-size:13px">Оставить</button><button class="btn gold" id="rouletteSell" style="flex:1;padding:10px;font-size:13px">Продать</button><button class="btn secondary" id="rouletteMarket" style="flex:1;padding:10px;font-size:13px">На рынок</button></div>
+<button class="btn secondary" id="rouletteClose" style="margin-top:10px">Понятно</button></div></div></section>
+<section class="page" id="market">
  <div class="section-title">Рынок номеров</div>
  <div class="card">
   <div class="row"><b>🏷️ Выставить свой номер</b><span class="rarity rare">P2P</span></div>
@@ -446,7 +461,7 @@ function renderGarage(){
  const el=document.getElementById('inventory');
  const entries=state.garage.map((x,i)=>({x,i})).filter(({x})=>garageFilter==='all'||x.cls===garageFilter);
  const count=document.getElementById('garagecount');if(count)count.textContent=state.garage.length+' номеров';
- el.innerHTML=entries.length?entries.map(({x,i})=>`<div class="item" data-upgrade-index="${i}" style="cursor:pointer;border-color:${upgradeSelection.includes(i)?'#c49aff':'#393947'};box-shadow:${upgradeSelection.includes(i)?'0 0 0 2px #9b65ff55':''}"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="sub">${upgradeSelection.includes(i)?'✓ Выбран':'Нажми, чтобы выбрать'}</div><div class="row" style="gap:6px;margin-top:8px"><button class="btn gold" data-quick-sell="${i}" style="padding:8px 5px;font-size:12px">Продать</button><button class="btn secondary" data-market-index="${i}" style="padding:8px 5px;font-size:12px">На рынок</button></div></div>`).join(''):state.garage.length?'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:22px">В этой категории пока нет номеров.</div>':'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
+ el.innerHTML=entries.length?entries.map(({x,i})=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap"><button class="btn gold" data-roulette-index="${i}" style="padding:8px 5px;font-size:12px">🎡 В рулетку</button><button class="btn secondary" data-quick-sell="${i}" style="padding:8px 5px;font-size:12px">Продать</button><button class="btn secondary" data-market-index="${i}" style="padding:8px 5px;font-size:12px">На рынок</button></div></div>`).join(''):state.garage.length?'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:22px">В этой категории пока нет номеров.</div>':'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
  document.querySelectorAll('[data-garage-filter]').forEach(b=>b.classList.toggle('active',b.dataset.garageFilter===garageFilter));
  renderUpgrader();
 }
@@ -454,12 +469,11 @@ document.querySelectorAll('[data-garage-filter]').forEach(b=>b.addEventListener(
 document.getElementById('inventory').addEventListener('click',event=>{
  const quickSell=event.target.closest('[data-quick-sell]');
  if(quickSell){event.stopPropagation();sellGarageNumber(Number(quickSell.dataset.quickSell));return;}
+ const rouletteItem=event.target.closest('[data-roulette-index]');
+ if(rouletteItem){event.stopPropagation();openRouletteForNumber(Number(rouletteItem.dataset.rouletteIndex));return;}
  const marketItem=event.target.closest('[data-market-index]');
  if(marketItem){event.stopPropagation();openMarketForSale(Number(marketItem.dataset.marketIndex));return;}
- const item=event.target.closest('[data-upgrade-index]');
- if(!item)return;
- const index=Number(item.dataset.upgradeIndex);
- if(Number.isInteger(index))toggleUpgradeSelection(index);
+
 });
 document.getElementById('marketListBtn').addEventListener('click',async()=>{
  const price=Number(document.getElementById('marketPrice').value);
@@ -469,6 +483,53 @@ document.getElementById('marketListBtn').addEventListener('click',async()=>{
 });
 
 let isSpinning=false,spinCount=1,fastSpin=false,lastWonIndex=-1;
+let rouletteSelectedIndex=null,rouletteBusy=false;
+const rouletteChances={common:55,unusual:45,rare:35,epic:25,legend:18,myth:10};
+function openRouletteForNumber(index){
+ const item=state.garage[index];if(!item)return;rouletteSelectedIndex=index;
+ document.getElementById('rouletteEmpty').style.display='none';
+ document.getElementById('rouletteSelected').style.display='block';
+ const panel=document.getElementById('rouletteResult');panel.style.display='none';panel.classList.remove('show');
+ document.getElementById('roulettePlate').textContent=item.plate;document.getElementById('rouletteRegion').textContent=item.region;
+ document.getElementById('rouletteRarity').textContent=item.rarity.toUpperCase();document.getElementById('rouletteRarity').className='rarity '+item.cls;
+ document.getElementById('rouletteValue').textContent=fmt(item.value)+' ₽';
+ const chance=rouletteChances[item.cls]||0;document.getElementById('rouletteChance').textContent='Шанс улучшения: '+chance+'%';
+ const btn=document.getElementById('rouletteStart');btn.disabled=chance===0||!serverMode;btn.textContent=chance===0?'Максимальная редкость':(!serverMode?'Открой игру через Telegram':'🎡 Запустить рулетку');
+ document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='roulette'));
+ document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='roulette'));
+}
+document.getElementById('rouletteStart').addEventListener('click',async()=>{
+ if(rouletteBusy||rouletteSelectedIndex===null||!serverMode)return;
+ const item=state.garage[rouletteSelectedIndex];if(!item)return;
+ rouletteBusy=true;const btn=document.getElementById('rouletteStart');btn.disabled=true;
+ const wheel=document.getElementById('upgradeWheel');wheel.classList.add('spinning');wheel.style.transform='rotate('+(1440+Math.floor(Math.random()*720))+'deg)';
+ try{
+  const response=await apiAction('rouletteUpgrade',{index:rouletteSelectedIndex,plate:item.plate,region:item.region});
+  const data=response.roulette;if(!data)throw new Error('Сервер не вернул результат рулетки');
+  await new Promise(resolve=>setTimeout(resolve,3000));wheel.classList.remove('spinning');rouletteSelectedIndex=null;
+  const panel=document.getElementById('rouletteResult');panel.style.display='block';panel.classList.add('show');
+  if(data.success&&data.number){
+   const n=data.number;document.getElementById('rouletteOutcome').textContent='УСПЕХ!';
+   document.getElementById('roulettePrizePlate').style.display='flex';document.getElementById('roulettePrizeNumber').textContent=n.plate;document.getElementById('roulettePrizeRegion').textContent=n.region;
+   const rarity=document.getElementById('roulettePrizeRarity');rarity.style.display='inline-block';rarity.textContent=n.rarity.toUpperCase();rarity.className='rarity '+n.cls;
+   document.getElementById('roulettePrizeValue').textContent='Номинал: '+fmt(n.value)+' ₽';
+   document.getElementById('rouletteOutcomeText').textContent='Исходный номер сгорел. Новый номер добавлен в гараж.';
+   document.getElementById('roulettePrizeActions').style.display='flex';lastWonIndex=state.garage.length-1;
+  }else{
+   document.getElementById('rouletteOutcome').textContent='НЕУДАЧА';document.getElementById('roulettePrizePlate').style.display='none';
+   document.getElementById('roulettePrizeRarity').style.display='none';document.getElementById('roulettePrizeValue').textContent='';
+   document.getElementById('rouletteOutcomeText').textContent='Исходный номер сгорел. Награда не выпала.';
+   document.getElementById('roulettePrizeActions').style.display='none';lastWonIndex=-1;
+  }
+  sync();await refreshFeatureState();
+ }catch(e){wheel.classList.remove('spinning');toast(e.message);btn.disabled=false;}
+ finally{rouletteBusy=false;}
+});
+document.getElementById('rouletteKeep').addEventListener('click',()=>{document.getElementById('roulettePrizeActions').style.display='none';toast('Номер оставлен в гараже');});
+document.getElementById('rouletteSell').addEventListener('click',async()=>{if(lastWonIndex>=0){await sellGarageNumber(lastWonIndex);document.getElementById('roulettePrizeActions').style.display='none';}});
+document.getElementById('rouletteMarket').addEventListener('click',()=>{if(lastWonIndex>=0){openMarketForSale(lastWonIndex);document.getElementById('roulettePrizeActions').style.display='none';}});
+document.getElementById('rouletteClose').addEventListener('click',()=>{document.getElementById('rouletteResult').style.display='none';document.getElementById('rouletteEmpty').style.display='block';document.getElementById('rouletteSelected').style.display='none';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='garage'));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='garage'));});
+
 async function sellGarageNumber(index){
  const item=state.garage[index];if(!item)return;
  if(!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(item.value)+' ₽?'))return;
