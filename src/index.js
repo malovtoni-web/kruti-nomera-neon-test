@@ -76,7 +76,7 @@ export default {
       html = html.replace(hydrateStart, hydrateStartPatched);
       // Upgrade legacy asset HTML based on its game bootstrap, not the mere presence
       // of a diagnostic element (older bundles may already contain that element).
-      if (!html.includes('let tg = window.Telegram?.WebApp;') && !html.includes('const tg = window.Telegram?.WebApp;')) {
+      if (!html.includes('function setGameActionsEnabled(enabled)')) {
         const diagnosticCss = '.connection-status{margin:0 0 14px;padding:11px 13px;border:1px solid #6b5730;border-radius:13px;background:#302719;color:#ffe0a0;font-size:12px;line-height:1.45}.connection-status.ok{border-color:#286b4b;background:#142b22;color:#9cf0bd}.connection-status.error{border-color:#8b3e50;background:#321923;color:#ffb6c3}.connection-status b{display:block;margin-bottom:3px;font-size:13px}';
         if (!html.includes('.connection-status{')) html = html.replace('</style>', diagnosticCss + '</style>');
         if (!html.includes('id="connectionStatus"')) {
@@ -89,7 +89,7 @@ export default {
 const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
 const tgInitData = window.Telegram?.WebApp?.initData || '';
 let serverMode = Boolean(tgInitData);`;
-        const newInit = `const tg = window.Telegram?.WebApp;
+        const newInit = `let tg = window.Telegram?.WebApp;
 try { tg?.ready(); tg?.expand(); } catch (_) {}
 const tgUserId = (() => {
  try { return tg?.initDataUnsafe?.user?.id || 'local'; }
@@ -107,7 +107,12 @@ function connectionStatus(title, message, kind='error') {
 function setGameActionsEnabled(enabled) {
  document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.asset-card .btn').forEach(b=>b.disabled=!enabled);
 }`;
-        html = html.replace(oldInit, newInit);
+        if (html.includes(oldInit)) {
+          html = html.replace(oldInit, newInit);
+        } else {
+          const legacyInit = /const tgUserId = \(\(\) => \{[\s\S]*?let serverMode = Boolean\(tgInitData\);/;
+          html = html.replace(legacyInit, newInit);
+        }
         const oldHydrate = `async function hydrateServerState(){
  if(!serverMode)return;
  try{const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
@@ -142,11 +147,15 @@ function setGameActionsEnabled(enabled) {
   connectionStatus('Ошибка подключения к игровому серверу',e.message+' Игровые действия отключены, чтобы не сохранять прогресс локально.');
  }
 }`;
-        html = html.replace(oldHydrate, newHydrate);
+        if (html.includes(oldHydrate)) {
+          html = html.replace(oldHydrate, newHydrate);
+        } else {
+          html = html.replace(/async function hydrateServerState\(\)\s*\{[\s\S]*?^\}/m, newHydrate);
+        }
       }
       // Surface browser-side startup failures instead of leaving the connection label stuck.
       // Mark whether the game's inline script actually begins execution.
-      html = html.replace(/<script>\s*(?=(?:const|let) tg = window\.Telegram\?\.WebApp;)/, '<script>\nwindow.__krutiMainStarted=true;\n');
+      html = html.replace(/<script>\s*(?=(?:const|let) tg = window\.Telegram\?\.WebApp;|const tgUserId = \(\(\) =>)/, '<script>\nwindow.__krutiMainStarted=true;\n');
       const startupProbe = `<script>
       (function(){
         var pendingError='';
