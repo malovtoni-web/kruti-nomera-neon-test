@@ -239,12 +239,13 @@ async function spin(type){
  if(count===5){toast('×5 доступно только VIP');return}
  if(state.energy<count){toast('Недостаточно энергии для ×'+count);return}
  const prices={any:2000000,unusual:4000000,rare:7000000,epic:19000000,legend:45000000,myth:100000000,secret:250000000};
- const totalCost=(prices[type]||2000000)*count;
- if(state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
+ const freeSpin=type==='free';
+ const totalCost=freeSpin?0:(prices[type]||2000000)*count;
+ if(!freeSpin&&state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
  isSpinning=true;
  let serverResult=null;
  if(serverMode){try{serverResult=await apiAction('spin',{type,count});}catch(e){isSpinning=false;toast(e.message);return}}
- else state.rub-=totalCost;
+ else if(!freeSpin)state.rub-=totalCost;
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
