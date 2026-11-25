@@ -63,7 +63,7 @@ export default {
         html = html.replace('<script src="https://telegram.org/js/telegram-web-app.js">', '<script async src="https://telegram.org/js/telegram-web-app.js">');
       }
       html = html.replace('const tg = window.Telegram?.WebApp;', 'let tg = window.Telegram?.WebApp;');
-      html = html.replace("const tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';", "let tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';"); 
+      html = html.replace("let tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';", "let tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';"); 
       const hydrateStart = `async function hydrateServerState(){
  setGameActionsEnabled(false);`;
       const hydrateStartPatched = `async function hydrateServerState(){
