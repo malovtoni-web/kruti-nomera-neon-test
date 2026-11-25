@@ -121,6 +121,11 @@ function setGameActionsEnabled(enabled) {
 }`;
         html = html.replace(oldHydrate, newHydrate);
       }
+      // Add a bounded wait to the current HTML hydration request, even when the asset
+      // already contains its own connection-status UI.
+      const oldStateFetch = "  const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});\\n  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));";
+      const newStateFetch = "  const controller=new AbortController();\\n  const requestTimeout=setTimeout(()=>controller.abort(),12000);\\n  let res;\\n  try {\\n   res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData}),signal:controller.signal,cache:'no-store'});\\n  } catch(fetchError) {\\n   if(fetchError.name==='AbortError') throw new Error('Сервер не ответил за 12 секунд. Проверь доступность тестового Worker.');\\n   throw new Error('Не удалось связаться с сервером: '+(fetchError.message||'сетевая ошибка'));\\n  } finally {\\n   clearTimeout(requestTimeout);\\n  }\\n  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));";
+      html = html.replace(oldStateFetch, newStateFetch);
       // The main game script owns connection status and loads the player profile.
       // Do not run a second, UI-only probe that can overwrite the real hydration result.
       const headers = new Headers(assetResponse.headers);
