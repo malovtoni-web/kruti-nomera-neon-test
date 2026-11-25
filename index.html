@@ -129,7 +129,17 @@ async function hydrateServerState(){
  }
  connectionStatus('Данные Telegram получены','Проверяем подпись и загружаем игровой профиль с тестового сервера…','');
  try {
-  const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
+  const controller=new AbortController();
+  const requestTimeout=setTimeout(()=>controller.abort(),12000);
+  let res;
+  try {
+   res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData}),signal:controller.signal,cache:'no-store'});
+  } catch(fetchError) {
+   if(fetchError.name==='AbortError') throw new Error('Сервер не ответил за 12 секунд. Проверь доступность тестового Worker.');
+   throw new Error('Не удалось связаться с сервером: '+(fetchError.message||'сетевая ошибка'));
+  } finally {
+   clearTimeout(requestTimeout);
+  }
   const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));
   if(!res.ok||!data.ok) {
    if(res.status===401) throw new Error('Сервер отклонил подпись Telegram. Нужно проверить связку токена бота и WebApp.');
