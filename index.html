@@ -75,7 +75,7 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
    <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Только секретные</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">5 млн ₽ · открыть</button></article>
   </div>
   <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div></div>
-  <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>1 открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
+  <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>Бесплатное открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
  </section>
  <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров · выбери два одинаковой редкости</span><b id="garagecount">0 номеров</b></div><div class="inventory" id="inventory"></div><div class="card" id="upgrader"><div class="row"><b>⚙️ Апгрейдер номеров</b><span class="rarity epic">2 → 1</span></div><p class="sub" id="upgradeHint">Выбери два номера одной редкости. Они объединятся в один номер следующего уровня.</p><div class="row"><span class="sub">Стоимость улучшения</span><b id="upgradeCost">—</b></div><button class="btn gold" id="upgradeNumbers" disabled>Улучшить выбранные номера</button></div></section>
  <section class="page" id="market"><div class="section-title">Рынок игроков</div><div class="sub">Демо-лотами можно торговать внутри прототипа</div><div class="card"><div class="listrow"><div><b>А777АА · 777</b><div class="sub">Легендарный номер</div></div><b>5 000 000 ₽</b></div><div class="listrow"><div><b>М001ММ · 99</b><div class="sub">Эпический номер</div></div><b>900 000 ₽</b></div><div class="listrow"><div><b>О555ОО · 178</b><div class="sub">Редкий номер</div></div><b>220 000 ₽</b></div><button class="btn secondary" onclick="toast('Подключение реального рынка — после настройки сервера')">Выставить свой номер</button></div></section>
@@ -258,9 +258,16 @@ async function upgradeSelectedNumbers(){
 document.getElementById('upgradeNumbers').addEventListener('click',upgradeSelectedNumbers);
 function renderGarage(){
  let el=document.getElementById('inventory');
- el.innerHTML=state.garage.length?state.garage.map((x,i)=>`<div class="item" onclick="toggleUpgradeSelection(${i})" style="cursor:pointer;border-color:${upgradeSelection.includes(i)?'#c49aff':'#393947'};box-shadow:${upgradeSelection.includes(i)?'0 0 0 2px #9b65ff55':''}"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="sub">${upgradeSelection.includes(i)?'✓ Выбран':'Нажми, чтобы выбрать'}</div></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
+ el.innerHTML=state.garage.length?state.garage.map((x,i)=>`<div class="item" data-upgrade-index="${i}" style="cursor:pointer;border-color:${upgradeSelection.includes(i)?'#c49aff':'#393947'};box-shadow:${upgradeSelection.includes(i)?'0 0 0 2px #9b65ff55':''}"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="sub">${upgradeSelection.includes(i)?'✓ Выбран':'Нажми, чтобы выбрать'}</div></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
  renderUpgrader();
 }
+document.getElementById('inventory').addEventListener('click',event=>{
+ const item=event.target.closest('[data-upgrade-index]');
+ if(!item)return;
+ const index=Number(item.dataset.upgradeIndex);
+ if(Number.isInteger(index))toggleUpgradeSelection(index);
+});
+
 let isSpinning=false,spinCount=1,fastSpin=false;
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
@@ -275,9 +282,9 @@ async function spin(type){
  if(isSpinning)return;
  const count=spinCount;
  if(count===5){toast('×5 доступно только VIP');return}
- if(state.energy<count){toast('Недостаточно энергии для ×'+count);return}
- const prices={any:50000,unusual:100000,rare:250000,epic:500000,legend:1000000,myth:2500000,secret:5000000};
  const freeSpin=type==='free';
+ if(freeSpin&&state.energy<count){toast('Недостаточно энергии для ×'+count);return}
+ const prices={any:50000,unusual:100000,rare:250000,epic:500000,legend:1000000,myth:2500000,secret:5000000};
  const totalCost=freeSpin?0:(prices[type]||2000000)*count;
  if(!freeSpin&&state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
  isSpinning=true;
@@ -287,7 +294,7 @@ async function spin(type){
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
- if(!serverMode)state.energy-=count;
+ if(!serverMode&&freeSpin)state.energy-=count;
  sync();
 
  let r=Math.random(),tier='Обычный',cls='common',value=35000;
