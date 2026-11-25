@@ -76,7 +76,7 @@ export default {
       html = html.replace(hydrateStart, hydrateStartPatched);
       // Upgrade legacy asset HTML based on its game bootstrap, not the mere presence
       // of a diagnostic element (older bundles may already contain that element).
-      if (!html.includes('function setGameActionsEnabled(enabled)')) {
+      {
         const diagnosticCss = '.connection-status{margin:0 0 14px;padding:11px 13px;border:1px solid #6b5730;border-radius:13px;background:#302719;color:#ffe0a0;font-size:12px;line-height:1.45}.connection-status.ok{border-color:#286b4b;background:#142b22;color:#9cf0bd}.connection-status.error{border-color:#8b3e50;background:#321923;color:#ffb6c3}.connection-status b{display:block;margin-bottom:3px;font-size:13px}';
         if (!html.includes('.connection-status{')) html = html.replace('</style>', diagnosticCss + '</style>');
         if (!html.includes('id="connectionStatus"')) {
