@@ -10,18 +10,22 @@ const STAR_PRODUCTS = {
   vip_week: { title: "VIP на 7 дней", description: "Временный VIP-статус на неделю", stars: 99, kind: "vip" }
 };
 
-async function grantStarsProduct(db, telegramId, productId, now) {
+function starsPaymentStatements(db, payment, telegramId, productId, now) {
   const product = STAR_PRODUCTS[productId];
-  if (!product) throw new Error("Unknown Stars product");
+  if (!product || !payment.telegram_payment_charge_id) throw new Error("Invalid Stars payment");
+  const statements = [
+    db.prepare("INSERT OR IGNORE INTO star_payments(telegram_payment_charge_id,telegram_id,product_id,total_amount,created_at) VALUES(?,?,?,?,?)")
+      .bind(payment.telegram_payment_charge_id,telegramId,productId,payment.total_amount,now)
+  ];
   if (product.kind === "bundle") {
-    await db.prepare("UPDATE players SET balance=balance+100000,coins=coins+1000,energy=MIN(25,energy+10),updated_at=? WHERE telegram_id=?").bind(now, telegramId).run();
-    await db.prepare("INSERT OR IGNORE INTO player_cosmetics(telegram_id,cosmetic_id,purchased_at) VALUES(?,?,?)").bind(telegramId,"plate_neon",now).run();
+    statements.push(db.prepare("UPDATE players SET balance=balance+100000,coins=coins+1000,energy=MIN(25,energy+10),updated_at=? WHERE telegram_id=? AND changes()=1").bind(now,telegramId));
+    statements.push(db.prepare("INSERT OR IGNORE INTO player_cosmetics(telegram_id,cosmetic_id,purchased_at) SELECT ?,?,? WHERE changes()=1").bind(telegramId,"plate_neon",now));
   } else if (product.kind === "cosmetic") {
-    await db.prepare("INSERT OR IGNORE INTO player_cosmetics(telegram_id,cosmetic_id,purchased_at) VALUES(?,?,?)").bind(telegramId,product.cosmetic,now).run();
+    statements.push(db.prepare("INSERT OR IGNORE INTO player_cosmetics(telegram_id,cosmetic_id,purchased_at) SELECT ?,?,? WHERE changes()=1").bind(telegramId,product.cosmetic,now));
   } else if (product.kind === "vip") {
-    await db.prepare("INSERT OR IGNORE INTO player_profile(telegram_id) VALUES(?)").bind(telegramId).run();
-    await db.prepare("UPDATE player_profile SET vip_until=MAX(vip_until,?)+604800 WHERE telegram_id=?").bind(now,telegramId).run();
+    statements.push(db.prepare("INSERT INTO player_profile(telegram_id,vip_until) SELECT ?,? WHERE changes()=1 ON CONFLICT(telegram_id) DO UPDATE SET vip_until=MAX(player_profile.vip_until,excluded.vip_until)").bind(telegramId,now+604800));
   }
+  return statements;
 }
 
 async function verifyTelegramInitData(initData, botToken) {
@@ -468,9 +472,9 @@ function setGameActionsEnabled(enabled) {
         const payment=update.message.successful_payment, parts=String(payment.invoice_payload||'').split(':'), telegramId=String(update.message.from?.id||'');
         const productId=parts[2], product=STAR_PRODUCTS[productId], now=Math.floor(Date.now()/1000);
         if(parts.length===3&&parts[0]==='kn1'&&parts[1]===telegramId&&product&&payment.currency==='XTR'&&payment.total_amount===product.stars){
-          const inserted=await env.DB.prepare("INSERT OR IGNORE INTO star_payments(telegram_payment_charge_id,telegram_id,product_id,total_amount,created_at) VALUES(?,?,?,?,?)").bind(payment.telegram_payment_charge_id,telegramId,productId,payment.total_amount,now).run();
-          if(inserted.meta?.changes) await grantStarsProduct(env.DB,telegramId,productId,now);
-          await sendMessage(env.BOT_TOKEN,update.message.chat.id,inserted.meta?.changes?"✅ Оплата получена! Покупка «"+product.title+"» добавлена в игру. Открой игру, чтобы увидеть обновления.":"Оплата уже была обработана ранее.");
+          const results=await env.DB.batch(starsPaymentStatements(env.DB,payment,telegramId,productId,now));
+          const inserted=Boolean(results?.[0]?.meta?.changes);
+          await sendMessage(env.BOT_TOKEN,update.message.chat.id,inserted?"✅ Оплата получена! Покупка «"+product.title+"» добавлена в игру. Открой игру, чтобы увидеть обновления.":"Оплата уже была обработана ранее.");
         }
         return Response.json({ok:true});
       }
