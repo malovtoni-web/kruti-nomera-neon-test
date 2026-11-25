@@ -22,6 +22,22 @@
 .nav{position:fixed;bottom:0;left:0;right:0;background:#171721ed;backdrop-filter:blur(16px);border-top:1px solid #343440;display:flex;justify-content:space-around;padding:9px max(8px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:#858596;font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:55px}.nav button span{font-size:21px}.nav button.active{color:#aa91ff}
 .toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#29253a;border:1px solid #6954a7;padding:10px 15px;border-radius:20px;z-index:9;display:none;white-space:nowrap}.toast.show{display:block}
 @media(min-width:520px){.app{padding-top:28px}.plate .mainnum{font-size:46px}}
+
+/* Neon refresh: visual layer only */
+body{background:radial-gradient(ellipse at 50% -18%,#31205a 0,#11101d 42%,#080910 82%);--panel:#151523;--panel2:#202035;--purple:#a77bff;--line:#34314a}
+.brand span{color:#bd8cff;text-shadow:0 0 12px #9b5cffaa}
+.hero{background:linear-gradient(135deg,#25183f,#171728 62%,#21163b);border-color:#8055c9;box-shadow:0 0 0 1px #9c63ff22,0 12px 36px #7a38ff22}
+.stat,.crate,.card{border-color:#39334f}
+.tab.active{background:#352052;border-color:#9a62ff;color:#e2ceff;box-shadow:inset 0 0 18px #9c5cff22,0 0 14px #8d4dff22}
+.plate{border-color:#b9a6ed;box-shadow:inset 0 0 0 2px #4b4b4b,0 0 16px #a66cff55,0 7px 18px #0007}
+.plate.rolling{animation:neonPulse .48s ease-in-out infinite alternate;border-color:#d6baff;box-shadow:inset 0 0 0 2px #4b4b4b,0 0 26px #a66cffaa,0 0 48px #743dff66}
+@keyframes neonPulse{from{filter:brightness(1)}to{filter:brightness(1.22)}}
+.btn{background:linear-gradient(180deg,#55f2a0,#12b968);box-shadow:0 5px 0 #087d42,0 0 18px #23df8750}
+.btn.gold{background:linear-gradient(180deg,#ffe17c,#efa51b);box-shadow:0 5px 0 #b87513,0 0 18px #ffc34b55}
+.result.show{border-color:#8f5bdb;background:linear-gradient(145deg,#171b29,#211634);box-shadow:0 0 26px #8b4cff35}
+.crate-icon{background:linear-gradient(145deg,#30264b,#171725);text-shadow:0 0 18px #b68aff88}
+.nav{background:#11111ded;border-top-color:#403451}
+
 </style></head>
 <body>
 <div class="toast" id="toast"></div>
@@ -74,11 +90,70 @@ const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2100)}
 function sync(){saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 10 ⚡';document.getElementById('energybar').style.width=(state.energy*10)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage()}
 function renderGarage(){let el=document.getElementById('inventory');el.innerHTML=state.garage.length?state.garage.map(x=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>'}
-function spin(type){if(state.energy<1){toast('Недостаточно энергии');return}state.energy--;let r=Math.random(),tier='Обычный',cls='common',value=35000;
+let isSpinning=false;
+function randomPlate(){
+ const a=names[Math.floor(Math.random()*names.length)];
+ const b=names[Math.floor(Math.random()*names.length)];
+ const c=names[Math.floor(Math.random()*names.length)];
+ return a+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+b+c;
+}
+function spin(type){
+ if(isSpinning)return;
+ if(state.energy<1){toast('Недостаточно энергии');return}
+ isSpinning=true;
+ const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
+ spinButtons.forEach(b=>b.disabled=true);
+ state.energy--;
+ sync();
+
+ let r=Math.random(),tier='Обычный',cls='common',value=35000;
  let weights=type==='legend'?[.15,.25,.35,.20,.05]:type==='epic'?[.42,.35,.18,.045,.005]:type==='rare'?[.68,.25,.06,.009,.001]:[.88,.105,.014,.0009,.0001];
- let c=0;for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){let a=[['Обычный','common',35000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000]][i];[tier,cls,value]=a;break}}
- let plate=names[Math.floor(Math.random()*names.length)]+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+names[Math.floor(Math.random()*names.length)]+names[Math.floor(Math.random()*names.length)],region=regions[Math.floor(Math.random()*regions.length)];
- let item={plate,region,rarity:tier,cls,value};state.garage.unshift(item);document.getElementById('wonplate').textContent=plate;document.getElementById('wonregion').textContent=region;document.getElementById('wonrarity').textContent=tier.toUpperCase();document.getElementById('wonrarity').className='rarity '+cls;document.getElementById('wonvalue').textContent='Стоимость: '+fmt(value)+' ₽';document.getElementById('wonmsg').textContent='Номер добавлен в гараж';document.getElementById('result').classList.add('show');sync()}
+ let c=0;
+ for(let i=0;i<weights.length;i++){
+  c+=weights[i];
+  if(r<c){
+   let a=[['Обычный','common',35000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000]][i];
+   [tier,cls,value]=a;break;
+  }
+ }
+ const finalPlate=randomPlate();
+ const finalRegion=regions[Math.floor(Math.random()*regions.length)];
+ const result=document.getElementById('result');
+ const plateEl=result.querySelector('.plate');
+ document.getElementById('wonplate').textContent=randomPlate();
+ document.getElementById('wonregion').textContent=regions[Math.floor(Math.random()*regions.length)];
+ document.getElementById('wonrarity').textContent='ПРОКРУТКА...';
+ document.getElementById('wonrarity').className='rarity rare';
+ document.getElementById('wonvalue').textContent='Подбираем номер...';
+ document.getElementById('wonmsg').textContent='Цифры постепенно замедляются';
+ result.classList.add('show');
+ plateEl.classList.add('rolling');
+
+ let tick=0;
+ const delays=[45,50,55,60,65,72,80,90,105,125,150,180,215,255,300];
+ function roll(){
+  if(tick<delays.length){
+   document.getElementById('wonplate').textContent=randomPlate();
+   document.getElementById('wonregion').textContent=regions[Math.floor(Math.random()*regions.length)];
+   const delay=delays[tick++];
+   setTimeout(roll,delay);
+   return;
+  }
+  document.getElementById('wonplate').textContent=finalPlate;
+  document.getElementById('wonregion').textContent=finalRegion;
+  document.getElementById('wonrarity').textContent=tier.toUpperCase();
+  document.getElementById('wonrarity').className='rarity '+cls;
+  document.getElementById('wonvalue').textContent='Стоимость: '+fmt(value)+' ₽';
+  document.getElementById('wonmsg').textContent='Номер добавлен в гараж';
+  plateEl.classList.remove('rolling');
+  state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
+  sync();
+  isSpinning=false;
+  spinButtons.forEach(b=>b.disabled=false);
+  document.getElementById('quickspin').disabled=state.energy<1;
+ }
+ setTimeout(roll,80);
+}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{let p=b.dataset.page;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p))}));
 sync();
 </script>
