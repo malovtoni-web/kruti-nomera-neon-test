@@ -121,29 +121,11 @@ function setGameActionsEnabled(enabled) {
 }`;
         html = html.replace(oldHydrate, newHydrate);
       }
-      if (!html.includes('id="telegramLaunchDataBridge"')) {
-        const bridge = `<script id="telegramLaunchDataBridge">
-(function(){
- try {
-  var hash=window.location.hash||'';
-  var params=new URLSearchParams(hash.charAt(0)==='#'?hash.slice(1):hash);
-  var initData=params.get('tgWebAppData')||'';
-  if(!initData)return;
-  window.Telegram=window.Telegram||{};
-  if(!window.Telegram.WebApp){
-   var unsafe={};
-   try{var u=new URLSearchParams(initData).get('user');if(u)unsafe.user=JSON.parse(u);}catch(e){}
-   window.Telegram.WebApp={initData:initData,initDataUnsafe:unsafe,platform:'unknown',version:'',colorScheme:'dark',ready:function(){},expand:function(){},isExpanded:true};
-  }
- } catch(e) {}
-})();
-</script>`;
-        html = html.replace('<head>', '<head>' + bridge);
-      }
       // The main game script owns connection status and loads the player profile.
       // Do not run a second, UI-only probe that can overwrite the real hydration result.
       const headers = new Headers(assetResponse.headers);
       headers.set("Content-Type", "text/html; charset=utf-8");
+      headers.set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
       headers.delete("Content-Length");
       return new Response(html, { status: assetResponse.status, headers });
     }
