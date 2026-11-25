@@ -146,11 +146,6 @@ function setGameActionsEnabled(enabled) {
       } else {
         html = startupProbe + html;
       }
-      if (html.includes(gameScriptMarker)) {
-        html = html.replace(gameScriptMarker, startupProbe + '\n' + gameScriptMarker);
-      } else {
-        html = html.replace('</head>', startupProbe + '</head>');
-      }
       // Add a bounded wait to the current HTML hydration request, even when the asset
       // already contains its own connection-status UI.
       const oldStateFetch = "  const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});\n  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));";
