@@ -463,7 +463,7 @@ function renderGarage(){
  const count=document.getElementById('garagecount');if(count)count.textContent=state.garage.length+' номеров';
  el.innerHTML=entries.length?entries.map(({x,i})=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap"><button class="btn gold" data-roulette-index="${i}" style="padding:8px 5px;font-size:12px">🎡 В рулетку</button><button class="btn secondary" data-quick-sell="${i}" style="padding:8px 5px;font-size:12px">Продать</button><button class="btn secondary" data-market-index="${i}" style="padding:8px 5px;font-size:12px">На рынок</button></div></div>`).join(''):state.garage.length?'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:22px">В этой категории пока нет номеров.</div>':'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
  document.querySelectorAll('[data-garage-filter]').forEach(b=>b.classList.toggle('active',b.dataset.garageFilter===garageFilter));
- renderUpgrader();
+ // Legacy two-number upgrader is retired; roulette is the only upgrade path.
 }
 document.querySelectorAll('[data-garage-filter]').forEach(b=>b.addEventListener('click',()=>{garageFilter=b.dataset.garageFilter;renderGarage();}));
 document.getElementById('inventory').addEventListener('click',event=>{
