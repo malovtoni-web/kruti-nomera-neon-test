@@ -272,6 +272,12 @@ export default {
       );
     }
 
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (url.pathname === "/" && assetResponse.headers.get("content-type")?.includes("text/html")) {
+      const html = await assetResponse.text();
+      const patched = html.replace("<head>", '<head><script src="https://telegram.org/js/telegram-web-app.js"></script>');
+      return new Response(patched, { status: assetResponse.status, statusText: assetResponse.statusText, headers: assetResponse.headers });
+    }
+    return assetResponse;
   }
 };
