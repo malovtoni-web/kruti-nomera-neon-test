@@ -307,8 +307,11 @@ function setGameActionsEnabled(enabled) {
         if(daily.last_claim_day===day) return Response.json({error:'Ежедневная награда уже получена'},{status:409});
         const streak=daily.last_claim_day===yesterday?Math.min(7,(daily.streak||0)+1):1;
         const cash=50000+(streak-1)*10000, coins=100+(streak-1)*25;
-        await env.DB.prepare("UPDATE players SET balance=balance+?,coins=coins+?,updated_at=? WHERE telegram_id=?").bind(cash,coins,now,telegramId).run();
-        await env.DB.prepare("UPDATE player_daily SET last_claim_day=?,streak=? WHERE telegram_id=?").bind(day,streak,telegramId).run();
+        const claimed=await env.DB.batch([
+          env.DB.prepare("UPDATE player_daily SET last_claim_day=?,streak=? WHERE telegram_id=? AND (last_claim_day IS NULL OR last_claim_day<>?)").bind(day,streak,telegramId,day),
+          env.DB.prepare("UPDATE players SET balance=balance+?,coins=coins+?,updated_at=? WHERE telegram_id=? AND changes()=1").bind(cash,coins,now,telegramId)
+        ]);
+        if(!claimed?.[0]?.meta?.changes) return Response.json({error:'Ежедневная награда уже получена'},{status:409});
       } else if(action==='wheelSpin'){
         await env.DB.prepare("INSERT OR IGNORE INTO player_daily(telegram_id) VALUES(?)").bind(telegramId).run();
         const daily=await env.DB.prepare("SELECT * FROM player_daily WHERE telegram_id=?").bind(telegramId).first();
@@ -316,25 +319,30 @@ function setGameActionsEnabled(enabled) {
         if(daily.last_wheel_day===day) return Response.json({error:'Колесо удачи доступно раз в день'},{status:409});
         const roll=Math.random(), prizes=[{type:'coins',amount:100,weight:.45,label:'100 монет'},{type:'balance',amount:10000,weight:.30,label:'10 000 ₽'},{type:'coins',amount:300,weight:.18,label:'300 монет'},{type:'balance',amount:50000,weight:.06,label:'50 000 ₽'},{type:'coins',amount:1000,weight:.01,label:'1 000 монет'}];
         let acc=0,prize=prizes[0]; for(const item of prizes){acc+=item.weight;if(roll<acc){prize=item;break;}}
-        if(prize.type==='coins') await save("UPDATE players SET coins=coins+?,updated_at=? WHERE telegram_id=?",[prize.amount,now,telegramId]);
-        else await save("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=?",[prize.amount,now,telegramId]);
-        await env.DB.prepare("UPDATE player_daily SET last_wheel_day=? WHERE telegram_id=?").bind(day,telegramId).run();
-        body._wheelReward=prize.label;body._wheelIndex=prizes.indexOf(prize);
         await env.DB.prepare("INSERT OR IGNORE INTO player_tasks(telegram_id,task_date) VALUES(?,?)").bind(telegramId,day).run();
-        await env.DB.prepare("UPDATE player_tasks SET wheel_count=wheel_count+1 WHERE telegram_id=? AND task_date=?").bind(telegramId,day).run();
+        const payout=prize.type==='coins'
+          ? env.DB.prepare("UPDATE players SET coins=coins+?,updated_at=? WHERE telegram_id=? AND changes()=1").bind(prize.amount,now,telegramId)
+          : env.DB.prepare("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=? AND changes()=1").bind(prize.amount,now,telegramId);
+        const wheelResults=await env.DB.batch([
+          env.DB.prepare("UPDATE player_daily SET last_wheel_day=? WHERE telegram_id=? AND (last_wheel_day IS NULL OR last_wheel_day<>?)").bind(day,telegramId,day),
+          payout,
+          env.DB.prepare("UPDATE player_tasks SET wheel_count=wheel_count+1 WHERE telegram_id=? AND task_date=? AND changes()=1").bind(telegramId,day)
+        ]);
+        if(!wheelResults?.[0]?.meta?.changes) return Response.json({error:'Колесо удачи доступно раз в день'},{status:409});
+        body._wheelReward=prize.label;body._wheelIndex=prizes.indexOf(prize);
       } else if(action==='claimTask'){
         const taskId=body.taskId;
         if(!['spin3','wheel1'].includes(taskId)) return Response.json({error:'Неизвестное задание'},{status:400});
         const day=new Date(now*1000).toISOString().slice(0,10);
         await env.DB.prepare("INSERT OR IGNORE INTO player_tasks(telegram_id,task_date) VALUES(?,?)").bind(telegramId,day).run();
         const task=await env.DB.prepare("SELECT * FROM player_tasks WHERE telegram_id=? AND task_date=?").bind(telegramId,day).first();
-        const claimed=JSON.parse(task.claimed_json||'[]');
-        if(claimed.includes(taskId)) return Response.json({error:'Награда уже получена'},{status:409});
         if((taskId==='spin3'&&task.spins_count<3)||(taskId==='wheel1'&&task.wheel_count<1)) return Response.json({error:'Задание ещё не выполнено'},{status:409});
         const reward=taskId==='spin3'?{coins:250,cash:25000}:{coins:100,cash:10000};
-        await env.DB.prepare("UPDATE players SET coins=coins+?,balance=balance+?,updated_at=? WHERE telegram_id=?").bind(reward.coins,reward.cash,now,telegramId).run();
-        claimed.push(taskId);
-        await env.DB.prepare("UPDATE player_tasks SET claimed_json=? WHERE telegram_id=? AND task_date=?").bind(JSON.stringify(claimed),telegramId,day).run();
+        const claimed=await env.DB.batch([
+          env.DB.prepare("UPDATE player_tasks SET claimed_json=json_insert(claimed_json,'$[#]',?) WHERE telegram_id=? AND task_date=? AND instr(claimed_json,?)=0 AND "+(taskId==='spin3'?"spins_count>=3":"wheel_count>=1")).bind(taskId,telegramId,day,'"'+taskId+'"'),
+          env.DB.prepare("UPDATE players SET coins=coins+?,balance=balance+?,updated_at=? WHERE telegram_id=? AND changes()=1").bind(reward.coins,reward.cash,now,telegramId)
+        ]);
+        if(!claimed?.[0]?.meta?.changes) return Response.json({error:'Награда уже получена'},{status:409});
       } else if(action==='redeemPromo'){
         const code=String(body.code||'').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,32);
         if(!code) return Response.json({error:'Введи промокод'},{status:400});
