@@ -12,15 +12,26 @@
 .page{display:none}.page.active{display:block}.section-title{font-size:20px;font-weight:900;margin:10px 0 12px}.sub{color:var(--muted);font-size:13px}
 .hero{background:linear-gradient(135deg,#27213b,#1a1a28 65%,#282039);border:1px solid #554477;border-radius:20px;padding:17px;margin-bottom:13px;box-shadow:0 12px 32px #0004}.hero-row{display:flex;justify-content:space-between;align-items:center}.pill{font-size:11px;font-weight:800;padding:5px 9px;border-radius:20px;background:#49366d;color:#d6caff}.price{font-size:23px;font-weight:900;color:#c19aff}
 .plate{background:linear-gradient(#fff,#e8e8e8);color:#171717;border:5px solid #b7bbc5;border-radius:13px;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:inset 0 0 0 2px #4b4b4b,0 7px 18px #0005;margin:16px auto;max-width:330px}.plate .mainnum{font-size:clamp(30px,9vw,46px);font-weight:950;letter-spacing:1px;line-height:1}.plate .region{border-left:2px solid #777;padding-left:7px;font-size:22px;font-weight:900}.plate .rus{font-size:9px;display:block;text-align:center}
-.rarity{font-size:12px;font-weight:900;border-radius:20px;padding:5px 9px;display:inline-block}.common{background:#393943;color:#c5c5ce}.rare{background:#163d73;color:#7db5ff}.epic{background:#42215f;color:#d6a0ff}.legend{background:#5a4315;color:#ffd56e}.myth{background:#5b243a;color:#ff9cb9}
+.unusual{background:#174d36;color:#75efb1}.secret{background:#27204e;color:#c6a9ff}.rarity{font-size:12px;font-weight:900;border-radius:20px;padding:5px 9px;display:inline-block}.common{background:#393943;color:#c5c5ce}.rare{background:#163d73;color:#7db5ff}.epic{background:#42215f;color:#d6a0ff}.legend{background:#5a4315;color:#ffd56e}.myth{background:#5b243a;color:#ff9cb9}
 .meter{height:8px;background:#33333f;border-radius:20px;overflow:hidden;margin:9px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#39d783,#5a9dff,#bd76ff,#ffc34b);width:72%}
 .btn{border:0;border-radius:15px;padding:14px 16px;background:linear-gradient(180deg,#36df83,#0ca957);color:#062616;font-size:17px;font-weight:950;width:100%;box-shadow:0 5px 0 #087d42;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#292936;color:#eee;box-shadow:none;border:1px solid #414151}.btn.gold{background:linear-gradient(180deg,#ffd15d,#f5a91f);color:#2c1c04;box-shadow:0 5px 0 #b87513}
 .energy{display:flex;justify-content:space-between;color:#b7b5c4;font-size:12px;margin:10px 2px}.crate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.crate{background:#1b1b27;border:1px solid #343442;border-radius:17px;padding:13px;min-width:0}.crate-icon{height:95px;border-radius:12px;display:grid;place-items:center;font-size:48px;margin-bottom:9px;background:linear-gradient(145deg,#30364b,#191925)}.crate h3{margin:0 0 3px;font-size:15px}.crate .sub{font-size:11px}.crate .btn{font-size:13px;padding:10px;margin-top:9px;border-radius:11px}
 .result{padding:14px;background:#141c1a;border:1px solid #226b49;border-radius:16px;margin:13px 0;text-align:center;display:none}.result.show{display:block;animation:pop .3s ease}@keyframes pop{from{transform:scale(.96);opacity:.5}to{transform:scale(1);opacity:1}}
+.result.rarity-win-epic{animation:epicReveal .9s ease}.result.rarity-win-legend{animation:legendReveal 1.15s ease;box-shadow:0 0 28px #ffc34b55}.result.rarity-win-myth{animation:mythReveal 1.35s ease;box-shadow:0 0 34px #ff70b855}.result.rarity-win-secret{animation:secretReveal 1.7s ease;box-shadow:0 0 42px #bd8cff88}
+@keyframes epicReveal{0%{box-shadow:0 0 0 #bd76ff00;transform:scale(.97)}45%{box-shadow:0 0 26px #bd76ff88;transform:scale(1.025)}100%{transform:scale(1)}}
+@keyframes legendReveal{0%{box-shadow:0 0 0 #ffc34b00;filter:brightness(.8)}35%{box-shadow:0 0 36px #ffc34baa;filter:brightness(1.4)}100%{filter:brightness(1)}}
+@keyframes mythReveal{0%{box-shadow:0 0 0 #ff70b800;transform:scale(.96)}40%{box-shadow:0 0 44px #ff70b8cc;transform:scale(1.035)}100%{transform:scale(1)}}
+@keyframes secretReveal{0%{filter:brightness(.7);transform:scale(.94);box-shadow:0 0 0 #bd8cff00}35%{filter:brightness(1.7);transform:scale(1.06);box-shadow:0 0 58px #bd8cff}70%{filter:brightness(1.2)}100%{filter:brightness(1);transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.result.rarity-win-epic,.result.rarity-win-legend,.result.rarity-win-myth,.result.rarity-win-secret{animation:none}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:9px}.item{background:#20202c;border:1px solid #393947;border-radius:13px;padding:10px}.item .plate{margin:5px auto 9px;padding:6px 4px;border-width:3px}.item .mainnum{font-size:20px}.item .region{font-size:13px}.item strong{font-size:13px}
 .listrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.listrow:last-child{border:0}.muted{color:var(--muted)}.notice{font-size:11px;color:#aaa8b7;text-align:center;margin-top:16px}
+.rarity-tabs{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;margin-bottom:8px}.rarity-tabs button{white-space:nowrap;border:1px solid #47405b;background:#1a1928;color:#c5bfd5;border-radius:12px;padding:9px 12px;font-weight:850;font-size:12px}.rarity-tabs button.active{border-color:#b18aff;background:#392452;box-shadow:0 0 14px #9b5cff55}
+.spin-options{display:flex;gap:7px;margin:10px 0}.spin-options button{flex:1;background:#211e30;color:#d9caff;border:1px solid #49405f;border-radius:11px;padding:10px 5px;font-weight:900}.spin-options button.active{background:#503477;border-color:#c49aff}.spin-options button:disabled{opacity:.45}
+.speed-toggle{display:flex;align-items:center;justify-content:space-between;background:#211e30;border:1px solid #49405f;border-radius:12px;padding:10px 12px;margin:8px 0 14px;color:#e3d8ff;font-weight:800;font-size:13px}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;align-items:end;text-align:center}.podium-person{background:linear-gradient(180deg,#29243b,#191925);border:1px solid #54466e;border-radius:16px;padding:12px 5px}.podium-person.first{padding-top:20px;border-color:#c49a48;box-shadow:0 0 24px #ffc34b22}.podium-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin:0 auto 7px;background:linear-gradient(145deg,#b98cff,#56358c);font-weight:950;font-size:19px}.podium-person.first .podium-avatar{background:linear-gradient(145deg,#ffe38c,#b87b25)}.podium-rank{font-size:21px}.podium-name{font-weight:900;font-size:12px;overflow-wrap:anywhere}.podium-score{font-size:10px;color:#b9afce;margin-top:4px}.asset-card{background:linear-gradient(145deg,#25243a,#171722);border:1px solid #49405f;border-radius:18px;padding:14px;margin:10px 0}.asset-icon{font-size:42px;text-align:center;padding:12px}.asset-price{font-size:18px;font-weight:950;color:#d4b8ff}.asset-card .btn{font-size:13px;padding:10px;margin-top:8px}.house-scene{border-radius:18px;min-height:145px;display:grid;place-items:center;background:linear-gradient(180deg,#18294a,#302345 60%,#171722);border:1px solid #64518c}.house-emoji{font-size:76px;filter:drop-shadow(0 0 18px #b58aff88)}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#171721ed;backdrop-filter:blur(16px);border-top:1px solid #343440;display:flex;justify-content:space-around;padding:9px max(8px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:#858596;font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:55px}.nav button span{font-size:21px}.nav button.active{color:#aa91ff}
 .toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#29253a;border:1px solid #6954a7;padding:10px 15px;border-radius:20px;z-index:9;display:none;white-space:nowrap}.toast.show{display:block}
+.connection-status{margin:0 0 14px;padding:11px 13px;border:1px solid #6b5730;border-radius:13px;background:#302719;color:#ffe0a0;font-size:12px;line-height:1.45}.connection-status.ok{border-color:#286b4b;background:#142b22;color:#9cf0bd}.connection-status.error{border-color:#8b3e50;background:#321923;color:#ffb6c3}.connection-status b{display:block;margin-bottom:3px;font-size:13px}
 @media(min-width:520px){.app{padding-top:28px}.plate .mainnum{font-size:46px}}
 .feature-controls{display:flex;gap:8px;align-items:center;margin:0 0 14px;flex-wrap:wrap}
 .sound-toggle,.mode-btn{border:1px solid #49405f;background:#201b2d;color:#d9c9ff;border-radius:12px;padding:9px 12px;font-weight:800;font-size:12px}
@@ -33,7 +44,7 @@
 @keyframes secretGlow{50%{text-shadow:0 0 18px #ffd76b,0 0 32px #b879ff}}
 
 /* Neon refresh: visual layer only */
-body{background:radial-gradient(ellipse at 50% -18%,#31205a 0,#11101d 42%,#080910 82%);--panel:#151523;--panel2:#202035;--purple:#a77bff;--line:#34314a}
+body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),radial-gradient(ellipse at 88% 35%,#642c8c88 0,transparent 30%),radial-gradient(ellipse at 50% -18%,#31205a 0,#11101d 42%,#080910 82%);--panel:#151523;--panel2:#202035;--purple:#a77bff;--line:#34314a} body:before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:repeating-linear-gradient(115deg,transparent 0 70px,#9a7aff08 71px 72px),radial-gradient(circle at 50% 70%,#8d4dff12,transparent 48%)}
 .brand span{color:#bd8cff;text-shadow:0 0 12px #9b5cffaa}
 .hero{background:linear-gradient(135deg,#25183f,#171728 62%,#21163b);border-color:#8055c9;box-shadow:0 0 0 1px #9c63ff22,0 12px 36px #7a38ff22}
 .stat,.crate,.card{border-color:#39334f}
@@ -47,44 +58,747 @@ body{background:radial-gradient(ellipse at 50% -18%,#31205a 0,#11101d 42%,#08091
 .crate-icon{background:linear-gradient(145deg,#30264b,#171725);text-shadow:0 0 18px #b68aff88}
 .nav{background:#11111ded;border-top-color:#403451}
 
-</style></head>
+
+/* Bonuses, wheel, history and Stars shop */
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.feature-tile{background:linear-gradient(145deg,#211b34,#151522);border:1px solid #554078;border-radius:16px;padding:13px}
+.feature-tile b{display:block;font-size:15px}.feature-tile .sub{font-size:11px}
+.daily-streak{display:flex;gap:5px;margin:12px 0}.streak-day{flex:1;text-align:center;padding:8px 2px;background:#222031;border:1px solid #49405f;border-radius:10px;font-size:10px;color:#b9aecb}.streak-day.active{background:#453064;border-color:#c49aff;color:#fff;box-shadow:0 0 12px #a76bff55}
+.wheel-wrap{display:grid;place-items:center;padding:14px;position:relative}.wheel{width:220px;height:220px;border-radius:50%;border:8px solid #b78cff;box-shadow:0 0 0 5px #34214e,0 0 35px #985aff66;background:conic-gradient(#f9c45a 0 45%,#593c87 45% 75%,#4bbd91 75% 93%,#3e7ec7 93% 99%,#c45eaa 99% 100%);position:relative;display:grid;place-items:center;transition:transform 4s cubic-bezier(.12,.75,.13,1)}
+.wheel:after{content:'★';display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#fff1c9;color:#7547a6;font-size:28px;box-shadow:0 0 20px #fff8}
+.wheel-pointer{font-size:25px;color:#ffe28a;text-shadow:0 2px 6px #000;position:absolute;top:-8px;z-index:2}
+.task-line{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #343044}.task-line:last-child{border:0}.task-icon{font-size:24px}.task-line .btn{width:auto;padding:8px 11px;font-size:12px;white-space:nowrap}
+.promo-row{display:flex;gap:8px}.promo-row input{min-width:0;flex:1;background:#11111d;color:#fff;border:1px solid #51426e;border-radius:12px;padding:12px;font-size:14px}
+.odds{font-size:11px;color:#c4b5e8;margin-top:3px}.rarity.cash{background:#1e463d;color:#75f0c2;border-color:#287c64}.rarity.loss{background:#4a2632;color:#ff9baa;border-color:#713747}
+.history-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid #343044}.history-row:last-child{border:0}
+.shop-product{background:linear-gradient(145deg,#241c37,#151522);border:1px solid #594477;border-radius:17px;padding:14px;margin:10px 0;display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center}.shop-product .emoji{font-size:38px;text-align:center}.shop-product .btn{grid-column:1/-1;font-size:14px;padding:11px}.shop-product.owned{border-color:#2d9864}
+.plate.cosmetic-neon{border-color:#6fe6ff;box-shadow:inset 0 0 0 2px #314d68,0 0 20px #42dfff99,0 0 34px #985aff55}
+body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 0 24px #dcae4a22}
+.result.effect-aurora{background:linear-gradient(135deg,#102b3c,#25183e,#163b36);box-shadow:0 0 36px #47e5d488}
+@keyframes wheelGlow{50%{box-shadow:0 0 0 5px #34214e,0 0 55px #ffcf65aa}}
+.wheel.spinning{animation:wheelGlow .6s ease infinite alternate}
+
+.wheel{background:conic-gradient(#A7ADB8 0 14.28%,#35D66F 14.28% 28.56%,#318BFF 28.56% 42.84%,#B34DFF 42.84% 57.12%,#FFB629 57.12% 71.4%,#FF4D83 71.4% 85.68%,#20E9E8 85.68% 100%)}
+/* Rarity identity + premium plate hero */
+.rarity-glow{--rarity-glow:#A7ADB8;--rarity-soft:rgba(167,173,184,.18)}
+.rarity-glow.common{--rarity-glow:#A7ADB8;--rarity-soft:rgba(167,173,184,.18)}
+.rarity-glow.unusual{--rarity-glow:#35D66F;--rarity-soft:rgba(53,214,111,.2)}
+.rarity-glow.rare{--rarity-glow:#318BFF;--rarity-soft:rgba(49,139,255,.2)}
+.rarity-glow.epic{--rarity-glow:#B34DFF;--rarity-soft:rgba(179,77,255,.22)}
+.rarity-glow.legend{--rarity-glow:#FFB629;--rarity-soft:rgba(255,182,41,.22)}
+.rarity-glow.myth{--rarity-glow:#FF4D83;--rarity-soft:rgba(255,77,131,.22)}
+.rarity-glow.secret{--rarity-glow:#20E9E8;--rarity-soft:rgba(32,233,232,.22)}
+.hero.plate-hero{position:relative;overflow:hidden;min-height:220px;padding:20px 17px 22px;border:1px solid #474052;background:radial-gradient(ellipse at 50% 110%,#553c78 0,transparent 58%),linear-gradient(145deg,#22202f,#11111b 72%);box-shadow:inset 0 1px #ffffff12,0 18px 48px #0005}
+.plate-hero:before{content:' ';position:absolute;width:240px;height:110px;right:-42px;bottom:-24px;border:16px solid #ffffff08;border-radius:90px 90px 24px 24px;transform:skewX(-18deg);box-shadow:0 -16px 0 -7px #ffffff06,0 -34px 0 -14px #ffffff05;pointer-events:none}
+.plate-hero:after{content:' ';position:absolute;inset:auto 10% 12px;height:1px;background:linear-gradient(90deg,transparent,#ffffff28,transparent)}
+.hero-kicker{font-size:11px;letter-spacing:2px;color:#b8aecb;font-weight:800;text-transform:uppercase}
+.hero-title{font-size:23px;font-weight:900;letter-spacing:-.7px;margin:9px 0 4px;position:relative;z-index:1}
+.hero-sub{font-size:12px;color:#aaa5b8;position:relative;z-index:1}
+.hero-plate-wrap{position:relative;z-index:1;margin:23px auto 4px;width:min(100%,340px);padding:7px;border-radius:15px;background:linear-gradient(135deg,#dce1e8,#737c8c 42%,#f8fafc 55%,#687282);box-shadow:0 0 0 1px #ffffff88,0 0 24px #a7adb866,0 0 60px #a7adb833;transform:perspective(500px) rotateX(3deg)}
+.hero-plate{display:flex;align-items:center;justify-content:center;gap:8px;min-height:77px;padding:8px 10px;border-radius:9px;background:linear-gradient(180deg,#fff 0%,#e8ebef 100%);color:#141820;font-weight:950;font-size:clamp(29px,8vw,42px);letter-spacing:1px;text-shadow:0 1px #fff;box-shadow:inset 0 2px 4px #0002,inset 0 -2px 3px #0001}
+.hero-plate .plate-region{font-size:15px;letter-spacing:0;border-left:2px solid #303844;padding-left:9px;align-self:stretch;display:flex;flex-direction:column;justify-content:center;line-height:1.05}
+.hero-plate .plate-region small{font-size:8px;margin-top:5px;font-weight:800}
+.hero-plate-caption{text-align:center;color:#c5bdd4;font-size:10px;letter-spacing:1.8px;font-weight:800;margin-top:10px;position:relative;z-index:1}
+.result{transition:box-shadow .25s,border-color .25s}
+.result.rarity-glow{border-color:var(--rarity-glow);box-shadow:0 0 0 1px var(--rarity-soft),0 0 28px var(--rarity-soft)}
+.result.rarity-glow .plate{box-shadow:0 0 22px var(--rarity-soft),0 0 44px var(--rarity-soft)}
+
+
+.profile-card{background:linear-gradient(145deg,#27213a,#191923 72%);border-color:#55456d}
+.profile-head{display:flex;align-items:center;gap:12px}.profile-avatar{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#b99aff,#6842b7);font-size:23px;font-weight:950;color:white;box-shadow:0 6px 24px #9477ff44}.profile-head>div:nth-child(2){flex:1;min-width:0}.profile-head b{font-size:15px}.profile-head .rarity{font-size:9px}
+.profile-xp{margin-top:19px}.profile-track{height:9px;background:#100f18;border-radius:99px;overflow:hidden;margin-top:8px}.profile-track i{display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#8e67ff,#34d7d0);box-shadow:0 0 15px #9477ff88;transition:width .3s}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.profile-stat{margin:0}.profile-stat small{display:block;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.5px}.profile-stat b{display:block;font-size:19px;margin-top:6px;overflow-wrap:anywhere}
+.rarity-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #ffffff0d}.rarity-row:last-child{border:0}.rarity-dot{width:9px;height:9px;border-radius:50%;background:var(--rarity-glow);box-shadow:0 0 12px var(--rarity-glow)}.rarity-row span:nth-child(2){flex:1;font-size:13px}.rarity-row b{font-size:13px}
+
+
+/* Full neon lobby refresh */
+:root{--purple:#a879ff;--gold:#ffc64d;--line:#393453}
+html{background:#080912}
+body{background:radial-gradient(ellipse at 50% -12%,#3b286c 0,transparent 42%),radial-gradient(ellipse at 12% 48%,#103d78aa 0,transparent 32%),radial-gradient(ellipse at 90% 60%,#59206e88 0,transparent 34%),linear-gradient(180deg,#090b18,#080912 75%);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background:repeating-linear-gradient(115deg,transparent 0 78px,#a68cff09 79px 80px),linear-gradient(180deg,transparent 65%,#0b0b17 100%)}
+.app{position:relative;z-index:1;max-width:560px;padding:12px 14px 112px}
+.top{margin:5px 0 12px;padding:9px 11px;border:1px solid #55427d;border-radius:18px;background:linear-gradient(100deg,#19172cdd,#111525ee);box-shadow:0 0 22px #854bff22,inset 0 1px #ffffff18}
+.brand{font-size:21px;letter-spacing:1px;text-shadow:0 0 16px #9d68ff88}.brand span{color:#d5a8ff}
+.top .sub{font-size:10px;letter-spacing:1.4px;text-transform:uppercase}
+.avatar{border-radius:50%;border:2px solid #c18cff;background:radial-gradient(circle at 30% 20%,#f4d2ff,#8048d5 60%,#251747);color:white;box-shadow:0 0 18px #a95dff99}
+.stats{gap:7px;margin-bottom:12px}.stat{background:linear-gradient(145deg,#191b31ed,#101321f2);border:1px solid #454064;border-radius:13px;box-shadow:inset 0 1px #ffffff12}.stat b{font-size:14px}.stat small{letter-spacing:1px}
+#tabs{display:none}
+.page{animation:pageEnter .24s ease both}
+@keyframes pageEnter{from{opacity:.55;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero.plate-hero{min-height:370px;padding:17px 17px 20px;border:1px solid #8661c8;border-radius:24px;background:radial-gradient(ellipse at 50% 78%,#2358a9bb 0,transparent 40%),radial-gradient(ellipse at 50% 20%,#6b35a866 0,transparent 48%),linear-gradient(180deg,#15162c 0%,#10172b 50%,#0a0d1b 100%);box-shadow:0 0 0 1px #b58aff22,0 16px 42px #050611aa,0 0 34px #6e38cf33;isolation:isolate}
+.hero.plate-hero:before{content:"";position:absolute;inset:0;width:auto;height:auto;right:0;bottom:0;border:0;border-radius:inherit;transform:none;opacity:.65;background:repeating-linear-gradient(90deg,transparent 0 17px,#8ab9ff12 18px 19px,transparent 20px 34px),linear-gradient(180deg,transparent 35%,#101a37 78%,#090b16 100%);clip-path:polygon(0 40%,7% 40%,7% 24%,13% 24%,13% 48%,20% 48%,20% 31%,27% 31%,27% 44%,34% 44%,34% 19%,41% 19%,41% 43%,49% 43%,49% 27%,56% 27%,56% 46%,64% 46%,64% 17%,72% 17%,72% 42%,79% 42%,79% 26%,86% 26%,86% 46%,93% 46%,93% 33%,100% 33%,100% 100%,0 100%);z-index:-1}
+.hero.plate-hero:after{inset:auto 0 0;height:2px;background:linear-gradient(90deg,transparent,#50bfff,#c18cff,#50bfff,transparent);box-shadow:0 0 18px #6bbdff}
+.hero-kicker{color:#d6c3ff;letter-spacing:2.5px}
+.hero-title{font-size:26px;line-height:1.06;text-align:center;text-transform:uppercase;text-shadow:0 3px 22px #9c64ff99;margin:12px 0 5px}
+.hero-sub{text-align:center;color:#b9c9ed;font-size:10px;letter-spacing:1.7px;font-weight:800}
+.lobby-city{height:128px;position:relative;margin:0 -4px -4px;overflow:hidden}
+.city-lights{position:absolute;inset:0;background:linear-gradient(180deg,transparent,#172e5c55 70%,#070a14),repeating-linear-gradient(90deg,transparent 0 20px,#9e8dff18 21px 23px,transparent 24px 37px);mask-image:linear-gradient(180deg,transparent,#000 22%,#000)}
+.lobby-car{position:absolute;z-index:2;left:50%;bottom:1px;transform:translateX(-50%);font-size:92px;line-height:1;filter:drop-shadow(0 0 10px #55bfff) drop-shadow(0 0 28px #874dff);animation:carFloat 3.2s ease-in-out infinite}
+@keyframes carFloat{50%{transform:translate(-50%,-5px)}}
+.road-glow{position:absolute;bottom:0;left:5%;right:5%;height:13px;border-radius:50%;background:#48aaff;filter:blur(15px);box-shadow:0 0 26px 8px #8a50ff}
+.hero-plate-wrap{margin:8px auto 4px;max-width:340px;padding:6px;border-radius:12px;background:linear-gradient(130deg,#fff,#a9b5d3,#fff);box-shadow:0 0 0 1px #fff9,0 0 22px #8ecaff99,0 0 48px #8b4fff55}
+.hero-plate{min-height:68px;font-size:clamp(31px,8vw,42px)}
+.hero-plate-caption{font-size:9px;color:#e2d4ff;text-shadow:0 0 12px #a879ff}
+.lobby-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.lobby-shortcuts button{min-width:0;text-align:left;padding:11px 9px;border-radius:15px;border:1px solid #554577;background:linear-gradient(145deg,#211b39,#111522);color:#fff;box-shadow:inset 0 1px #ffffff12,0 7px 18px #0005}
+.lobby-shortcuts button span{display:block;font-size:23px;margin-bottom:5px;filter:drop-shadow(0 0 8px #a879ff)}
+.lobby-shortcuts button b{display:block;font-size:11px;white-space:nowrap}.lobby-shortcuts button small{display:block;color:#a9a4c0;font-size:9px;margin-top:3px}
+.lobby-mission{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 13px;margin:10px 0 16px;border:1px solid #6c5735;border-radius:15px;background:linear-gradient(100deg,#30233a,#19172a);box-shadow:0 0 20px #ffbd4a12}
+.lobby-mission small,.lobby-mission span{display:block;color:#c5b9d8;font-size:9px;letter-spacing:1px}.lobby-mission b{display:block;font-size:13px;margin:3px 0}.lobby-mission button{border:1px solid #a87bff;border-radius:11px;background:#3a245a;color:#f2e7ff;padding:9px;font-size:10px;font-weight:900;white-space:nowrap}
+.feature-controls{padding:10px;border:1px solid #403657;border-radius:15px;background:#111321cc}
+.section-title{font-size:18px;letter-spacing:-.3px;margin:16px 2px 10px;text-shadow:0 0 14px #9d6aff44}
+.rarity-tabs{scrollbar-width:none}.rarity-tabs::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
+.rarity-tabs button{border-color:#4b4266;background:#171728;color:#d9d0ef}
+.rarity-tabs button.active{border-color:#c49aff;background:linear-gradient(135deg,#58328c,#272044);box-shadow:0 0 17px #a15cff44}
+.crate-grid{gap:10px}.crate{background:linear-gradient(145deg,#1d1b31,#111522);border-color:#4c426a;box-shadow:inset 0 1px #ffffff0c,0 8px 20px #0004}.crate-icon{height:100px;border:1px solid #51406e;background:radial-gradient(circle at 50% 40%,#56347b,#171728 72%);font-size:49px;filter:drop-shadow(0 0 9px #b58aff)}
+.crate h3{font-size:14px}.crate .btn{border-radius:11px}
+.card,.asset-card,.item{background:linear-gradient(145deg,#1a1b30,#111522);border-color:#494264;box-shadow:0 9px 22px #0003}
+.nav{left:50%;transform:translateX(-50%);width:min(100%,560px);justify-content:space-around;gap:2px;padding:9px 10px calc(9px + env(safe-area-inset-bottom));background:#0b0d1bed;border:1px solid #51426e;border-bottom:0;border-radius:18px 18px 0 0;box-shadow:0 -8px 32px #0008,0 0 24px #7546bd22;backdrop-filter:blur(20px)}
+.nav button{flex:1;min-width:0;color:#8889a6;font-size:9px}.nav button span{font-size:19px;filter:drop-shadow(0 0 5px #8d5aff55)}
+.nav button.active{color:#e1caff;text-shadow:0 0 12px #a879ff}.nav button.active span{filter:drop-shadow(0 0 9px #b77cff)}
+.btn{border-radius:13px}
+@media(max-width:380px){.hero.plate-hero{min-height:350px}.lobby-car{font-size:78px}.lobby-shortcuts button{padding:9px 7px}.lobby-shortcuts button b{font-size:10px}.stats .stat{padding:8px 5px}}
+@media(prefers-reduced-motion:reduce){.lobby-car{animation:none}.page{animation:none}}
+.world-links{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:3px 1px 10px;margin:0 0 10px;scrollbar-width:none}.world-links::-webkit-scrollbar{display:none}.world-links>span{flex:0 0 auto;color:#9288ad;font-size:9px;font-weight:900;letter-spacing:1px;margin-right:2px}.world-links button{flex:0 0 auto;border:1px solid #443b60;border-radius:10px;background:#151728;color:#d7c8f4;padding:8px 10px;font-size:10px;font-weight:800}
+/* Premium case opening experience */
+.crate{position:relative;overflow:hidden;isolation:isolate;transition:transform .22s,border-color .22s,box-shadow .22s}
+.crate:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 0%,#a879ff20,transparent 58%)}
+.crate-icon{position:relative;isolation:isolate;overflow:hidden;height:116px;border:1px solid #6d5b94;border-radius:15px;background:radial-gradient(ellipse at 50% 80%,#a879ff25,transparent 62%),linear-gradient(145deg,#282341,#111626);box-shadow:inset 0 1px #ffffff20,0 8px 18px #0005;text-shadow:0 0 18px #d4b0ff;transition:transform .35s,filter .35s,border-color .35s}
+.crate-icon:before{content:"";position:absolute;z-index:-1;width:68px;height:58px;left:50%;top:50%;transform:translate(-50%,-40%);border-radius:8px 8px 12px 12px;border:2px solid #d5c4ff;background:linear-gradient(135deg,#a77aff 0%,#6336a8 42%,#281b4b 100%);box-shadow:inset 0 3px 8px #fff5,0 0 22px #9b63ff88,0 10px 20px #0008}
+.crate-icon:after{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:13px;height:57px;transform:translate(-50%,-39%);background:linear-gradient(90deg,#ffdf88,#fff0b7 48%,#bd7b24);box-shadow:0 0 12px #ffc65d99}
+.crate:nth-child(2) .crate-icon:before{filter:hue-rotate(70deg)}.crate:nth-child(3) .crate-icon:before{filter:hue-rotate(145deg)}.crate:nth-child(4) .crate-icon:before{filter:hue-rotate(205deg)}.crate:nth-child(5) .crate-icon:before{filter:hue-rotate(255deg)}.crate:nth-child(6) .crate-icon:before{filter:hue-rotate(300deg)}.crate:nth-child(7) .crate-icon:before{filter:hue-rotate(170deg) brightness(1.25)}
+.crate h3{font-size:15px;letter-spacing:.1px}.crate .odds{min-height:30px;color:#a9a2c2}
+.crate .meter{height:5px;border-radius:8px;background:#29243c;overflow:hidden}.crate .meter i{border-radius:8px;box-shadow:0 0 12px #bd91ff}
+.crate .btn{width:100%;font-weight:900;letter-spacing:.15px;box-shadow:0 4px 0 #090b18,0 0 15px #8e58e844}
+.crate.opening{transform:translateY(-3px) scale(1.015);border-color:#e3c2ff;box-shadow:0 0 0 1px #c18cff66,0 0 28px #a45cff99,0 12px 28px #0009}
+.crate.opening .crate-icon{animation:caseShake .13s ease-in-out infinite alternate;filter:brightness(1.45) saturate(1.3);border-color:#fff0bd;box-shadow:inset 0 0 25px #fff5,0 0 28px #d29aff}
+.crate.opening .crate-icon:before{animation:caseLid .55s ease-in-out infinite alternate}
+.crate.opening .crate-icon:after{filter:brightness(1.7);box-shadow:0 0 22px #ffe9a4}
+@keyframes caseShake{from{transform:translateX(-2px) rotate(-1.5deg)}to{transform:translateX(2px) rotate(1.5deg)}}
+@keyframes caseLid{from{transform:translate(-50%,-40%) rotate(0)}to{transform:translate(-50%,-53%) rotate(-5deg)}}
+.result.show{position:relative;overflow:hidden;border:1px solid #9470cb;background:radial-gradient(ellipse at 50% 0%,#7d4cb844,transparent 56%),linear-gradient(145deg,#171b2d,#211633);box-shadow:0 0 0 1px #bd91ff22,0 0 32px #8b4cff55}
+.result.show:before{content:"";position:absolute;pointer-events:none;left:50%;top:62px;width:210px;height:210px;transform:translateX(-50%);border-radius:50%;border:1px solid #c59cff55;box-shadow:0 0 0 14px #b88aff0a,0 0 0 30px #b88aff08,0 0 42px #9c64ff33;animation:revealHalo 2.4s ease-out infinite}
+.result.show>*{position:relative;z-index:1}
+@keyframes revealHalo{0%{transform:translateX(-50%) scale(.82);opacity:.25}50%{opacity:.9}100%{transform:translateX(-50%) scale(1.18);opacity:.15}}
+#result .plate{margin:12px auto;max-width:350px;box-shadow:0 0 24px #a879ff55,0 0 50px #9a5dff22}
+#result .sub:first-child{font-size:10px;font-weight:950;letter-spacing:2.2px;color:#ddc8ff}
+@media(prefers-reduced-motion:reduce){.crate.opening .crate-icon,.crate.opening .crate-icon:before,.result.show:before{animation:none}}
+
+/* PREMIUM MOTOR CITY REDESIGN — unified visual system */
+:root{--bg:#070912;--panel:#111522;--panel2:#171e30;--muted:#929bb2;--text:#f4f6ff;--purple:#9d76ff;--line:#28344b;--gold:#ffc65c}
+body{background:radial-gradient(ellipse at 50% -12%,#384a78 0,transparent 34%),radial-gradient(ellipse at 8% 38%,#35205c88 0,transparent 34%),radial-gradient(ellipse at 100% 58%,#123b5688 0,transparent 31%),linear-gradient(180deg,#090d18,#070912 68%,#090b14);letter-spacing:.05px}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.22;background:repeating-linear-gradient(90deg,transparent 0 42px,#9ab9ff0a 43px 44px),linear-gradient(180deg,transparent 72%,#151c2d)}
+.app{max-width:560px;padding:14px 14px 112px}
+.top{margin:8px 2px 15px}.brand{font-size:25px;letter-spacing:-1px;text-shadow:0 3px 22px #8f68ff44}
+.avatar{border-radius:50%;border:1px solid #ffe1a0;box-shadow:0 0 0 4px #ffc65c18,0 0 26px #ffc65c44}
+.stats{gap:8px}.stat{background:linear-gradient(145deg,#1b263b,#101522);border:1px solid #34435e;border-radius:16px;box-shadow:inset 0 1px #ffffff0b,0 8px 22px #0004}.stat b{font-size:16px}
+.tabs{scrollbar-width:none;margin-bottom:14px}.tab{background:#101726;border-color:#2d3a54;border-radius:999px;padding:9px 14px}.tab.active{background:linear-gradient(135deg,#6342a5,#283b69);border-color:#ad8aff;color:#fff;box-shadow:0 0 22px #9164ff44}
+.page{animation:pageArrive .28s ease both}.section-title{font-size:19px;letter-spacing:-.35px;margin:17px 2px 11px}.sub{color:#a1abc1}
+.hero{border-radius:23px;background:linear-gradient(140deg,#1d2b45,#15182b 58%,#291b43);border:1px solid #6275a0;box-shadow:inset 0 1px #ffffff19,0 18px 42px #0007,0 0 28px #8160ff20}
+.hero.plate-hero{min-height:290px;border-radius:26px;background:radial-gradient(ellipse at 50% 108%,#6950a5 0,transparent 53%),linear-gradient(155deg,#1d2d49,#111725 57%,#26183c);border-color:#667ca9;box-shadow:inset 0 1px #ffffff22,0 22px 54px #0008,0 0 40px #6c55c933}
+.hero-title{font-size:25px;line-height:1.12;max-width:290px;text-shadow:0 4px 20px #0008}.hero-kicker{color:#d2c8f4;letter-spacing:2.4px}
+.lobby-city{height:110px!important;opacity:.96;filter:saturate(1.25)}
+.lobby-car{font-size:76px!important;filter:drop-shadow(0 10px 12px #000b) drop-shadow(0 0 20px #7bbdff88);transform:translateY(-4px)}
+.road-glow{filter:blur(1px);opacity:.9}
+.hero-plate-wrap{width:min(90%,350px);padding:8px;border-radius:13px;background:linear-gradient(135deg,#f8fbff,#7889a3 34%,#fff 52%,#65738c);box-shadow:0 0 0 1px #fff9,0 8px 25px #0009,0 0 34px #9b83ff88}
+.hero-plate{min-height:82px;border-radius:8px;font-size:clamp(32px,9vw,46px);box-shadow:inset 0 3px 7px #0002,inset 0 -3px 5px #0002}
+.hero-plate-caption{letter-spacing:2.5px;color:#d7d0e9}
+.lobby-shortcuts{gap:8px!important}.lobby-shortcuts button{background:linear-gradient(150deg,#1c2941,#111725)!important;border:1px solid #3c4d6c!important;border-radius:17px!important;box-shadow:inset 0 1px #ffffff0b,0 9px 22px #0004}.lobby-shortcuts button span{filter:drop-shadow(0 0 10px #9a7aff88)}
+.lobby-mission{background:linear-gradient(120deg,#30244c,#172338)!important;border:1px solid #7054a0!important;border-radius:17px!important;box-shadow:0 10px 26px #0005}
+.world-links{border:1px solid #293650;border-radius:16px;padding:10px;background:#0d1421b8}
+.world-links button{background:#19243a!important;border:1px solid #2d4161!important;border-radius:999px!important;color:#dbe5ff!important}
+.card,.crate,.feature-tile,.asset-card,.shop-product,.profile-card{background:linear-gradient(145deg,#192338,#101522 75%);border:1px solid #34435f;border-radius:18px;box-shadow:inset 0 1px #ffffff0a,0 12px 26px #0004}
+.crate-grid{gap:12px}.crate{position:relative;overflow:hidden;padding:12px;background:linear-gradient(155deg,#202c44,#101522 68%);border-color:#3c4d6a;box-shadow:inset 0 1px #ffffff12,0 12px 25px #0006}
+.crate:before{content:"";display:block;position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,#9d83ff,#63c9ff,transparent);opacity:.8}
+.crate-icon{height:116px;border-radius:13px;background:radial-gradient(ellipse at 50% 100%,#7d65bd55,transparent 60%),linear-gradient(145deg,#283957,#111827);font-size:56px;text-shadow:0 8px 18px #000,0 0 22px #a88affaa;position:relative;overflow:hidden}
+.crate-icon:after{content:"";position:absolute;inset:8px;border:1px solid #ffffff14;border-radius:10px;pointer-events:none}
+.crate h3{font-size:15px;margin-top:3px}.crate .btn{border-radius:12px;min-height:40px}
+.btn{border-radius:13px;letter-spacing:.25px;text-transform:none}.btn.secondary{background:linear-gradient(180deg,#26344e,#182237);border:1px solid #526586;color:#e8efff;box-shadow:0 4px 12px #0004}.btn.gold{color:#251704}
+.plate{border-radius:11px;border-width:4px;background:linear-gradient(180deg,#fff,#dce2eb);box-shadow:inset 0 0 0 2px #4b4b4b,0 0 22px #9b83ff55,0 9px 20px #0007}
+.item{background:linear-gradient(145deg,#202c43,#111827);border-color:#394b68;border-radius:16px;box-shadow:0 8px 20px #0004}
+.item .plate{box-shadow:inset 0 0 0 2px #4b4b4b,0 0 16px var(--rarity-soft,#8f7aff44),0 6px 12px #0005}
+.inventory{gap:11px}
+.rarity-tabs button{background:#111a2a;border-color:#34435f}.rarity-tabs button.active{background:#47326f;border-color:#b795ff;box-shadow:0 0 18px #966cff55}
+.wheel{border-color:#c4a4ff;box-shadow:0 0 0 5px #202b42,0 0 40px #a17bff66}
+.podium-person{background:linear-gradient(160deg,#293854,#121a29);border-color:#53698c}.podium-person.first{border-color:#d4ad5b;box-shadow:0 0 28px #ffc65c33}
+.asset-card .asset-icon{font-size:58px;min-height:105px;display:grid;place-items:center;background:radial-gradient(ellipse,#49658b55,transparent 68%);filter:drop-shadow(0 8px 14px #0008)}
+.house-scene{background:radial-gradient(ellipse at 50% 100%,#8d70c455,transparent 55%),linear-gradient(180deg,#253b5b,#19243b 58%,#111827);border-color:#526b91;box-shadow:inset 0 1px #ffffff1a,0 12px 28px #0006}
+.shop-product{grid-template-columns:64px 1fr}.shop-product .emoji{font-size:46px;filter:drop-shadow(0 4px 10px #0008)}
+.profile-avatar{border-radius:17px;border:1px solid #c7a8ff;box-shadow:0 0 24px #9477ff66}
+.profile-track{background:#090f1b}.profile-track i{background:linear-gradient(90deg,#7c5bff,#55d6ef,#ffc65c)}
+.nav{background:#0b101ced;border-top:1px solid #33425d;box-shadow:0 -10px 30px #0007;padding-top:10px;backdrop-filter:blur(20px)}
+.nav button{font-size:10px;letter-spacing:.2px}.nav button span{font-size:22px;filter:drop-shadow(0 0 7px #9d76ff55)}.nav button.active{color:#c9b4ff}
+.toast{background:#1b2740;border-color:#9878d7;box-shadow:0 12px 35px #0008}
+input,select,textarea{font:inherit}
+@keyframes pageArrive{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:380px){.app{padding-left:11px;padding-right:11px}.hero.plate-hero{padding:16px 13px}.hero-title{font-size:22px}.crate-icon{height:98px}.stat{padding:9px 5px}.stat b{font-size:14px}}
+@media(prefers-reduced-motion:reduce){.page{animation:none}}
+
+
+/* Signature concept: midnight supercar showroom + cinematic case reveal */
+body{background:#050812!important}
+body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 50% 20%,#263d66 0,transparent 42%),linear-gradient(180deg,#0b1425 0,#070b16 48%,#05070e 100%)}
+.app{max-width:540px}
+.top{padding:10px 12px;border:1px solid #334761;border-radius:18px;background:linear-gradient(110deg,#17263bdf,#0c1422df);box-shadow:0 12px 30px #0006}
+.brand{font-size:26px;font-weight:950;letter-spacing:-1.3px;background:linear-gradient(90deg,#fff,#b9d7ff 55%,#c9a5ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero.plate-hero{min-height:360px;overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 112%,#a879ff65,transparent 43%),linear-gradient(180deg,#17263b 0%,#101b2d 50%,#090f1c 100%);border:1px solid #7790b7;border-radius:26px;box-shadow:inset 0 1px #ffffff30,0 24px 55px #0009,0 0 45px #6f91ff22}
+.hero.plate-hero:after{content:"";position:absolute;left:-15%;right:-15%;bottom:0;height:100px;background:linear-gradient(180deg,transparent,#111827),repeating-linear-gradient(90deg,transparent 0 35px,#9fcaff12 36px 38px);transform:perspective(120px) rotateX(28deg);pointer-events:none}
+.lobby-city{height:142px!important;transform:scale(1.05);transform-origin:center bottom}
+.lobby-car{font-size:88px!important;filter:drop-shadow(0 13px 10px #000d) drop-shadow(0 0 25px #77baffaa);animation:supercarFloat 3s ease-in-out infinite}
+@keyframes supercarFloat{0%,100%{transform:translateY(-3px)}50%{transform:translateY(-10px)}}
+.hero-plate-wrap{position:relative;z-index:2;width:min(92%,370px);padding:9px;border-radius:15px;background:linear-gradient(130deg,#f8fbff,#8595ad 22%,#fff 48%,#596a83 75%,#e8effa);box-shadow:0 0 0 1px #fff,0 12px 28px #000b,0 0 42px #a88affaa}
+.hero-plate{height:92px;border-radius:8px;font-size:clamp(35px,10vw,50px);background:linear-gradient(180deg,#fff,#e3eaf3);color:#111827}
+.hero-title{font-size:27px;font-weight:900;letter-spacing:-.8px;text-shadow:0 4px 20px #000a}
+.lobby-shortcuts button,.lobby-mission,.crate,.card,.asset-card{backdrop-filter:blur(8px)}
+.crate{padding:12px;border-radius:20px;background:linear-gradient(150deg,#1d2b42,#111827 66%,#151329);border:1px solid #465d7c;box-shadow:inset 0 1px #ffffff16,0 14px 28px #0008;transition:transform .25s,border-color .25s,box-shadow .25s}
+.crate:active{transform:scale(.985)}
+.crate-icon{height:132px!important;position:relative;display:grid;place-items:center;border-radius:15px;background:radial-gradient(ellipse at 50% 85%,#a88aff66,transparent 58%),linear-gradient(145deg,#334765,#131d30 68%,#21183a);font-size:64px!important;text-shadow:0 10px 15px #000b,0 0 25px #b69aff;overflow:hidden}
+.crate-icon:before{content:"";position:absolute;inset:9px;border:1px solid #ffffff20;border-radius:10px;box-shadow:inset 0 0 24px #a3caff12}
+.crate-icon:after{content:"";position:absolute;left:15%;right:15%;bottom:12px;height:2px;background:linear-gradient(90deg,transparent,#b7d7ff,transparent);box-shadow:0 0 16px #91baff}
+.crate h3{font-size:16px;font-weight:900;letter-spacing:.1px}
+.crate .meter{height:5px;background:#080e19;border-radius:10px;overflow:hidden}
+.crate .meter i{background:linear-gradient(90deg,#8b6bff,#6edfff,#ffd078);box-shadow:0 0 12px #9d7aff}
+.crate.opening{animation:crateImpact .72s ease-in-out infinite;border-color:#e4c2ff;box-shadow:0 0 0 2px #a67aff55,0 0 42px #9c75ff99}
+.crate.opening .crate-icon{animation:crateLid 1.15s cubic-bezier(.2,.8,.2,1) forwards;filter:brightness(1.6)}
+@keyframes crateImpact{0%,100%{transform:translateY(0) rotate(0)}20%{transform:translateY(-5px) rotate(-1.5deg)}45%{transform:translateY(2px) rotate(1.7deg)}70%{transform:translateY(-3px) rotate(-.8deg)}}
+@keyframes crateLid{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-7px) rotate(-3deg)}55%{transform:translateY(-18px) rotate(5deg)}80%{transform:translateY(-22px) rotate(-3deg)}}
+#caseModal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:18px 14px calc(18px + env(safe-area-inset-bottom));background:radial-gradient(ellipse at 50% 35%,#26365beF 0,#0a1020f7 55%,#03050bf9 100%);backdrop-filter:blur(18px);overflow-y:auto}
+#caseModal.active{display:flex;animation:modalFade .28s ease both}
+#caseModal .case-modal-inner{width:min(100%,500px);min-height:min(760px,calc(100dvh - 34px));display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;position:relative}
+#caseModal .case-close{position:absolute;right:2px;top:2px;border:1px solid #64799a;background:#19263c;color:#fff;border-radius:50%;width:40px;height:40px;font-size:22px;z-index:5}
+#caseModal .case-eyebrow{font-size:11px;letter-spacing:3px;color:#c7d7f4;font-weight:800;text-align:center}
+#caseModal .case-scene{width:100%;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+#caseModal .case-pedestal{width:min(80%,300px);height:22px;border-radius:50%;background:#a7c7ff55;filter:blur(13px);box-shadow:0 0 45px #9c7aff}
+#caseModal .case-big{font-size:clamp(110px,36vw,170px);line-height:1.05;filter:drop-shadow(0 18px 15px #000b) drop-shadow(0 0 32px #9c7affaa);transform-origin:50% 80%;animation:caseHover 2.2s ease-in-out infinite}
+#caseModal.opening .case-big{animation:caseCinematic .95s ease-in-out 2}
+#caseModal.opening .case-pedestal{animation:pedestalPulse .8s ease-in-out infinite}
+#caseModal .case-open-copy{font-size:14px;color:#dce7ff}
+#caseModal .case-result-host{width:100%}
+#caseModal .result{display:none!important;width:100%;margin:0!important;max-width:none;padding:26px 18px 22px!important;border-radius:24px!important;border:1px solid #7890b8!important;background:linear-gradient(155deg,#1b2b44f5,#0b1220f7 68%,#211738f5)!important;box-shadow:inset 0 1px #ffffff22,0 25px 65px #000b,0 0 50px #9975ff33!important;text-align:center}
+#caseModal .result.show{display:flex!important;flex-direction:column;align-items:center;gap:13px;animation:resultReveal .65s cubic-bezier(.16,1,.3,1) both}
+#caseModal .result .plate{width:min(100%,350px);min-height:96px;font-size:clamp(32px,9vw,46px);margin:8px auto 4px;box-shadow:inset 0 0 0 2px #434b59,0 0 30px var(--rarity-glow,#a78bfa),0 12px 25px #0009}
+#caseModal .result h2{font-size:21px;margin:4px 0}
+#caseModal .result .row{width:100%}
+#caseModal .result .btn{min-height:46px}
+#caseModal .keep-number{width:100%;border:1px solid #8e9fbd;border-radius:13px;padding:13px;background:linear-gradient(180deg,#2c3e5b,#19263b);color:#fff;font-weight:800}
+#caseModal .result .sub{line-height:1.45}
+#caseModal .result .rarity{margin:0 auto}
+#caseModal .case-scene.hidden{display:none}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+@keyframes caseHover{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-13px) rotate(1deg)}}
+@keyframes caseCinematic{0%{transform:scale(1) rotate(0)}35%{transform:scale(1.12) rotate(-5deg)}65%{transform:scale(1.2) rotate(5deg);filter:brightness(2) drop-shadow(0 0 50px #c5a0ff)}100%{transform:scale(.85) rotate(0);opacity:.2}}
+@keyframes pedestalPulse{50%{transform:scaleX(1.35);opacity:.6}}
+@keyframes resultReveal{0%{opacity:0;transform:translateY(35px) scale(.88);filter:blur(8px)}70%{opacity:1;transform:translateY(-5px) scale(1.02);filter:blur(0)}100%{transform:none}}
+@media(max-height:700px){#caseModal .case-modal-inner{min-height:0}#caseModal .case-big{font-size:105px}#caseModal .result{padding:17px 14px!important}#caseModal .result .plate{min-height:76px}}
+@media(prefers-reduced-motion:reduce){#caseModal *,#caseModal *:before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+
+/* Smooth automotive case presentation */
+.crate-icon{height:112px!important;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#667da833,transparent 58%),linear-gradient(145deg,#202c43,#101522)!important;border:1px solid #53627d;perspective:700px}
+.crate-icon:after{content:'';position:absolute;inset:auto 12% 9px;height:2px;border-radius:50%;background:#c9dcff66;filter:blur(5px)}
+.car-art{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 9px #0009);transform:translateY(3px);transition:transform .65s cubic-bezier(.2,.8,.2,1),filter .65s ease}
+.crate:hover .car-art{transform:translateY(-3px) scale(1.055);filter:drop-shadow(0 0 13px #b8caff66)}
+#caseModal .case-big{width:min(100%,520px);height:clamp(170px,43vw,250px);display:grid;place-items:center;font-size:0;filter:none;animation:carFloat 4.8s ease-in-out infinite;transform-origin:50% 75%}
+#caseModal .case-big .car-art{width:100%;height:100%;filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 24px #a5c8ff55);transform:scale(1.06)}
+#caseModal.opening .case-big{animation:carApproach 2.6s cubic-bezier(.22,.72,.18,1) both}
+#caseModal.opening .case-big .car-art{animation:carPaintGlow 2.6s ease-in-out both}
+#caseModal .case-big.car-reveal{animation:carWinner 1.05s cubic-bezier(.16,1,.3,1) both}
+#caseModal .case-pedestal{width:min(82%,390px);height:26px;background:linear-gradient(90deg,transparent,#a8d7ff99,#c39affaa,#a8d7ff99,transparent);filter:blur(12px);box-shadow:0 0 55px #86aaff88}
+#caseModal.opening .case-pedestal{animation:pedestalDrift 2.6s ease-in-out both}
+#caseModal .case-open-copy{font-size:13px;letter-spacing:.3px;color:#dce7ff;transition:opacity .35s ease}
+#caseModal .case-result-host{transition:opacity .4s ease}
+@keyframes carFloat{0%,100%{transform:translate3d(0,0,0) rotateX(0) rotateZ(-.5deg)}50%{transform:translate3d(0,-9px,0) rotateX(2deg) rotateZ(.5deg)}}
+@keyframes carApproach{0%{opacity:0;transform:translate3d(0,28px,0) scale(.72) rotateY(-12deg)}18%{opacity:1}42%{transform:translate3d(0,-8px,0) scale(1.035) rotateY(5deg)}63%{transform:translate3d(0,2px,0) scale(.99) rotateY(-2deg)}82%{transform:translate3d(0,-4px,0) scale(1.015) rotateY(1deg)}100%{opacity:1;transform:translate3d(0,0,0) scale(1) rotateY(0)}}
+@keyframes carPaintGlow{0%,100%{filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 15px #a5c8ff22)}45%{filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 36px #c5dfffbb) brightness(1.18)}72%{filter:drop-shadow(0 24px 20px #000c) drop-shadow(0 0 23px #c5dfff77)}}
+@keyframes carWinner{0%{opacity:.5;transform:translateY(20px) scale(.9);filter:blur(5px)}65%{opacity:1;transform:translateY(-4px) scale(1.035);filter:blur(0)}100%{transform:none;filter:none}}
+@keyframes pedestalDrift{0%,100%{transform:scaleX(.82);opacity:.55}45%{transform:scaleX(1.18);opacity:1}75%{transform:scaleX(1.04);opacity:.8}}
+@media(prefers-reduced-motion:reduce){#caseModal .case-big,#caseModal.opening .case-big,#caseModal .case-big.car-reveal,#caseModal .case-big .car-art,.crate:hover .car-art{animation:none!important;transition:none!important;transform:none!important}}
+
+/* Premium cinematic reward screen */
+#caseModal{padding:clamp(10px,2.4vh,24px) 14px calc(12px + env(safe-area-inset-bottom));background:radial-gradient(ellipse at 50% 48%,#34205f 0%,#111a35 42%,#050813 78%,#02040a 100%);overflow:hidden}
+#caseModal:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 15%,#bd72ff0b 40%,transparent 62%),repeating-linear-gradient(0deg,transparent 0 54px,#8db7ff08 55px 56px);opacity:.9}
+#caseModal .case-modal-inner{width:min(100%,760px);height:min(920px,calc(100dvh - 26px));min-height:0;justify-content:space-between;gap:clamp(6px,1.3vh,14px);padding:4px 0 8px;z-index:1}
+#caseModal .case-topline{height:34px;display:flex;align-items:center;justify-content:center;gap:9px;color:#e8d8ff;font-size:12px;font-weight:1000;letter-spacing:3px;text-shadow:0 0 18px #b66cff}
+#caseModal .case-brand-mark{font-size:22px;color:#ffca65;text-shadow:0 0 18px #ffae38}
+#caseModal .case-topline-tag{font-size:8px;letter-spacing:1.6px;color:#8da9dc;border:1px solid #536a9b88;border-radius:20px;padding:4px 8px;margin-left:4px}
+#caseModal .case-close{right:0;top:0;width:38px;height:38px;background:#111b34cc;border:1px solid #8e9bce88;box-shadow:0 0 20px #8155ff33}
+#caseModal .case-headline{text-align:center;display:flex;flex-direction:column;gap:3px}
+#caseModal .case-headline-title{font-size:clamp(28px,6.6vw,48px);font-weight:1000;font-style:italic;letter-spacing:.3px;color:#fff;text-shadow:0 0 12px #c28cff,0 0 34px #8c4cff;line-height:1.1}
+#caseModal .case-headline-sub{font-size:14px;color:#d9e5ff;font-weight:700}
+#caseModal .case-scene{flex:1;min-height:0;justify-content:center;gap:8px;position:relative;width:100%;border-radius:26px;background:radial-gradient(ellipse at 50% 68%,#5b43a744 0%,#18264a33 42%,transparent 72%);overflow:visible}
+#caseModal .case-scene:before{content:"";position:absolute;width:min(78vw,520px);height:40px;bottom:15%;border-radius:50%;border:2px solid #b98aff88;box-shadow:0 0 18px #a35bff, inset 0 0 18px #5c9dff66;transform:perspective(200px) rotateX(58deg)}
+#caseModal .case-eyebrow{font-size:9px;letter-spacing:3px;color:#a8bde9;z-index:1}
+#caseModal .case-big{width:min(100%,600px);height:clamp(150px,34vh,300px);display:flex;align-items:center;justify-content:center;font-size:0;z-index:1;filter:drop-shadow(0 22px 18px #000b) drop-shadow(0 0 28px #986bff88);animation:caseHover 3.2s ease-in-out infinite}
+#caseModal .case-big .car-art{width:100%;height:100%;max-height:100%;overflow:visible}
+#caseModal .case-big .car-art-large{width:100%;height:100%}
+#caseModal .case-pedestal{position:absolute;bottom:17%;width:min(70%,440px);height:16px;background:#b98aff55;filter:blur(16px);box-shadow:0 0 65px #8e65ff}
+#caseModal .case-open-copy{z-index:1;font-size:12px;color:#dce7ff;text-shadow:0 1px 5px #000}
+#caseModal .case-result-host{width:min(100%,570px);z-index:2;flex:0 0 auto}
+#caseModal .result{padding:clamp(12px,2vh,20px) 16px!important;background:linear-gradient(155deg,#172744f5,#080f20f7 65%,#21123bf5)!important;border-color:#9675d7!important;box-shadow:inset 0 1px #ffffff22,0 15px 50px #000c,0 0 38px #9a5cff55!important}
+#caseModal .result .plate{min-height:76px;font-size:clamp(28px,7vw,42px);margin:2px auto}
+#caseModal .result h2{font-size:19px;margin:0}
+#caseModal .result .sub{font-size:12px}
+#caseModal .result .row{gap:8px}
+#caseModal .result .btn,#caseModal .keep-number{min-height:43px;font-size:12px}
+#caseModal .case-footer-glow{font-size:8px;letter-spacing:2px;color:#8195bf;text-align:center;text-shadow:0 0 12px #8c64ff66}
+#caseModal .case-scene.hidden{display:flex!important;opacity:.72;pointer-events:none}
+#caseModal .case-scene.hidden .case-big{height:clamp(92px,17vh,150px);animation:none;filter:drop-shadow(0 10px 12px #000b) drop-shadow(0 0 24px #a66dff)}
+#caseModal .case-scene.hidden .case-eyebrow,#caseModal .case-scene.hidden .case-open-copy,#caseModal .case-scene.hidden .case-pedestal{display:none}
+#caseModal .case-scene.hidden:before{bottom:4%;height:18px}
+#caseModal .case-modal-inner:has(.result.show) .case-headline{gap:1px}
+#caseModal .result.show{animation:resultReveal .8s cubic-bezier(.16,1,.3,1) both}
+@keyframes caseCinematic{0%{transform:translateY(16px) scale(.78) rotate(-3deg);filter:brightness(.7)}55%{transform:translateY(-8px) scale(1.06) rotate(1deg);filter:brightness(1.45) drop-shadow(0 0 42px #c5a0ff)}100%{transform:translateY(0) scale(1) rotate(0);filter:brightness(1)}}
+@media(max-height:700px){#caseModal .case-modal-inner{gap:4px}#caseModal .case-headline-title{font-size:27px}#caseModal .case-scene{min-height:130px}#caseModal .case-big{height:clamp(112px,27vh,190px)}#caseModal .case-footer-glow{display:none}#caseModal .result{padding:9px 12px!important}#caseModal .result .plate{min-height:62px}}
+@media(prefers-reduced-motion:reduce){#caseModal .case-big{animation:none!important}}
+
+
+/* Neon night-city backdrop across the game */
+html{background:#050813}
+body{position:relative;isolation:isolate;background:linear-gradient(180deg,#070b19 0%,#10152b 42%,#080b18 100%)!important}
+body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+ radial-gradient(ellipse at 50% 65%,#8c49ff24 0%,transparent 34%),
+ radial-gradient(ellipse at 13% 38%,#ff8b4320 0%,transparent 27%),
+ radial-gradient(ellipse at 88% 34%,#328cff26 0%,transparent 30%),
+ linear-gradient(180deg,#060916 0%,#111a35 52%,#090d1c 100%)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.72;background:
+ linear-gradient(90deg,transparent 0 3%,#ffad5c88 3.2%,transparent 3.6% 8%,#a65cff77 8.2%,transparent 8.6% 91%,#388dff88 91.2%,transparent 91.6% 96%,#56caff66 96.2%,transparent 96.6%),
+ repeating-linear-gradient(90deg,transparent 0 34px,#8dbaff16 35px 37px,transparent 38px 59px),
+ repeating-linear-gradient(0deg,transparent 0 24px,#b8d7ff1a 25px 27px,transparent 28px 45px);
+ mask-image:linear-gradient(180deg,#000 0%,#000 46%,transparent 83%)}
+.app{position:relative;z-index:0}
+#caseModal{background:
+ radial-gradient(ellipse at 50% 70%,#a34cff30 0%,transparent 42%),
+ radial-gradient(ellipse at 12% 42%,#ff9b4a24 0%,transparent 28%),
+ radial-gradient(ellipse at 88% 40%,#368fff30 0%,transparent 30%),
+ linear-gradient(180deg,#060916 0%,#121a35 58%,#070b17 100%)!important}
+#caseModal:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;background:
+ linear-gradient(90deg,transparent 0 4%,#ffb56a66 4.2%,transparent 4.8% 12%,#bb6aff88 12.2%,transparent 12.8% 87%,#4a9dff88 87.2%,transparent 87.8% 96%,#61d7ff66 96.2%,transparent 96.8%),
+ repeating-linear-gradient(90deg,transparent 0 42px,#b5d4ff14 43px 45px,transparent 46px 67px),
+ linear-gradient(180deg,transparent 0%,#060a17 85%)}
+#caseModal .case-scene{background:radial-gradient(ellipse at 50% 72%,#b14cff35 0%,transparent 48%),linear-gradient(180deg,#0c163322,#111c3822)}
+#caseModal .case-scene:after{content:"";position:absolute;left:-18vw;right:-18vw;bottom:2%;height:24%;z-index:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 12%,#9c70ff22 12.2% 12.5%,transparent 12.8% 28%),linear-gradient(180deg,transparent,#9a5dff18 72%,#4a8dff20);filter:blur(3px);transform:perspective(180px) rotateX(58deg)}
+#caseModal .case-big{z-index:2}
+@media(prefers-reduced-motion:reduce){body:before,body:after{animation:none!important}}
+
+
+/* NEON CITY · complete interface refresh v1 */
+:root{--bg:#060916;--panel:#11182b;--panel2:#17233b;--muted:#9ba9c8;--text:#f4f6ff;--purple:#a879ff;--gold:#ffc65d;--green:#42e59a;--line:#344568}
+html,body{background:#060916!important;color:#f4f6ff}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.01em}
+.app{width:min(100%,560px);padding:14px 14px calc(112px + env(safe-area-inset-bottom))}
+.top{margin:8px 2px 14px;min-height:48px}
+.brand{font-size:21px;letter-spacing:1.2px;text-shadow:0 0 20px #9a6cff66}.brand span{color:#65dfff;text-shadow:0 0 16px #4baaff}
+.top .sub{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#91a5d0}
+.avatar{border-radius:16px;background:linear-gradient(145deg,#8d5cff,#266be8);color:#fff;border:1px solid #b9a2ff;box-shadow:0 0 24px #754cff77}
+.connection-status{border-radius:12px;margin:6px auto 12px;max-width:532px}
+.stats{gap:8px;margin:0 0 12px}
+.stat{position:relative;overflow:hidden;border:1px solid #354c78;border-radius:14px;padding:10px 7px;background:linear-gradient(145deg,#172746dd,#0c1428f2);box-shadow:inset 0 1px #ffffff12,0 8px 20px #0005}
+.stat:after{content:"";position:absolute;inset:auto 10% 0;height:1px;background:linear-gradient(90deg,transparent,#7fbdff99,transparent)}
+.stat small{font-size:9px;letter-spacing:1px;color:#91a8d1}.stat b{font-size:clamp(12px,3.5vw,16px);text-shadow:0 0 14px #83aaff44}.stat .star{color:#ffd36c}
+.tabs{gap:6px;margin:0 -1px 14px;padding:2px 1px 8px;scrollbar-width:none}
+.tab{border:1px solid #35486d;background:#0d162a;color:#aab8d5;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:850}
+.tab.active{background:linear-gradient(135deg,#673ac0,#214d91);border-color:#a98bff;color:#fff;box-shadow:0 0 18px #8255ff55,inset 0 1px #fff3}
+.page.active{animation:neonPageIn .28s ease both}@keyframes neonPageIn{from{opacity:.55;transform:translateY(7px)}to{opacity:1;transform:none}}
+.section-title{font-size:18px;font-weight:950;letter-spacing:.1px;margin:18px 2px 11px;color:#f4f2ff;text-shadow:0 0 16px #8b67ff66}
+.hero.plate-hero{min-height:0;padding:17px 15px 16px;border:1px solid #647ab0;border-radius:23px;background:radial-gradient(ellipse at 50% 78%,#6241ad66,transparent 55%),linear-gradient(145deg,#172d53f5 0%,#11162d 58%,#241642 100%);box-shadow:inset 0 1px #ffffff26,0 18px 44px #0008,0 0 28px #7652ff22}
+.hero-kicker{color:#a9c5f5;font-size:9px;letter-spacing:2.2px}.hero-title{font-size:clamp(20px,5.2vw,27px);line-height:1.12;text-shadow:0 0 20px #9868ff66;margin:10px 0 5px}.hero-sub{font-size:9px;letter-spacing:1.1px;color:#a9bde0}
+.lobby-city{height:clamp(112px,34vw,165px);margin:9px -5px 0;border-radius:17px;overflow:hidden;position:relative;background:linear-gradient(180deg,#09152b 0%,#172957 58%,#080e20 100%);border:1px solid #516fa5;box-shadow:inset 0 -25px 35px #0a1028,0 0 24px #387aff22}
+.lobby-city:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 5%,#f3a75c99 5.3% 6%,transparent 6.4% 14%,#a66cff99 14.3% 15%,transparent 15.4% 83%,#55c8ff99 83.3% 84%,transparent 84.4%),repeating-linear-gradient(90deg,transparent 0 22px,#9ecbff18 23px 25px,transparent 26px 37px),repeating-linear-gradient(0deg,transparent 0 18px,#b8d5ff18 19px 21px,transparent 22px 31px);mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%)}
+.lobby-city:after{content:"";position:absolute;left:-10%;right:-10%;bottom:-19px;height:53px;background:repeating-linear-gradient(90deg,transparent 0 18%,#9e6dff44 18.3% 18.8%,transparent 19.2% 32%),linear-gradient(180deg,transparent,#4c77ff44);transform:perspective(110px) rotateX(48deg);filter:blur(3px)}
+.lobby-car{font-size:clamp(64px,18vw,96px);filter:drop-shadow(0 10px 9px #000d) drop-shadow(0 0 20px #55aaffaa);bottom:7px;z-index:2}.road-glow{z-index:1;bottom:2px}
+.hero-plate-wrap{margin:8px auto 4px;box-shadow:0 0 0 1px #fff8,0 0 25px #67caffaa,0 0 55px #8755ff77}.hero-plate{min-height:65px;font-size:clamp(30px,8vw,42px);border-radius:9px}.hero-plate-caption{letter-spacing:2px;font-size:8px;color:#c5d6ff}
+.lobby-shortcuts{gap:8px;margin:12px 0}.lobby-shortcuts button{border:1px solid #425d91;border-radius:15px;background:linear-gradient(145deg,#1c2d50,#10182d);box-shadow:inset 0 1px #fff2,0 9px 22px #0006}.lobby-shortcuts button span{filter:drop-shadow(0 0 9px #8d6cff)}.lobby-shortcuts button b{font-size:10px}.lobby-shortcuts button small{font-size:9px;color:#9eb2d8}
+.lobby-mission{border-color:#7b633d;background:linear-gradient(100deg,#322747,#17223b);border-radius:15px;box-shadow:0 0 22px #ffbd4a16}.lobby-mission button{background:linear-gradient(135deg,#7142c2,#315caa);border-color:#a88cff}
+.world-links button{background:#101a31;border-color:#3a527e;color:#c4d6fa}.feature-controls{background:#0d162bd9;border-color:#33486f}
+.rarity-tabs button{border-color:#394e76;background:#0e192e;color:#c4d1eb}.rarity-tabs button.active{background:linear-gradient(135deg,#693fc1,#234f94);border-color:#b69bff;box-shadow:0 0 18px #8c58ff66}
+.spin-options button{background:#101a31;border-color:#3c527b;color:#d4e0ff}.spin-options button.active{background:linear-gradient(135deg,#7143c7,#2759a0);border-color:#b59aff;box-shadow:0 0 16px #8654ff55}
+.crate-grid{gap:10px}.crate{border:1px solid #3c527d;border-radius:18px;background:linear-gradient(145deg,#1b2b49,#0d1426 76%);box-shadow:inset 0 1px #fff2,0 12px 24px #0006}.crate:before{background:radial-gradient(ellipse at 50% 0%,#8d69ff2c,transparent 62%)}
+.crate-icon{height:108px!important;border-radius:14px!important;border-color:#5973a5!important;background:radial-gradient(ellipse at 50% 75%,#5a71b455,transparent 60%),linear-gradient(145deg,#20375d,#0c1427)!important}
+.crate h3{font-size:14px;color:#f1f4ff}.crate .sub{color:#9eafd0}.crate .btn{font-size:11px;padding:10px 7px;border-radius:11px}
+.btn{border-radius:13px;font-weight:950;letter-spacing:.15px}.btn.secondary{background:linear-gradient(145deg,#263a61,#14213b);border:1px solid #5874a7;color:#e4edff;box-shadow:0 5px 16px #0005}.btn.gold{background:linear-gradient(180deg,#ffe18a,#eea52a);color:#291b06;box-shadow:0 4px 0 #9c671b,0 0 19px #ffbd4a44}
+.card,.asset-card,.item,.feature-tile{border:1px solid #3a5079;border-radius:17px;background:linear-gradient(145deg,#1a2a46,#10172a 78%);box-shadow:inset 0 1px #ffffff12,0 10px 24px #0005}
+.item{padding:10px}.inventory{gap:9px}.item .plate{border-color:#c3d2ee;box-shadow:0 0 14px #80aaff44}
+.wheel{border:7px solid #b5a0ff;box-shadow:0 0 0 5px #1c2a4b,0 0 38px #865dff88}.wheel:after{background:linear-gradient(145deg,#fff1c8,#e6a93c);box-shadow:0 0 24px #ffe18caa}.wheel-pointer{color:#ffe28a;text-shadow:0 0 12px #ffbd4a}
+.profile-card{background:radial-gradient(ellipse at 0 0,#6540a944,transparent 60%),linear-gradient(145deg,#1c2c4b,#10172a);border-color:#6555a0}.profile-avatar{border:1px solid #c1a8ff;box-shadow:0 0 25px #865cff77}.profile-track{background:#0a1020}.profile-track i{background:linear-gradient(90deg,#9b69ff,#38d7ff);box-shadow:0 0 16px #8e62ff}.profile-stat{background:linear-gradient(145deg,#1c2d4d,#10172a)}
+.house-scene{background:linear-gradient(180deg,#10264a,#3a2860 65%,#0a1427);border-color:#5574a7}.asset-icon{filter:drop-shadow(0 0 12px #8d75ff)}.shop-product{border-color:#465c8a;background:linear-gradient(145deg,#1d2b49,#10172a)}
+.nav{width:min(100%,560px);border:1px solid #425b8b;border-bottom:0;background:#091226ed;box-shadow:0 -9px 34px #0009,0 0 28px #5e4dff26}.nav button{font-size:9px;letter-spacing:.2px}.nav button.active{color:#e9ddff;text-shadow:0 0 15px #9f72ff}.nav button.active span{filter:drop-shadow(0 0 10px #9b71ff)}
+#caseModal{background:radial-gradient(ellipse at 50% 48%,#38246c 0%,#101b38 46%,#040813 100%)!important}#caseModal .case-topline{color:#e6dcff}#caseModal .case-headline-title{color:#fff;text-shadow:0 0 14px #c28cff,0 0 38px #7c54ff}#caseModal .case-result-host .result{border-color:#8c78c5!important;background:linear-gradient(155deg,#1d3152f7,#0b1429f9 68%,#251747f7)!important}#caseModal .case-close{border-color:#7893c8;background:#10203d}
+@media(max-width:390px){.app{padding-left:11px;padding-right:11px}.stats{gap:6px}.stat{padding:9px 5px}.tabs{gap:5px}.tab{padding:8px 9px;font-size:10px}.crate-grid{gap:8px}.crate{padding:10px}}
+@media(prefers-reduced-motion:reduce){.page.active{animation:none}}
+
+
+/* NEON CITY · layout pass v2 */
+@media(min-width:700px){.app{width:min(100%,760px)}.nav{width:min(100%,760px)}}
+#tabs{display:none!important}
+.app{padding-top:10px;padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+.top{position:relative;display:flex;align-items:center;justify-content:space-between;padding:8px 4px 14px;border-bottom:1px solid #536a9a33}
+.top:after{content:"NEON CITY  /  SEASON 01";position:absolute;right:52px;bottom:15px;font-size:8px;letter-spacing:1.5px;color:#7188b5}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0 16px}
+.stat{min-width:0;min-height:62px;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.stat b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.page{min-height:45vh}
+.page>.section-title:first-child{margin-top:5px;font-size:21px;letter-spacing:.2px}
+#spin .plate-hero{position:relative;overflow:hidden;padding:15px 15px 17px}
+#spin .hero-row{position:relative;z-index:3}
+#spin .hero-title{max-width:330px;font-size:clamp(22px,6vw,30px);font-weight:950}
+#spin .lobby-city{height:clamp(150px,43vw,245px);margin:14px -7px 10px;border-radius:19px}
+#spin .lobby-city:before{background:linear-gradient(90deg,transparent 0 3%,#f3a75caa 3.2% 3.7%,transparent 4% 12%,#a66cffaa 12.2% 12.7%,transparent 13% 25%,#6acbffaa 25.2% 25.7%,transparent 26% 74%,#b07bffaa 74.2% 74.7%,transparent 75% 91%,#5bd5ffaa 91.2% 91.7%,transparent 92%),repeating-linear-gradient(90deg,transparent 0 26px,#9ecbff20 27px 29px,transparent 30px 43px),repeating-linear-gradient(0deg,transparent 0 19px,#b8d5ff1c 20px 22px,transparent 23px 34px);mask-image:linear-gradient(180deg,#000 0%,#000 82%,transparent 100%)}
+#spin .lobby-city:after{height:70px;bottom:-24px;filter:blur(2px);background:repeating-linear-gradient(90deg,transparent 0 14%,#9e6dff66 14.2% 14.8%,transparent 15.1% 26%),linear-gradient(180deg,transparent,#4c77ff66)}
+#spin .lobby-car{font-size:clamp(76px,22vw,126px);bottom:9px;filter:drop-shadow(0 13px 10px #000e) drop-shadow(0 0 24px #55aaffcc)}
+#spin .hero-plate-wrap{width:min(94%,390px);margin:0 auto 5px}
+#spin .hero-plate{min-height:clamp(65px,18vw,82px);font-size:clamp(34px,9vw,49px)}
+#spin .lobby-shortcuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:14px 0}
+#spin .lobby-shortcuts button{min-width:0;min-height:94px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:12px 10px;text-align:left}
+#spin .lobby-shortcuts button span{font-size:22px}
+#spin .lobby-shortcuts button b{font-size:11px;line-height:1.2}
+#spin .lobby-shortcuts button small{font-size:9px;line-height:1.25}
+#spin .lobby-mission{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px}
+#spin .lobby-mission>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+#spin .lobby-mission button{flex:0 0 auto;min-height:38px;padding:8px 11px;font-size:10px}
+#spin .world-links{display:flex;gap:7px;align-items:center;overflow-x:auto;white-space:nowrap;padding:12px 0 4px;scrollbar-width:none}
+#spin .world-links span{flex:0 0 auto;font-size:8px;letter-spacing:1px;color:#788db6}
+#spin .world-links button{flex:0 0 auto;border-radius:9px;padding:8px 10px;font-size:10px}
+#spin .feature-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:10px;border-radius:13px}
+#spin .feature-controls .sub{font-size:10px}
+#spin .feature-controls button{border-radius:9px;padding:7px 9px;font-size:10px}
+#spin .section-title{margin-top:22px}
+#spin .rarity-tabs,#garage .rarity-tabs{display:flex;overflow-x:auto;gap:7px;padding:2px 0 9px;scrollbar-width:none}
+#spin .rarity-tabs button,#garage .rarity-tabs button{flex:0 0 auto;border-radius:10px;padding:9px 11px;font-size:10px}
+#spin .spin-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+#spin .spin-options button{min-height:40px;border-radius:11px}
+#spin .speed-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 13px;border-radius:12px;background:#111d36;border:1px solid #405982;color:#dbe7ff}
+#spin .crate-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+#spin .crate{min-width:0;padding:12px}
+#spin .crate-icon{height:clamp(90px,27vw,140px)!important}
+#spin .crate .odds{min-height:28px;font-size:9px;line-height:1.35}
+#garage>.row{padding:12px 13px;border:1px solid #3b527b;border-radius:14px;background:#111d34;margin:10px 0}
+#inventory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+#inventory .item{min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:9px;padding:12px}
+#inventory .item .rarity{align-self:flex-start}
+#inventory .item .plate{width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:clamp(17px,5vw,25px);padding:7px 5px}
+#inventory .item>strong{text-align:center;font-size:15px}
+#inventory .item .row{display:grid!important;grid-template-columns:1fr 1fr;gap:6px!important}
+#inventory .item .row button{min-width:0;padding:9px 5px!important;font-size:10px!important;white-space:nowrap}
+#inventory .item .row button:first-child{grid-column:1/-1}
+#roulette .card{padding:16px;border-radius:20px}
+#rouletteSelected{background:radial-gradient(ellipse at 50% 20%,#59358a66,transparent 55%),linear-gradient(150deg,#1a2c4d,#0c1428);border-color:#705ba5;box-shadow:0 15px 36px #0008,0 0 28px #8055ff20}
+#rouletteSelected>.sub:first-child{font-size:9px;letter-spacing:2px;color:#c0aaff}
+#rouletteSelected>.plate{width:min(100%,340px);margin:15px auto 10px;min-height:76px;font-size:clamp(30px,8vw,42px);box-shadow:0 0 26px var(--rarity-glow,#a78bfa)}
+#rouletteSelected .wheel-wrap{margin:18px auto}
+#rouletteSelected .wheel{width:min(68vw,270px);height:min(68vw,270px)}
+#rouletteSelected>p.sub{padding:12px;border-radius:12px;background:#080f20aa;line-height:1.5}
+#rouletteChance{font-weight:900;color:#d9c9ff;font-size:13px}
+#rouletteStart{min-height:52px;font-size:14px;letter-spacing:.7px}
+#profile .profile-card{padding:17px;border-radius:21px}
+#profile .profile-head{gap:12px;align-items:center}
+#profile .profile-avatar{width:58px;height:58px;font-size:24px}
+#profile .profile-head>div:nth-child(2){min-width:0;flex:1}
+#profile .profile-head b{font-size:15px}
+#profile .profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+#profile .profile-stat{padding:14px 12px;min-width:0}
+#profile .profile-stat small{font-size:9px;letter-spacing:.7px;color:#9eb2d8}
+#profile .profile-stat b{display:block;margin-top:7px;font-size:clamp(18px,5vw,24px);overflow-wrap:anywhere}
+#profile .profile-track{height:9px;border-radius:10px;overflow:hidden;margin-top:9px}
+#profile .profile-track i{height:100%;border-radius:10px}
+#profile #profileRarities,#profile #talismansCollection{padding:15px}
+.nav{padding:8px 8px calc(8px + env(safe-area-inset-bottom));height:auto;min-height:67px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+.nav button{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 2px;border-radius:12px;font-size:9px;line-height:1.15}
+.nav button span{font-size:19px;line-height:1.1}
+.nav button.active{background:linear-gradient(180deg,#6e4ab033,#345da033);border:1px solid #8e79d755}
+.page .card,.page .asset-card{margin-bottom:10px}
+#caseModal .case-modal-inner{gap:clamp(10px,3vh,20px)}
+#caseModal .case-scene{min-height:clamp(210px,37vh,340px);justify-content:center}
+#caseModal .case-big{font-size:clamp(120px,34vw,190px)}
+@media(max-width:370px){#inventory{grid-template-columns:1fr}.nav button{font-size:8px}#spin .lobby-shortcuts button{padding:10px 7px}#spin .lobby-shortcuts button b{font-size:10px}}
+@media(min-width:600px){#inventory{grid-template-columns:repeat(3,minmax(0,1fr))}#spin .crate-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* NEON CITY · free visual polish */
+.lobby-car{display:flex;align-items:flex-end;justify-content:center;width:min(78%,390px);height:100px;left:50%;transform:translateX(-50%);font-size:0!important}
+.lobby-car .car-art{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 9px #000d) drop-shadow(0 0 20px #55aaffaa);animation:heroCarFloat 4s ease-in-out infinite}
+.lobby-car .car-art-large{width:100%;height:100%}
+@keyframes heroCarFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+#cars .asset-icon{display:flex;align-items:center;justify-content:center;min-height:145px;overflow:hidden;border-radius:16px;background:radial-gradient(ellipse at 50% 80%,#7654d655,transparent 65%),linear-gradient(145deg,#172b4b,#0a1225)}
+#cars .asset-icon .car-art{width:100%;height:145px;filter:drop-shadow(0 9px 10px #000b) drop-shadow(0 0 16px #75aaff66)}
+#spin .lobby-city{isolation:isolate}
+#spin .lobby-city .lobby-car{z-index:3}
+@media(prefers-reduced-motion:reduce){.lobby-car .car-art{animation:none}}
+
+
+/* CINEMATIC CASE REVEAL · no external assets */
+#caseModal{background:radial-gradient(ellipse at 50% 42%,#182b4fee 0,#080e1cf8 48%,#01030afc 100%)}
+#caseModal:before{content:'';position:absolute;inset:-20%;pointer-events:none;background:conic-gradient(from 0deg at 50% 42%,transparent 0 34deg,#91baff0d 42deg,transparent 58deg 118deg,#c59bff12 132deg,transparent 150deg 240deg,#7ce8ff0b 260deg,transparent 280deg);animation:caseSkyTurn 18s linear infinite}
+#caseModal .case-modal-inner{z-index:1}
+#caseModal .case-scene{position:relative;min-height:320px;justify-content:center;isolation:isolate;gap:15px}
+#caseModal .case-scene:before,#caseModal .case-scene:after{content:'';position:absolute;z-index:-1;top:-35px;width:42%;height:280px;pointer-events:none;filter:blur(16px);opacity:0;transform-origin:top center}
+#caseModal .case-scene:before{left:5%;background:linear-gradient(180deg,#b9d8ff55,transparent 90%);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);transform:rotate(12deg)}
+#caseModal .case-scene:after{right:5%;background:linear-gradient(180deg,#c7a2ff55,transparent 90%);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);transform:rotate(-12deg)}
+#caseModal.opening .case-scene:before,#caseModal.opening .case-scene:after{opacity:1;animation:caseSpotlight 1.8s ease-in-out infinite alternate}
+#caseModal .case-big{position:relative;z-index:1}
+#caseModal .case-big:after{content:'';position:absolute;left:15%;right:15%;bottom:5%;height:12px;border-radius:50%;background:#a9caff66;filter:blur(12px);box-shadow:0 0 35px 12px #9b7aff66}
+#caseModal.opening .case-big .car-art{animation:caseCarIgnition 2.35s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 10px #d4e5ff) drop-shadow(0 0 38px #8e78ff)}
+#caseModal .case-eyebrow{color:#dbe9ff;text-shadow:0 0 16px #91baff}
+#caseModal .case-pedestal{height:28px;background:linear-gradient(90deg,transparent,#9bc7ff88,#c6a0ff88,transparent);box-shadow:0 0 28px #8b82ff,0 0 70px #659dff66}
+#caseModal .case-open-copy{font-weight:800;letter-spacing:.04em;text-shadow:0 0 16px #9dbdff88;min-height:22px}
+#caseModal .case-result-host .result.show{animation:caseCardImpact .85s cubic-bezier(.16,1,.3,1) both}
+#caseModal .result.show .plate{animation:casePlateFlash .9s ease-out both}
+#caseModal.opening .case-headline{opacity:0;transform:translateY(-8px)}
+#caseModal .case-headline{transition:opacity .35s ease,transform .35s ease}
+#caseModal:not(.opening) .case-headline{opacity:1;transform:none}
+@keyframes caseSkyTurn{to{transform:rotate(360deg)}}
+@keyframes caseSpotlight{from{opacity:.35;filter:blur(20px)}to{opacity:.9;filter:blur(9px)}}
+@keyframes caseCarIgnition{0%{transform:translateY(35px) scale(.72) rotate(-5deg);filter:brightness(.5) blur(4px)}35%{transform:translateY(-9px) scale(1.12) rotate(2deg);filter:brightness(1.8) blur(0)}60%{transform:translateY(-3px) scale(1.04) rotate(-1deg)}100%{transform:translateY(0) scale(1) rotate(0);filter:brightness(1.15) drop-shadow(0 0 35px #a5baff)}}
+@keyframes caseCardImpact{0%{opacity:0;transform:translateY(48px) scale(.82);filter:blur(10px)}65%{opacity:1;transform:translateY(-7px) scale(1.025);filter:blur(0)}100%{transform:none}}
+@keyframes casePlateFlash{0%{filter:brightness(2.2);box-shadow:0 0 0 0 var(--rarity-glow)}100%{filter:brightness(1);box-shadow:0 0 35px var(--rarity-glow,#a78bfa)}}
+@media(max-height:700px){#caseModal .case-scene{min-height:235px;gap:8px}}
+@media(prefers-reduced-motion:reduce){#caseModal:before{animation:none}#caseModal.opening .case-big .car-art{animation:none;filter:drop-shadow(0 0 24px #a5baff)}}
+
+
+/* Visible number reel during case opening */
+#caseReel{display:none;width:min(100%,390px);margin:2px auto 4px;position:relative;z-index:2}
+#caseModal.opening #caseReel{display:block;animation:reelIn .35s ease both}
+#caseReel .reel-caption{font-size:10px;letter-spacing:2px;color:#aebfe0;font-weight:900;margin-bottom:8px}
+#caseReel .reel-window{height:196px;overflow:hidden;position:relative;border:1px solid #6f82a9;border-radius:18px;background:linear-gradient(90deg,#0b1425,#1b2b48 50%,#0b1425);box-shadow:inset 0 0 32px #000b,0 0 30px #8e6cff44}
+#caseReel .reel-window:before{content:'';position:absolute;z-index:3;left:0;right:0;top:50%;height:64px;transform:translateY(-50%);border:2px solid #bba0ff;border-left:0;border-right:0;background:#9c7aff12;box-shadow:0 0 18px #9b75ff55;pointer-events:none}
+#caseReel .reel-track{position:absolute;top:0;left:0;right:0;transition:transform .18s cubic-bezier(.15,.7,.15,1);will-change:transform}
+#caseReel .reel-row{height:64px;display:flex;align-items:center;justify-content:center;gap:10px;color:#8796b3;font-size:23px;font-weight:950;letter-spacing:1px;opacity:.48;filter:blur(.25px)}
+#caseReel .reel-row .reel-region{font-size:13px;border-left:1px solid #66728b;padding-left:9px}
+#caseReel .reel-row.active{color:#fff;font-size:31px;opacity:1;text-shadow:0 0 14px #b69aff}
+#caseReel .reel-row.active .reel-region{font-size:16px}
+#caseReel .reel-status{font-size:11px;color:#c9d7f0;margin-top:8px;font-weight:750}
+#caseModal.reel-stopped #caseReel{animation:reelStop .55s ease both}
+@keyframes reelIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes reelStop{0%{filter:brightness(1)}35%{filter:brightness(2)}100%{filter:brightness(1)}}
+@media(max-height:740px){#caseReel .reel-window{height:164px}#caseReel .reel-row{height:54px}#caseReel .reel-window:before{height:54px}}
+</style><script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
 <body>
 <div class="toast" id="toast"></div>
+<div class="connection-status" id="connectionStatus" role="status" aria-live="polite"><b>Проверка подключения…</b>Ожидаем ответ Telegram и игрового сервера.</div>
 <main class="app">
  <header class="top"><div><div class="brand">КРУТИ <span>НОМЕРА</span></div><div class="sub">Коллекционируй редкость</div></div><div class="avatar">К</div></header>
- <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">240 364 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
- <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="shop">Магазин</button></nav>
+ <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">1 000 000 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
+ <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="roulette">🎡 Рулетка</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="home">Дом</button><button class="tab" data-page="cars">Авто</button><button class="tab" data-page="shop">Магазин</button><button class="tab" data-page="bonuses">Бонусы</button><button class="tab" data-page="history">История</button><button class="tab" data-page="profile">Профиль</button></nav>
  <section class="page active" id="spin">
-  <div class="hero"><div class="hero-row"><span class="rarity rare">СЕЗОННЫЙ БОНУС</span><span class="sub">Удача ×<b id="luck">1,0</b></span></div><h2 style="margin:12px 0 2px">Открой свой номер</h2><div class="sub">Каждый контейнер — шанс найти редкий экземпляр</div></div>
-  <div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
-  <div class="section-title">Контейнеры</div>
+  <div class="hero plate-hero rarity-glow common"><div class="hero-row"><span class="hero-kicker">Крути номера · сезон</span><span class="sub">Бонус талисмана ×<b id="luck">1,0</b></span></div><div class="hero-title">Твой следующий номер уже близко</div><div class="hero-sub">ТВОЙ ГОРОД · ТВОИ ПРАВИЛА · ТВОЯ КОЛЛЕКЦИЯ</div><div class="lobby-city" aria-hidden="true"><div class="city-lights"></div><div class="lobby-car">🏎️</div><div class="road-glow"></div></div><div class="hero-plate-wrap"><div class="hero-plate"><span>А777АА</span><span class="plate-region">77<small>RUS</small></span></div></div><div class="hero-plate-caption">СОБЕРИ СВОЮ КОЛЛЕКЦИЮ</div></div>
+  <div class="lobby-shortcuts"><button data-page="roulette"><span>🎡</span><b>Рулетка риска</b><small>Испытай удачу</small></button><button data-page="garage"><span>🚘</span><b>Мой гараж</b><small>Коллекция номеров</small></button><button data-page="bonuses"><span>🎁</span><b>Награды</b><small>Забери бонус</small></button></div><div class="lobby-mission"><div><small>ЦЕЛЬ СЕГОДНЯ</small><b>Открой 3 контейнера</b><span>Забери награду в бонусном центре</span></div><button data-page="bonuses">К заданиям&nbsp; ›</button></div><div class="world-links"><span>МИР ИГРЫ</span><button data-page="market">🏷️ Рынок</button><button data-page="rating">🏆 Рейтинг</button><button data-page="home">🏡 Дом</button><button data-page="cars">🚗 Авто</button><button data-page="shop">⭐ Магазин</button><button data-page="history">📜 История</button></div><div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
+  <div class="section-title">Выбери редкость</div><div class="rarity-tabs" id="rarityTabs"><button class="active" data-rarity="any">✨ Любые</button><button data-rarity="unusual">🟢 Необычные</button><button data-rarity="rare">🔵 Редкие</button><button data-rarity="epic">🟣 Эпические</button><button data-rarity="legend">🟡 Легендарные</button><button data-rarity="myth">💗 Мифические</button><button data-rarity="secret">🌌 Секретные</button></div><div class="spin-options" id="spinOptions"><button class="active" data-count="1">×1</button><button data-count="3">×3</button><button data-count="5" title="Только VIP">👑 ×5 VIP</button></div><button class="speed-toggle" id="speedToggle" type="button"><span>⚡ Ускоренная прокрутка</span><span id="speedState">ВЫКЛ</span></button><div class="section-title">Контейнеры</div>
   <div class="crate-grid">
-   <article class="crate"><div class="crate-icon">📦</div><h3>Обычный</h3><div class="sub">Легендарный и выше: 0,0047%</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('common')">2 млн ₽ · открыть</button></article>
-   <article class="crate"><div class="crate-icon">🟦</div><h3>Редкий</h3><div class="sub">Легендарный и выше: 0,15%</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">7 млн ₽ · открыть</button></article>
-   <article class="crate"><div class="crate-icon">🟪</div><h3>Эпический</h3><div class="sub">Легендарный и выше: 2,84%</div><div class="meter"><i style="width:75%"></i></div><button class="btn secondary" onclick="spin('epic')">19 млн ₽ · открыть</button></article>
-   <article class="crate"><div class="crate-icon">👑</div><h3>Легендарный</h3><div class="sub">Повышенный шанс редких номеров</div><div class="meter"><i style="width:91%"></i></div><button class="btn gold" onclick="spin('legend')">45 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="any"><div class="crate-icon">📦</div><h3>Любые</h3><div class="sub">Все категории номеров</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:28%"></i></div><button class="btn secondary" onclick="spin('any')">50 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="unusual"><div class="crate-icon">🟢</div><h3>Необычные</h3><div class="sub">Необычные и выше</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:38%"></i></div><button class="btn secondary" onclick="spin('unusual')">100 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="rare"><div class="crate-icon">🔵</div><h3>Редкие</h3><div class="sub">Редкие и выше</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:52%"></i></div><button class="btn secondary" onclick="spin('rare')">250 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="epic"><div class="crate-icon">🟣</div><h3>Эпические</h3><div class="sub">Эпические и выше</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:68%"></i></div><button class="btn secondary" onclick="spin('epic')">500 000 ₽ · открыть</button></article>
+   <article class="crate" data-tier="legend"><div class="crate-icon">🟡</div><h3>Легендарные</h3><div class="sub">Легендарные и выше</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:78%"></i></div><button class="btn gold" onclick="spin('legend')">1 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="myth"><div class="crate-icon">💗</div><h3>Мифические</h3><div class="sub">Мифические и выше</div><div class="sub odds">Номер гарантирован · редкость по шансам кейса</div><div class="meter"><i style="width:88%"></i></div><button class="btn gold" onclick="spin('myth')">2,5 млн ₽ · открыть</button></article>
+   <article class="crate" data-tier="secret"><div class="crate-icon">🌌</div><h3>Секретные</h3><div class="sub">Только секретные</div><div class="sub odds">Номер гарантирован · только секретная редкость</div><div class="meter"><i style="width:96%"></i></div><button class="btn gold" onclick="spin('secret')">5 млн ₽ · открыть</button></article>
   </div>
-  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div></div>
-  <div class="card"><div class="row"><b>Энергия</b><b id="energy">10 / 10 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>1 открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ +10 энергии для теста</button><div class="notice">Только для тестирования. Энергия восстанавливается до 10/10.</div></div>
+  <div class="result" id="result"><div class="sub">ТВОЯ НАХОДКА</div><div class="plate"><span class="mainnum" id="wonplate">А777АА</span><span class="region"><span id="wonregion">777</span><span class="rus">RUS 🇷🇺</span></span></div><div id="wonrarity" class="rarity epic">ЭПИЧЕСКИЙ</div><h2 id="wonvalue">Стоимость номера: 125 000 ₽</h2><div class="sub" id="wonmsg">Номер добавлен в гараж</div><div class="row" style="gap:8px;margin-top:12px"><button class="btn gold" id="sellWonNumber" type="button" onclick="window.sellWonNumberNow(event)" style="flex:1;padding:11px;font-size:14px;touch-action:manipulation" disabled>Продать</button><button class="btn secondary" id="listWonNumber" style="flex:1;padding:11px;font-size:14px" disabled>На рынок</button></div></div>
+  <div class="card"><div class="row"><b>Энергия</b><b id="energy">25 / 25 ⚡</b></div><div class="meter"><i id="energybar" style="width:100%"></i></div><div class="energy"><span>Восстанавливается со временем</span><span>Бесплатное открытие = 1 ⚡</span></div><button class="btn" id="quickspin" onclick="spin('free')">КРУТИТЬ · 1 ⚡</button><button class="btn secondary" id="testEnergy" type="button" style="margin-top:10px">⚡ Пробная энергия +10</button><div class="notice">Пробная энергия доступна раз в час.</div></div>
  </section>
- <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров</span><b id="garagecount">0 номеров</b></div><div class="inventory" id="inventory"></div><div class="card"><b>Апгрейд номеров</b><p class="sub">Выбери два номера в гараже — в полной версии можно будет объединять их и повышать редкость.</p><button class="btn secondary" onclick="toast('Апгрейд появится в следующем этапе разработки')">Перейти к апгрейду</button></div></section>
- <section class="page" id="market"><div class="section-title">Рынок игроков</div><div class="sub">Демо-лотами можно торговать внутри прототипа</div><div class="card"><div class="listrow"><div><b>А777АА · 777</b><div class="sub">Легендарный номер</div></div><b>8 500 000 ₽</b></div><div class="listrow"><div><b>М001ММ · 99</b><div class="sub">Эпический номер</div></div><b>1 200 000 ₽</b></div><div class="listrow"><div><b>О555ОО · 178</b><div class="sub">Редкий номер</div></div><b>420 000 ₽</b></div><button class="btn secondary" onclick="toast('Подключение реального рынка — после настройки сервера')">Выставить свой номер</button></div></section>
- <section class="page" id="rating"><div class="section-title">Рейтинг игроков</div><div class="card"><div class="listrow"><span>🥇 АвтоКороль</span><b>98 400 000 ₽</b></div><div class="listrow"><span>🥈 NumberOne</span><b>76 120 000 ₽</b></div><div class="listrow"><span>🥉 Turbo777</span><b>51 900 000 ₽</b></div><div class="listrow"><span>4. Ты</span><b id="myrating">240 364 ₽</b></div></div></section>
- <section class="page" id="shop"><div class="section-title">Магазин</div><div class="hero"><span class="pill">ОДИН РАЗ</span><h2>Стартовый набор</h2><p class="sub">Бонусные монеты, энергия и редкий номер</p><div class="price">19 ★</div><button class="btn gold" onclick="toast('Платежи Telegram Stars подключаются через бота')">Купить за ★ 19</button></div><div class="card"><b>Первая покупка — всё ×2</b><p class="sub">Удвоенные игровые награды при первой покупке за Telegram Stars.</p></div><div class="card"><div class="listrow"><b>Удача ×2 на 24 часа</b><b>49 ★</b></div><div class="listrow"><b>Энергия +10</b><b>25 ★</b></div><div class="listrow"><b>VIP на 7 дней</b><b>99 ★</b></div></div><div class="notice">В прототипе покупки отключены. Рубли и монеты — виртуальные игровые единицы.</div></section>
+ <section class="page" id="garage"><div class="section-title">Мой гараж</div><div class="row"><span class="sub">Коллекция номеров · выбери номер для рулетки</span><b id="garagecount">0 номеров</b></div><div class="rarity-tabs garage-filters"><button class="active" data-garage-filter="all">Все</button><button data-garage-filter="common">Обычные</button><button data-garage-filter="unusual">Необычные</button><button data-garage-filter="rare">Редкие</button><button data-garage-filter="epic">Эпические</button><button data-garage-filter="legend">Легендарные</button><button data-garage-filter="myth">Мифические</button><button data-garage-filter="secret">Секретные</button></div><div class="inventory" id="inventory"></div></section>
+ <section class="page" id="roulette">
+<div class="section-title">🎡 Рулетка улучшений</div>
+<div class="card" id="rouletteEmpty"><b>Выбери номер в гараже</b><p class="sub">Нажми «В рулетку» на карточке номера. При успехе он заменится номером следующей редкости. При неудаче исходный номер сгорит.</p></div>
+<div class="card" id="rouletteSelected" style="display:none;text-align:center">
+<div class="sub">ТВОЙ НОМЕР НА КОНУ</div><div class="plate"><span class="mainnum" id="roulettePlate">А777АА</span><span class="region"><span id="rouletteRegion">77</span><span class="rus">RUS</span></span></div>
+<span class="rarity common" id="rouletteRarity">ОБЫЧНЫЙ</span><div class="row" style="margin:12px 0"><span class="sub">Номинал номера</span><b id="rouletteValue">50 000 ₽</b></div>
+<div class="wheel-wrap"><div class="wheel-pointer">▼</div><div class="wheel" id="upgradeWheel"></div></div><div class="sub" id="rouletteChance"></div>
+<p class="sub">При запуске номер сгорает в любом случае. Успех даёт один номер следующей редкости; при неудаче награды нет.</p>
+<button class="btn gold" id="rouletteStart">🎡 Запустить рулетку</button>
+<div class="result" id="rouletteResult" style="display:none"><h2 id="rouletteOutcome"></h2>
+<div class="plate" id="roulettePrizePlate" style="display:none"><span class="mainnum" id="roulettePrizeNumber"></span><span class="region"><span id="roulettePrizeRegion"></span><span class="rus">RUS</span></span></div>
+<div id="roulettePrizeRarity" class="rarity" style="display:none"></div><h3 id="roulettePrizeValue"></h3><div class="sub" id="rouletteOutcomeText"></div>
+<div class="row" id="roulettePrizeActions" style="gap:8px;margin-top:12px;display:none"><button class="btn secondary" id="rouletteKeep" style="flex:1;padding:10px;font-size:13px">Оставить</button><button class="btn gold" id="rouletteSell" style="flex:1;padding:10px;font-size:13px">Продать</button><button class="btn secondary" id="rouletteMarket" style="flex:1;padding:10px;font-size:13px">На рынок</button></div>
+<button class="btn secondary" id="rouletteClose" style="margin-top:10px">Понятно</button></div></div></section>
+<section class="page" id="market">
+ <div class="section-title">Рынок номеров</div>
+ <div class="card">
+  <div class="row"><b>🏷️ Выставить свой номер</b><span class="rarity rare">P2P</span></div>
+  <div class="sub" id="marketSelectedLabel">Выбери номер в гараже кнопкой «Продать»</div>
+  <input id="marketPrice" type="number" min="1" step="1" placeholder="Цена продажи в ₽" style="width:100%;margin:12px 0;padding:13px;border-radius:12px;background:#171421;color:#fff;border:1px solid #49405f">
+  <button class="btn gold" id="marketListBtn" disabled>Выставить на рынок</button>
+ </div>
+ <div class="sub" style="margin:8px 2px 12px">После успешной покупки продавец получает 93% указанной цены. Комиссия рынка — 7%.</div><div class="section-title">Активные предложения</div>
+ <div class="card" id="marketListings"><div class="sub">Загружаем предложения игроков…</div></div>
+</section>
+ <section class="page" id="rating"><div class="section-title">Рейтинг игроков</div><div class="card"><div class="podium"><div class="podium-person"><div class="podium-rank">🥈</div><div class="podium-avatar">N</div><div class="podium-name">NumberOne</div><div class="podium-score">76,1 млн ₽</div></div><div class="podium-person first"><div class="podium-rank">👑</div><div class="podium-avatar">A</div><div class="podium-name">АвтоКороль</div><div class="podium-score">98,4 млн ₽</div></div><div class="podium-person"><div class="podium-rank">🥉</div><div class="podium-avatar">T</div><div class="podium-name">Turbo777</div><div class="podium-score">51,9 млн ₽</div></div></div><div class="listrow"><b>ТВОЯ ПОЗИЦИЯ</b><b id="myrating">1 000 000 ₽</b></div><div class="sub">Демо-рейтинг. Онлайн-таблица появится после серверной синхронизации.</div></div></section>
+ <section class="page" id="home"><div class="section-title">Мой дом</div><div class="house-scene"><div class="house-emoji" id="houseEmoji">🛖</div></div><div class="card"><div class="row"><div><b id="houseName">Старый сарай</b><div class="sub" id="houseLevel">Уровень 1 · Начало пути</div></div><span class="rarity epic">НЕДВИЖИМОСТЬ</span></div><p class="sub" id="houseDesc">Небольшое укрытие. Улучшай его, чтобы построить дом мечты.</p><div class="row"><span class="sub">Следующий уровень</span><b class="asset-price" id="houseCost">100 000 ₽</b></div><button class="btn gold" id="upgradeHouse">Улучшить дом</button></div></section>
+<section class="page" id="cars"><div class="section-title">Автосалон и гараж</div><div class="card"><div class="row"><b>Мой гараж</b><span id="carCount" class="rarity rare">0 машин</span></div><div id="carCollection" class="sub">Пока здесь пусто — выбери первую машину ниже.</div></div><div class="section-title">Автосалон</div><div class="asset-card"><div class="asset-icon">🚗</div><div class="row"><b>Городской седан</b><span class="asset-price">300 000 ₽</span></div><div class="sub">Надёжная первая машина для коллекции.</div><button class="btn secondary" onclick="buyCar('Городской седан','🚗',300000)">Купить машину</button></div><div class="asset-card"><div class="asset-icon">🏎️</div><div class="row"><b>Спорткар</b><span class="asset-price">2 500 000 ₽</span></div><div class="sub">Быстрый и заметный автомобиль.</div><button class="btn secondary" onclick="buyCar('Спорткар','🏎️',2500000)">Купить машину</button></div><div class="asset-card"><div class="asset-icon">🚙</div><div class="row"><b>Премиум внедорожник</b><span class="asset-price">7 000 000 ₽</span></div><div class="sub">Комфорт и статус.</div><button class="btn gold" onclick="buyCar('Премиум внедорожник','🚙',7000000)">Купить машину</button></div></section>
+<section class="page" id="shop"><div class="section-title">Магазин Stars</div><div class="hero"><div class="hero-row"><span class="pill">TELEGRAM STARS</span><span class="price">★</span></div><h2>Прокачай стиль игры</h2><p class="sub">Покупки проходят через официальный платёжный интерфейс Telegram. После подтверждения предмет выдаётся автоматически.</p></div><div id="starsCatalog"><div class="sub">Загружаем каталог…</div></div><div class="section-title">Моя косметика</div><div class="card" id="cosmeticsCollection"><div class="sub">Пока нет косметических предметов.</div></div><div class="notice">Все платежи — в Telegram Stars (XTR). Виртуальная валюта игры не выводится и не обменивается на деньги.</div></section>
+
+ <section class="page" id="bonuses">
+  <div class="section-title">Бонусный центр</div>
+  <div class="hero"><div class="hero-row"><span class="pill">ЕЖЕДНЕВНАЯ НАГРАДА</span><span id="streakLabel" class="sub">Серия: 0 дней</span></div><h2 style="margin:12px 0 4px">Забирай награду каждый день</h2><div class="sub">Чем дольше серия входов, тем больше награда.</div><div class="daily-streak" id="streakDays"></div><button class="btn gold" id="dailyClaim">Забрать ежедневный бонус</button></div>
+  <div class="section-title">Колесо удачи</div><div class="card"><div class="wheel-wrap"><div class="wheel-pointer">▼</div><div class="wheel" id="luckWheel"></div></div><div class="sub" style="text-align:center">Одно бесплатное вращение в день. Призы начисляются автоматически.</div><button class="btn" id="wheelSpin">КРУТИТЬ КОЛЕСО</button><div class="sub" id="wheelResult" style="text-align:center;margin-top:10px">Попробуй удачу!</div></div>
+  <div class="section-title">Ежедневные задания</div><div class="card" id="dailyTasks"><div class="task-line"><span class="task-icon">🎰</span><div style="flex:1"><b>Открой 3 контейнера</b><div class="sub" id="spinTaskProgress">0 / 3 · Награда: 250 монет + 25 000 ₽</div></div><button class="btn secondary" id="claimSpinTask" disabled>Забрать</button></div><div class="task-line"><span class="task-icon">🎡</span><div style="flex:1"><b>Испытай колесо удачи</b><div class="sub" id="wheelTaskProgress">0 / 1 · Награда: 100 монет + 10 000 ₽</div></div><button class="btn secondary" id="claimWheelTask" disabled>Забрать</button></div></div>
+  <div class="section-title">Промокод</div><div class="card"><div class="sub" style="margin-bottom:9px">Введи код и получи бонус на баланс или монеты.</div><div class="promo-row"><input id="promoCode" maxlength="32" placeholder="Например, START777" autocomplete="off"><button class="btn gold" id="redeemPromo" style="width:auto;padding:10px 14px">Активировать</button></div></div>
+ </section>
+ <section class="page" id="profile">
+ <div class="section-title">Профиль игрока</div>
+ <div class="card profile-card">
+  <div class="profile-head"><div class="profile-avatar" id="profileAvatar">К</div><div><b id="profileName">Коллекционер номеров</b><div class="sub" id="profileStatus">Начинающий коллекционер</div></div><span class="rarity epic" id="profileLevel">УРОВЕНЬ 1</span></div>
+  <div class="profile-xp"><div class="row"><span class="sub">Прогресс коллекционера</span><b id="profileXpLabel">0 / 10 номеров</b></div><div class="profile-track"><i id="profileXpBar"></i></div></div>
+ </div>
+ <div class="profile-grid">
+  <div class="card profile-stat"><small>НОМЕРОВ В ГАРАЖЕ</small><b id="profileNumbers">0</b></div>
+  <div class="card profile-stat"><small>СТОИМОСТЬ КОЛЛЕКЦИИ</small><b id="profileValue">0 ₽</b></div>
+  <div class="card profile-stat"><small>РЕДКИЕ И ВЫШЕ</small><b id="profileRare">0</b></div>
+  <div class="card profile-stat"><small>СЕКРЕТНЫЕ</small><b id="profileSecret">0</b></div>
+ </div>
+ <div class="section-title">Состав коллекции</div>
+ <div class="card" id="profileRarities"></div>
+ <div class="section-title">Талисманы удачи</div>
+ <div class="card" id="talismansCollection"><div class="sub">Загружаем талисманы…</div></div>
+ <div class="section-title">Аккаунт</div>
+ <div class="card"><div class="listrow"><span class="sub">Баланс</span><b id="profileBalance">0 ₽</b></div><div class="listrow"><span class="sub">Монеты</span><b id="profileCoins">0 ◈</b></div><div class="listrow"><span class="sub">Энергия</span><b id="profileEnergy">0 / 25</b></div><div class="listrow"><span class="sub">VIP</span><b id="profileVip">Не активен</b></div></div>
+</section>
+<section class="page" id="history"><div class="section-title">История выпадений</div><div class="sub">Последние 25 результатов открытий — включая пустые кейсы.</div><div class="card" id="spinHistory"><div class="sub">История пока пуста. Открой первый контейнер!</div></div><div class="section-title">История покупок</div><div class="sub">Покупки в Telegram Stars.</div><div class="card" id="purchaseHistory"><div class="sub">Покупок пока нет.</div></div></section>
 </main>
-<nav class="nav"><button class="active" data-page="spin"><span>▤</span>Крутить</button><button data-page="garage"><span>⌂</span>Гараж</button><button data-page="market"><span>▣</span>Рынок</button><button data-page="rating"><span>♜</span>Рейтинг</button><button data-page="shop"><span>▢</span>Магазин</button></nav>
+<nav class="nav"><button class="active" data-page="spin"><span>⌂</span>Главная</button><button data-page="garage"><span>🚘</span>Гараж</button><button data-page="roulette"><span>🎡</span>Рулетка</button><button data-page="bonuses"><span>🎁</span>События</button><button data-page="profile"><span>👤</span>Профиль</button></nav>
+<div id="caseModal" aria-modal="true" role="dialog" aria-label="Открытие кейса"><div class="case-modal-inner"><div class="case-topline"><span class="case-brand-mark">♛</span><span>КРУТИ НОМЕРА</span><span class="case-topline-tag">PREMIUM DROP</span></div><button class="case-close" id="caseClose" aria-label="Закрыть" type="button">×</button><div class="case-headline"><div class="case-headline-title">Поздравляем!</div><div class="case-headline-sub">Вы выиграли номер:</div></div><div id="caseReel" aria-live="polite"><div class="reel-caption">ВАШ НОМЕР НА ЛИНИИ ВЫПАДЕНИЯ</div><div class="reel-window"><div class="reel-track" id="caseReelTrack"></div></div><div class="reel-status" id="caseReelStatus">Запускаем барабан…</div></div><div class="case-scene" id="caseScene"><div class="case-eyebrow">ВАША НАГРАДА</div><div class="case-big" id="caseBig">📦</div><div class="case-pedestal"></div><div class="case-open-copy" id="caseOpenCopy">Автомобиль уже в пути…</div></div><div class="case-result-host" id="caseResultHost"></div><div class="case-footer-glow">ВАШ СТИЛЬ. ВАШ НОМЕР. ВАША ИСТОРИЯ.</div></div></div>
 <script>
+const tg = window.Telegram?.WebApp;
+try { tg?.ready(); tg?.expand(); } catch (_) {}
 const tgUserId = (() => {
- try { return window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'local'; }
+ try { return tg?.initDataUnsafe?.user?.id || 'local'; }
  catch (_) { return 'local'; }
 })();
 const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
-const DEFAULT_STATE = {rub:240364,coins:1250,stars:0,energy:10,garage:[]};
+const tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';
+let serverMode = false;
+function connectionStatus(title, message, kind='error') {
+ const el=document.getElementById('connectionStatus');
+ if(!el)return;
+ el.className='connection-status '+kind;
+ el.innerHTML='<b>'+title+'</b>'+message;
+}
+function setGameActionsEnabled(enabled) {
+ document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.asset-card .btn,#marketListBtn').forEach(b=>b.disabled=!enabled);
+}
+async function apiAction(action,extra={}) {
+ const res=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData,action,...extra})});
+ const data=await res.json().catch(()=>({error:'Ошибка ответа сервера'}));
+ if(!res.ok||!data.ok) throw new Error(data.error||'Ошибка сервера');
+ if(data.player) applyServerPlayer(data.player);
+ return data;
+}
+function applyServerPlayer(p){
+ state.rub=Number(p.balance);state.coins=Number(p.coins);state.stars=Number(p.stars);
+ state.energy=Number(p.energy);state.energyAt=Number(p.energyUpdatedAt)*1000;
+ state.trialAt=Number(p.trialAt)*1000;state.garage=Array.isArray(p.garage)?p.garage:[];
+ state.houseLevel=Number(p.houseLevel)||1;state.cars=Array.isArray(p.cars)?p.cars:[];
+}
+
+async function refreshFeatureState(){
+ if(!serverMode)return;
+ const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData}),cache:'no-store'});
+ const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'Не удалось обновить профиль');
+ applyServerPlayer(data.player);state.features=data.features||{};sync();renderFeaturePanels();
+}
+function renderMarketListings(rows){
+ const el=document.getElementById('marketListings');if(!el)return;
+ el.innerHTML=rows.length?rows.map(x=>'<div class="listrow" style="gap:12px;align-items:center"><div style="min-width:0;flex:1"><b>'+x.plate+' · '+x.region+'</b><div class="sub">'+x.rarity+' · '+fmt(x.value)+' ₽ номинал'+(x.is_mine?' · Ваш лот':'')+'</div></div><div style="text-align:right"><b>'+fmt(x.asking_price)+' ₽</b><div>'+(x.is_mine?'<button class="btn secondary" data-market-cancel="'+x.id+'" style="padding:7px 10px;margin-top:5px">Снять</button>':'<button class="btn gold" data-market-buy="'+x.id+'" style="padding:7px 10px;margin-top:5px" '+(Number(state.rub)<Number(x.asking_price)?'disabled':'')+'>Купить</button>')+'</div></div></div>').join(''):'<div class="sub">Пока нет активных объявлений. Выстави первый номер!</div>';
+}
+document.getElementById('marketListings').addEventListener('click',async event=>{
+ const buy=event.target.closest('[data-market-buy]'),cancel=event.target.closest('[data-market-cancel]');
+ try{if(buy){await apiAction('marketBuy',{listingId:Number(buy.dataset.marketBuy)});toast('Номер куплен! Деньги продавцу переведены.');}
+ else if(cancel){await apiAction('marketCancel',{listingId:Number(cancel.dataset.marketCancel)});toast('Лот снят, номер возвращён в гараж.');}
+ else return;
+ await refreshFeatureState();renderGarage();
+ }catch(e){toast(e.message);}
+});
+function renderFeaturePanels(){
+ const f=state.features||{},d=f.daily||{},t=f.tasks||{},claimed=(()=>{try{return JSON.parse(t.claimed_json||'[]')}catch(_){return[]}})();
+ const talismans=f.talismans||[],equippedTalisman=f.profile?.equipped_talisman||null;
+ const streak=Number(d.streak||0),day=new Date().toISOString().slice(0,10),claimedToday=d.last_claim_day===day,vipActive=Number(f.profile?.vip_until||0)*1000>Date.now();
+ const vipButton=document.querySelector('[data-count="5"]');if(vipButton){vipButton.disabled=!vipActive;vipButton.title=vipActive?'VIP активен':'Только для VIP';vipButton.textContent=vipActive?'👑 ×5 VIP · АКТИВЕН':'👑 ×5 VIP';}
+ const claim=document.getElementById('dailyClaim');if(claim){claim.disabled=claimedToday;claim.textContent=claimedToday?'Награда получена сегодня':'Забрать ежедневный бонус';}
+ const streakLabel=document.getElementById('streakLabel');if(streakLabel)streakLabel.textContent='Серия: '+streak+' дней';
+ const streakDays=document.getElementById('streakDays');if(streakDays)streakDays.innerHTML=Array.from({length:7},(_,i)=>'<div class="streak-day '+(i<streak?'active':'')+'">'+(i+1)+' дн.</div>').join('');
+ const wheel=document.getElementById('wheelSpin');if(wheel){wheel.disabled=d.last_wheel_day===day;wheel.textContent=wheel.disabled?'Колесо уже использовано':'КРУТИТЬ КОЛЕСО';}
+ const spins=Number(t.spins_count||0),wheels=Number(t.wheel_count||0);
+ const sp=document.getElementById('spinTaskProgress'),wp=document.getElementById('wheelTaskProgress');if(sp)sp.textContent=Math.min(3,spins)+' / 3 · Награда: 250 монет + 25 000 ₽';if(wp)wp.textContent=Math.min(1,wheels)+' / 1 · Награда: 100 монет + 10 000 ₽';
+ const sb=document.getElementById('claimSpinTask'),wb=document.getElementById('claimWheelTask');if(sb){sb.disabled=spins<3||claimed.includes('spin3');sb.textContent=claimed.includes('spin3')?'Получено':'Забрать';}if(wb){wb.disabled=wheels<1||claimed.includes('wheel1');wb.textContent=claimed.includes('wheel1')?'Получено':'Забрать';}
+ const hist=document.getElementById('spinHistory');if(hist){const rows=f.history||[];hist.innerHTML=rows.length?rows.map(x=>'<div class="history-row"><div><b>'+(x.plate&&x.plate!=='—'?x.plate+' · '+x.region:'Открытие без номера')+'</b><div class="sub">'+x.rarity+' · '+new Date(x.created_at*1000).toLocaleString('ru-RU')+'</div></div><b>'+(x.value>0?'Стоимость '+fmt(x.value)+' ₽':'—')+'</b></div>').join(''):'<div class="sub">История пока пуста. Открой первый контейнер!</div>';}
+ renderMarketListings(f.market||[]);
+ const products=f.products||[],owned=f.cosmetics||[],catalog=document.getElementById('starsCatalog'),profile=f.profile||{};
+ const purchases=document.getElementById('purchaseHistory');if(purchases){const rows=f.purchases||[];purchases.innerHTML=rows.length?rows.map(x=>{const product=products.find(p=>p.id===x.product_id);return '<div class="history-row"><div><b>'+(product?.title||'Покупка')+'</b><div class="sub">'+new Date(x.created_at*1000).toLocaleString('ru-RU')+'</div></div><b>'+x.total_amount+' ★</b></div>'}).join(''):'<div class="sub">Покупок пока нет.</div>'}
+ document.body.classList.toggle('theme-royal',profile.equipped_theme==='theme_royal');
+ document.querySelectorAll('.plate').forEach(p=>p.classList.toggle('cosmetic-neon',profile.equipped_plate==='plate_neon'));
+ const resultPanel=document.getElementById('result');if(resultPanel)resultPanel.classList.toggle('effect-aurora',profile.equipped_effect==='effect_aurora');
+ const icons={starter_bundle:'🎁',plate_neon:'💠',effect_aurora:'🌌',theme_royal:'👑',vip_week:'💎'};
+ if(catalog)catalog.innerHTML=products.map(p=>{const has=p.cosmetic&&owned.includes(p.cosmetic);return '<article class="shop-product '+(has?'owned':'')+'"><div class="emoji">'+(icons[p.id]||'✨')+'</div><div><b>'+p.title+'</b><div class="sub">'+p.description+'</div><div class="asset-price">'+p.stars+' ★</div></div><button class="btn '+(has?'secondary':'gold')+'" data-buy-stars="'+p.id+'" '+(has?'disabled':'')+'>'+(has?'Уже куплено':'Купить за '+p.stars+' ★')+'</button></article>'}).join('');
+ const collection=document.getElementById('cosmeticsCollection');if(collection)collection.innerHTML=owned.length?owned.map(x=>'<div class="listrow"><span>'+(icons[x]||'✨')+' '+x+'</span><button class="btn secondary" data-equip-cosmetic="'+x+'" style="width:auto;padding:7px 10px;font-size:11px">Надеть</button></div>').join(''):'<div class="sub">Пока нет косметических предметов.</div>';
+ const talismanBox=document.getElementById('talismansCollection');
+ if(talismanBox)talismanBox.innerHTML=talismans.length?talismans.map(x=>'<div class="listrow"><div><b>🍀 Талисман удачи</b><div class="sub">+10% к относительному шансу редких и более высоких номеров</div></div><button class="btn '+(equippedTalisman==='luck_charm'?'secondary':'gold')+'" data-equip-talisman="'+(equippedTalisman==='luck_charm'?'':'luck_charm')+'" style="width:auto;padding:8px 11px;font-size:12px">'+(equippedTalisman==='luck_charm'?'Снять':'Надеть')+'</button></div>').join(''):'<div class="sub">Талисманов пока нет.</div>';
+ const luck=document.getElementById('luck');if(luck)luck.textContent=equippedTalisman==='luck_charm'?'1,1':'1,0';
+}
+async function buyStarsProduct(productId){
+ try{
+  if(!serverMode||!tg?.openInvoice)throw new Error('Открой игру внутри Telegram, чтобы оплатить Stars.');
+  const res=await fetch('/api/stars/invoice',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData,productId})});
+  const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'Не удалось создать счёт');
+  tg.openInvoice(data.url,async status=>{
+   if(status==='paid'){toast('Оплата принята! Обновляем покупку…');setTimeout(()=>refreshFeatureState().catch(e=>toast(e.message)),1200);setTimeout(()=>refreshFeatureState().catch(()=>{}),3500);}
+   else if(status==='cancelled')toast('Оплата отменена');
+   else if(status==='failed')toast('Платёж не прошёл. Деньги не списаны.');
+  });
+ }catch(e){toast(e.message)}
+}
+document.getElementById('dailyClaim')?.addEventListener('click',async()=>{try{const r=await apiAction('dailyClaim');await refreshFeatureState();toast('🎁 Ежедневный бонус получен!')}catch(e){toast(e.message)}});
+let wheelRotation=0;
+document.getElementById('wheelSpin')?.addEventListener('click',async()=>{const wheel=document.getElementById('luckWheel');try{const b=document.getElementById('wheelSpin');b.disabled=true;wheel.classList.add('spinning');const r=await apiAction('wheelSpin');const centers=[81,216,302.4,345.6,358.2],index=Math.max(0,Math.min(4,Number(r.wheelIndex)||0)),delta=(360-centers[index]-(wheelRotation%360)+360)%360;wheelRotation+=1800+delta;wheel.style.transform='rotate('+wheelRotation+'deg)';setTimeout(async()=>{wheel.classList.remove('spinning');document.getElementById('wheelResult').textContent='🎉 Твой приз: '+(r.wheelReward||'награда начислена');await refreshFeatureState();},4100);}catch(e){wheel.classList.remove('spinning');document.getElementById('wheelSpin').disabled=false;toast(e.message)}});
+document.getElementById('claimSpinTask')?.addEventListener('click',async()=>{try{await apiAction('claimTask',{taskId:'spin3'});await refreshFeatureState();toast('Задание выполнено!')}catch(e){toast(e.message)}});
+document.getElementById('claimWheelTask')?.addEventListener('click',async()=>{try{await apiAction('claimTask',{taskId:'wheel1'});await refreshFeatureState();toast('Задание выполнено!')}catch(e){toast(e.message)}});
+document.getElementById('redeemPromo')?.addEventListener('click',async()=>{try{const code=document.getElementById('promoCode').value;await apiAction('redeemPromo',{code});document.getElementById('promoCode').value='';await refreshFeatureState();toast('🎉 Промокод активирован!')}catch(e){toast(e.message)}});
+document.getElementById('starsCatalog')?.addEventListener('click',event=>{const b=event.target.closest('[data-buy-stars]');if(b)buyStarsProduct(b.dataset.buyStars)});
+document.getElementById('cosmeticsCollection')?.addEventListener('click',async event=>{const b=event.target.closest('[data-equip-cosmetic]');if(!b)return;try{await apiAction('equipCosmetic',{cosmeticId:b.dataset.equipCosmetic});await refreshFeatureState();toast('✨ Косметика применена')}catch(e){toast(e.message)}});
+document.getElementById('talismansCollection')?.addEventListener('click',async event=>{const b=event.target.closest('[data-equip-talisman]');if(!b)return;try{const talismanId=b.dataset.equipTalisman||null;await apiAction('equipTalisman',{talismanId});await refreshFeatureState();toast(talismanId?'🍀 Талисман удачи надет':'Талисман снят')}catch(e){toast(e.message)}});
+
+async function hydrateServerState(){
+ setGameActionsEnabled(false);
+ if(!tg) {
+  connectionStatus('Telegram WebApp SDK не найден','Страница открыта не во встроенном режиме Telegram. Открой игру кнопкой «🎮 Играть» в сообщении бота.');
+  return;
+ }
+ if(!tgInitData) {
+  connectionStatus('Telegram не передал данные авторизации','initData пустой. Скорее всего, игра открыта как обычная ссылка, а не через WebApp-кнопку. Вернись в чат с ботом и нажми «🎮 Играть».');
+  return;
+ }
+ connectionStatus('Данные Telegram получены','Проверяем подпись и загружаем игровой профиль с тестового сервера…','');
+ try {
+  const controller=new AbortController();
+  const requestTimeout=setTimeout(()=>controller.abort(),12000);
+  let res;
+  try {
+   res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData}),signal:controller.signal,cache:'no-store'});
+  } catch(fetchError) {
+   if(fetchError.name==='AbortError') throw new Error('Сервер не ответил за 12 секунд. Проверь доступность тестового Worker.');
+   throw new Error('Не удалось связаться с сервером: '+(fetchError.message||'сетевая ошибка'));
+  } finally {
+   clearTimeout(requestTimeout);
+  }
+  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));
+  if(!res.ok||!data.ok) {
+   if(res.status===401) throw new Error('Сервер отклонил подпись Telegram. Нужно проверить связку токена бота и WebApp.');
+   if(res.status===503) throw new Error('На тестовом сервере не настроена база данных или токен бота.');
+   throw new Error(data.error||('HTTP '+res.status));
+  }
+  serverMode=true;
+  applyServerPlayer(data.player);state.features=data.features||{};sync();renderFeaturePanels();setGameActionsEnabled(true);sync();
+  connectionStatus('Подключено к серверу','Профиль загружен. Баланс и энергия теперь берутся из тестовой базы данных.','ok');
+ } catch(e) {
+  serverMode=false;setGameActionsEnabled(false);
+  connectionStatus('Ошибка подключения к игровому серверу',e.message+' Игровые действия отключены, чтобы не сохранять прогресс локально.');
+ }
+}
+
+const DEFAULT_STATE = {rub:1000000,coins:1250,stars:0,energy:25,garage:[],energyAt:Date.now(),trialAt:0,houseLevel:1,cars:[]};
 function loadState(){
  try {
   const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
   if (saved && typeof saved === 'object') {
-   return {...DEFAULT_STATE, ...saved, garage:Array.isArray(saved.garage)?saved.garage:[]};
+   return {...DEFAULT_STATE, ...saved, garage:Array.isArray(saved.garage)?saved.garage:[],cars:Array.isArray(saved.cars)?saved.cars:[]};
   }
  } catch (_) {}
  return {...DEFAULT_STATE};
@@ -138,38 +852,336 @@ const names=['А','В','Е','К','М','Н','О','Р','С','Т','У','Х'];
 const regions=['77','97','99','178','777','05','116','02','174','750'];
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2100)}
-document.getElementById('testEnergy').addEventListener('click',()=>{if(isSpinning){toast('Дождись окончания прокрутки');return}state.energy=10;sync();toast('⚡ Энергия восстановлена: 10 / 10')});
-function sync(){saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 10 ⚡';document.getElementById('energybar').style.width=(state.energy*10)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage()}
-function renderGarage(){let el=document.getElementById('inventory');el.innerHTML=state.garage.length?state.garage.map(x=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>'}
-let isSpinning=false;
+document.getElementById('testEnergy').addEventListener('click',async()=>{if(isSpinning){toast('Дождись окончания прокрутки');return}if(Date.now()-(state.trialAt||0)<3600000){toast('Пробная энергия ещё не восстановилась');return}if(serverMode){try{await apiAction('trial');sync();toast('⚡ Пробная энергия начислена')}catch(e){toast(e.message)}return}state.energy=Math.min(25,state.energy+10);state.trialAt=Date.now();sync();toast('⚡ +10 пробной энергии')});
+function applyEnergyRegen(){const now=Date.now();if(state.energy<25){const elapsed=Math.max(0,now-(state.energyAt||now));const gained=Math.floor(elapsed/300000);if(gained>0){state.energy=Math.min(25,state.energy+gained);state.energyAt=(state.energyAt||now)+gained*300000;}}else state.energyAt=now;}
+function renderProfile(){
+ const g=Array.isArray(state.garage)?state.garage:[],counts={common:0,unusual:0,rare:0,epic:0,legend:0,myth:0,secret:0};
+ let total=0;g.forEach(n=>{const c=counts[n.cls]!==undefined?n.cls:'common';counts[c]++;total+=Number(n.value)||0;});
+ const level=Math.max(1,Math.floor(g.length/10)+1),current=g.length%10,progress=current*10;
+ const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+ set('profileLevel','УРОВЕНЬ '+level);set('profileXpLabel',current+' / 10 номеров');set('profileNumbers',fmt(g.length));set('profileValue',fmt(total)+' ₽');
+ set('profileRare',fmt(counts.rare+counts.epic+counts.legend+counts.myth+counts.secret));set('profileSecret',fmt(counts.secret));
+ set('profileBalance',fmt(state.rub)+' ₽');set('profileCoins',fmt(state.coins)+' ◈');set('profileEnergy',state.energy+' / 25');
+ const vip=Number(state.features?.profile?.vip_until||0)*1000>Date.now();set('profileVip',vip?'Активен до '+new Date(Number(state.features.profile.vip_until)*1000).toLocaleDateString('ru-RU'):'Не активен');
+ set('profileStatus',g.length===0?'Начинающий коллекционер':g.length<10?'Собирает первые номера':g.length<50?'Уверенный коллекционер':'Мастер коллекции');
+ const bar=document.getElementById('profileXpBar');if(bar)bar.style.width=progress+'%';
+ const name=tg?.initDataUnsafe?.user?.first_name||'Коллекционер номеров';set('profileName',name);set('profileAvatar',(name.trim()[0]||'К').toUpperCase());
+ const rows=[['common','Обычные'],['unusual','Необычные'],['rare','Редкие'],['epic','Эпические'],['legend','Легендарные'],['myth','Мифические'],['secret','Секретные']];
+ const el=document.getElementById('profileRarities');if(el)el.innerHTML=rows.map(([cls,label])=>'<div class="rarity-row rarity-glow '+cls+'"><i class="rarity-dot"></i><span>'+label+'</span><b>'+fmt(counts[cls])+'</b></div>').join('');
+}
+function sync(){applyEnergyRegen();saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 25 ⚡';document.getElementById('energybar').style.width=(state.energy*4)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage();renderHouse();renderCars();renderProfile()}
+const houses=[{name:'Старый сарай',emoji:'🛖',cost:100000,desc:'Небольшое укрытие. Первый шаг к собственному дому.'},{name:'Уютный дом',emoji:'🏠',cost:500000,desc:'Тёплый дом с небольшим участком.'},{name:'Загородный коттедж',emoji:'🏡',cost:2000000,desc:'Просторный коттедж с красивым двором.'},{name:'Особняк',emoji:'🏛️',cost:8000000,desc:'Роскошная недвижимость для настоящего коллекционера.'},{name:'Вилла',emoji:'🏰',cost:25000000,desc:'Вершина недвижимости — твоя собственная вилла.'}];
+function renderHouse(){const i=Math.min(4,Math.max(0,(state.houseLevel||1)-1)),x=houses[i];document.getElementById('houseName').textContent=x.name;document.getElementById('houseLevel').textContent='Уровень '+(i+1)+' · '+(i===4?'Максимальный уровень':'Улучши свою недвижимость');document.getElementById('houseEmoji').textContent=x.emoji;document.getElementById('houseDesc').textContent=x.desc;const btn=document.getElementById('upgradeHouse');if(i===4){document.getElementById('houseCost').textContent='MAX';btn.textContent='Максимальный уровень';btn.disabled=true}else{document.getElementById('houseCost').textContent=fmt(x.cost)+' ₽';btn.textContent='Улучшить до: '+houses[i+1].name;btn.disabled=state.rub<x.cost}}
+document.getElementById('upgradeHouse').addEventListener('click',async()=>{if(serverMode){try{await apiAction('upgradeHouse');sync();toast('🏡 Дом улучшен')}catch(e){toast(e.message)}return}const i=Math.min(4,(state.houseLevel||1)-1),x=houses[i];if(i>=4)return;if(state.rub<x.cost){toast('Не хватает денег');return}state.rub-=x.cost;state.houseLevel=i+2;sync();toast('🏡 Дом улучшен: '+houses[i+1].name)});
+function renderCars(){document.getElementById('carCount').textContent=(state.cars||[]).length+' машин';document.getElementById('carCollection').innerHTML=(state.cars||[]).length?state.cars.map(c=>'<div class="listrow"><span>'+c.emoji+' '+c.name+'</span><b>'+fmt(c.cost)+' ₽</b></div>').join(''):'Пока здесь пусто — выбери первую машину ниже.'}
+async function buyCar(name,emoji,cost){if(serverMode){try{await apiAction('buyCar',{name});sync();toast('🚘 Покупка: '+name)}catch(e){toast(e.message)}return}if(state.rub<cost){toast('Не хватает денег');return}state.rub-=cost;state.cars=state.cars||[];state.cars.push({name:name,emoji:emoji,cost:cost});sync();toast('🚘 Покупка: '+name)}
+let upgradeSelection=[];
+const rarityOrder=['common','unusual','rare','epic','legend','myth','secret'];
+const rarityNames=['Обычный','Необычный','Редкий','Эпический','Легендарный','Мифический','Секретный'];
+const rarityValues=[50000,100000,250000,500000,1000000,2500000,5000000];
+const upgradeFees=[10000,25000,60000,150000,400000,1000000];
+function upgradeFeeFor(cls){return upgradeFees[rarityOrder.indexOf(cls)]||0}
+function renderUpgrader(){
+ const valid=upgradeSelection.length===2&&upgradeSelection.every(i=>state.garage[i])&&state.garage[upgradeSelection[0]].cls===state.garage[upgradeSelection[1]].cls;
+ const cls=valid?state.garage[upgradeSelection[0]].cls:null,tier=rarityOrder.indexOf(cls),fee=valid?upgradeFeeFor(cls):0;
+ document.getElementById('upgradeCost').textContent=valid?(tier>=6?'MAX':fmt(fee)+' ₽'):'—';
+ document.getElementById('upgradeHint').textContent=valid?(tier>=6?'Секретный номер уже максимальной редкости.':rarityNames[tier]+' + '+rarityNames[tier]+' → '+rarityNames[tier+1]):'Выбери два номера одной редкости. Они объединятся в один номер следующего уровня.';
+ document.getElementById('upgradeNumbers').disabled=!valid||tier>=6||state.rub<fee;
+}
+function toggleUpgradeSelection(i){
+ if(upgradeSelection.includes(i))upgradeSelection=upgradeSelection.filter(x=>x!==i);
+ else if(upgradeSelection.length<2)upgradeSelection.push(i);
+ else upgradeSelection=[i];
+ renderGarage();
+}
+async function upgradeSelectedNumbers(){
+ if(upgradeSelection.length!==2)return;
+ const indices=[...upgradeSelection];
+ try{
+  if(serverMode)await apiAction('upgradeNumbers',{indices});
+  else{
+   const [a,b]=indices.map(i=>state.garage[i]),tier=rarityOrder.indexOf(a.cls),fee=upgradeFeeFor(a.cls);
+   if(tier<0||a.cls!==b.cls||tier>=6||state.rub<fee)throw new Error('Проверь выбранные номера и баланс');
+   state.rub-=fee;state.garage=state.garage.filter((_,i)=>!indices.includes(i));
+   state.garage.push({...a,rarity:rarityNames[tier+1],cls:rarityOrder[tier+1],value:rarityValues[tier+1]});
+  }
+  upgradeSelection=[];sync();toast('✨ Номера успешно объединены');
+ }catch(e){toast(e.message)}
+}
+
+let garageFilter='all',marketSelectedIndex=null,marketSelectedPlate=null,marketSelectedRegion=null;
+function openMarketForSale(index){
+ marketSelectedIndex=index;const item=state.garage[index];if(!item)return;marketSelectedPlate=item.plate;marketSelectedRegion=item.region;
+ document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='market'));
+ document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='market'));
+ const label=document.getElementById('marketSelectedLabel');if(label)label.textContent='Выбран: '+item.plate+' · '+item.region+' · '+item.rarity;
+ const price=document.getElementById('marketPrice');if(price&&!price.value)price.value=item.value;
+ document.getElementById('marketListBtn').disabled=false;
+}
+function renderGarage(){
+ const el=document.getElementById('inventory');
+ const entries=state.garage.map((x,i)=>({x,i})).filter(({x})=>garageFilter==='all'||x.cls===garageFilter);
+ const count=document.getElementById('garagecount');if(count)count.textContent=state.garage.length+' номеров';
+ el.innerHTML=entries.length?entries.map(({x,i})=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong><div class="row" style="gap:6px;margin-top:8px;flex-wrap:wrap"><button class="btn gold" data-roulette-index="${i}" style="padding:8px 5px;font-size:12px">🎡 В рулетку</button><button class="btn secondary" data-quick-sell="${i}" style="padding:8px 5px;font-size:12px">Продать</button><button class="btn secondary" data-market-index="${i}" style="padding:8px 5px;font-size:12px">На рынок</button></div></div>`).join(''):state.garage.length?'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:22px">В этой категории пока нет номеров.</div>':'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>';
+ document.querySelectorAll('[data-garage-filter]').forEach(b=>b.classList.toggle('active',b.dataset.garageFilter===garageFilter));
+ // Legacy two-number upgrader is retired; roulette is the only upgrade path.
+}
+document.querySelectorAll('[data-garage-filter]').forEach(b=>b.addEventListener('click',()=>{garageFilter=b.dataset.garageFilter;renderGarage();}));
+document.getElementById('inventory').addEventListener('click',event=>{
+ const quickSell=event.target.closest('[data-quick-sell]');
+ if(quickSell){event.stopPropagation();sellGarageNumber(Number(quickSell.dataset.quickSell));return;}
+ const rouletteItem=event.target.closest('[data-roulette-index]');
+ if(rouletteItem){event.stopPropagation();openRouletteForNumber(Number(rouletteItem.dataset.rouletteIndex));return;}
+ const marketItem=event.target.closest('[data-market-index]');
+ if(marketItem){event.stopPropagation();openMarketForSale(Number(marketItem.dataset.marketIndex));return;}
+
+});
+document.getElementById('marketListBtn').addEventListener('click',async()=>{
+ const price=Number(document.getElementById('marketPrice').value);
+ if(!Number.isInteger(marketSelectedIndex)||!Number.isSafeInteger(price)||price<1){toast('Выбери номер и укажи цену');return;}
+ try{await apiAction('marketList',{index:marketSelectedIndex,price,plate:marketSelectedPlate,region:marketSelectedRegion});marketSelectedIndex=null;marketSelectedPlate=null;marketSelectedRegion=null;document.getElementById('marketPrice').value='';document.getElementById('marketListBtn').disabled=true;await refreshFeatureState();renderGarage();toast('Номер выставлен на рынок');}
+ catch(e){toast(e.message);}
+});
+
+let isSpinning=false,spinCount=1,fastSpin=false,lastWonIndex=-1,lastWonNumber=null;
+let rouletteSelectedIndex=null,rouletteBusy=false;
+const rouletteChances={common:55,unusual:45,rare:35,epic:25,legend:18,myth:10};
+function openRouletteForNumber(index){
+ const item=state.garage[index];if(!item)return;rouletteSelectedIndex=index;
+ document.getElementById('rouletteEmpty').style.display='none';
+ document.getElementById('rouletteSelected').style.display='block';
+ const panel=document.getElementById('rouletteResult');panel.style.display='none';panel.classList.remove('show');
+ document.getElementById('roulettePlate').textContent=item.plate;document.getElementById('rouletteRegion').textContent=item.region;
+ document.getElementById('rouletteRarity').textContent=item.rarity.toUpperCase();document.getElementById('rouletteRarity').className='rarity '+item.cls;
+ document.getElementById('rouletteValue').textContent=fmt(item.value)+' ₽';
+ const chance=rouletteChances[item.cls]||0;document.getElementById('rouletteChance').textContent='Шанс улучшения: '+chance+'%';
+ const btn=document.getElementById('rouletteStart');btn.disabled=chance===0||!serverMode;btn.textContent=chance===0?'Максимальная редкость':(!serverMode?'Открой игру через Telegram':'🎡 Запустить рулетку');
+ document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='roulette'));
+ document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='roulette'));
+}
+document.getElementById('rouletteStart').addEventListener('click',async()=>{
+ if(rouletteBusy||rouletteSelectedIndex===null||!serverMode)return;
+ const item=state.garage[rouletteSelectedIndex];if(!item)return;
+ rouletteBusy=true;const btn=document.getElementById('rouletteStart');btn.disabled=true;
+ const wheel=document.getElementById('upgradeWheel');wheel.classList.add('spinning');wheel.style.transform='rotate('+(1440+Math.floor(Math.random()*720))+'deg)';
+ try{
+  const response=await apiAction('rouletteUpgrade',{index:rouletteSelectedIndex,plate:item.plate,region:item.region});
+  const data=response.roulette;if(!data)throw new Error('Сервер не вернул результат рулетки');
+  await new Promise(resolve=>setTimeout(resolve,3000));wheel.classList.remove('spinning');rouletteSelectedIndex=null;
+  const panel=document.getElementById('rouletteResult');panel.style.display='block';panel.classList.add('show');
+  if(data.success&&data.number){
+   const n=data.number;document.getElementById('rouletteOutcome').textContent='УСПЕХ!';
+   document.getElementById('roulettePrizePlate').style.display='flex';document.getElementById('roulettePrizeNumber').textContent=n.plate;document.getElementById('roulettePrizeRegion').textContent=n.region;
+   const rarity=document.getElementById('roulettePrizeRarity');rarity.style.display='inline-block';rarity.textContent=n.rarity.toUpperCase();rarity.className='rarity '+n.cls;
+   document.getElementById('roulettePrizeValue').textContent='Номинал: '+fmt(n.value)+' ₽';
+   document.getElementById('rouletteOutcomeText').textContent='Исходный номер сгорел. Новый номер добавлен в гараж.';
+   document.getElementById('roulettePrizeActions').style.display='flex';lastWonIndex=state.garage.length-1;
+  }else{
+   document.getElementById('rouletteOutcome').textContent='НЕУДАЧА';document.getElementById('roulettePrizePlate').style.display='none';
+   document.getElementById('roulettePrizeRarity').style.display='none';document.getElementById('roulettePrizeValue').textContent='';
+   document.getElementById('rouletteOutcomeText').textContent='Исходный номер сгорел. Награда не выпала.';
+   document.getElementById('roulettePrizeActions').style.display='none';lastWonIndex=-1;
+  }
+  sync();await refreshFeatureState();
+ }catch(e){wheel.classList.remove('spinning');toast(e.message);btn.disabled=false;}
+ finally{rouletteBusy=false;}
+});
+document.getElementById('rouletteKeep').addEventListener('click',()=>{document.getElementById('roulettePrizeActions').style.display='none';toast('Номер оставлен в гараже');});
+document.getElementById('rouletteSell').addEventListener('click',async()=>{if(lastWonIndex>=0){await sellGarageNumber(lastWonIndex);document.getElementById('roulettePrizeActions').style.display='none';}});
+document.getElementById('rouletteMarket').addEventListener('click',()=>{if(lastWonIndex>=0){openMarketForSale(lastWonIndex);document.getElementById('roulettePrizeActions').style.display='none';}});
+document.getElementById('rouletteClose').addEventListener('click',()=>{document.getElementById('rouletteResult').style.display='none';document.getElementById('rouletteEmpty').style.display='block';document.getElementById('rouletteSelected').style.display='none';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='garage'));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='garage'));});
+
+async function sellGarageNumber(index,exactNumber=null,skipConfirm=false){
+ const item=exactNumber||state.garage[index];if(!item)return false;
+ const expectedValue=Number(item.value);
+ if(!Number.isSafeInteger(expectedValue)||expectedValue<1){toast('Не удалось определить точную стоимость номера.');return false;}
+ if(!skipConfirm&&!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(expectedValue)+' ₽?'))return false;
+ try{
+  let actualValue=expectedValue;
+  if(serverMode){
+   const sold=await apiAction('sellNumber',{plate:item.plate,region:item.region,expectedValue});
+   actualValue=Number(sold.soldNumber?.value);
+   if(!Number.isSafeInteger(actualValue)||actualValue!==expectedValue)throw new Error('Сервер не подтвердил точную сумму продажи. Номер не удалён из окна.');
+  }else{state.garage.splice(index,1);state.rub+=expectedValue;sync();}
+  lastWonIndex=-1;lastWonNumber=null;
+  const wonSell=document.getElementById('sellWonNumber');
+  if(wonSell){wonSell.disabled=true;wonSell.textContent='Продано';}
+  const wonList=document.getElementById('listWonNumber');if(wonList)wonList.disabled=true;
+  renderGarage();sync();
+  toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
+  try{await refreshFeatureState();renderGarage();sync();}catch(refreshError){console.warn('После продажи не удалось обновить состояние:',refreshError);}
+  return true;
+ }catch(e){toast(e.message||'Не удалось продать номер.');return false;}
+}
+window.sellWonNumberNow=async function(event){
+ if(event){event.preventDefault();event.stopPropagation();}
+ const button=document.getElementById('sellWonNumber');
+ const message=document.getElementById('wonmsg');
+ if(!button||button.disabled||!lastWonNumber||window.__sellingWonNumber)return false;
+ window.__sellingWonNumber=true;
+ button.disabled=true;button.textContent='Продаём…';
+ if(message)message.textContent='Отправляем продажу на сервер…';
+ let sold=false;
+ try{sold=await sellGarageNumber(lastWonIndex,lastWonNumber,true);}
+ catch(error){if(message)message.textContent='Ошибка продажи: '+(error?.message||'попробуй ещё раз');}
+ window.__sellingWonNumber=false;
+ if(sold){if(message)message.textContent='Номер продан — деньги зачислены на баланс.';return true;}
+ if(lastWonNumber){
+  button.disabled=false;button.textContent='Продать за '+fmt(lastWonNumber.value)+' ₽';
+  if(message&&message.textContent==='Отправляем продажу на сервер…')message.textContent='Продажа не завершена. Нажми ещё раз.';
+ }
+ return false;
+};
+
+
+document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
+document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
+function plateBlatMultiplier(plate,region){
+ const digits=String(plate||'').replace(/\D/g,'').split('');
+ const letters=String(plate||'').replace(/[0-9]/g,'').split('');
+ const d=digits.join(''),l=letters.join('');
+ if((d==='000'||d==='777')&&l.length===3&&new Set(l).size===1&&String(region)==='77')return 20;
+ let m=1;
+ if(d.length>=4&&new Set(d).size===1)m*=10;
+ else if(d.length===3&&new Set(d).size===1)m*=5;
+ else if(d.length===3&&((+d[1]===+d[0]+1&&+d[2]===+d[1]+1)||(+d[1]===+d[0]-1&&+d[2]===+d[1]-1)))m*=4;
+ else if(d.length===3&&d[0]===d[2])m*=3;
+ else if(d.length===3&&(d[0]===d[1]||d[1]===d[2]))m*=1.5;
+ if(l.length>=2&&new Set(l).size===1)m*=1.5;
+ const r=String(region||'');
+ if(r.length>=2&&new Set(r).size===1)m*=1.5;
+ return Math.min(25,m);
+}
 function randomPlate(){
  const a=names[Math.floor(Math.random()*names.length)];
  const b=names[Math.floor(Math.random()*names.length)];
  const c=names[Math.floor(Math.random()*names.length)];
  return a+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+b+c;
 }
-function spin(type){
+
+const CAR_PAINTS={
+ any:['#aebbd2','#eef5ff','#596a86'],unusual:['#35d66f','#b5ffd0','#167f4b'],
+ rare:['#318bff','#c6e5ff','#164a9a'],epic:['#b34dff','#efd1ff','#5b248f'],
+ legend:['#ffb629','#fff0b2','#986018'],myth:['#ff4d83','#ffd0df','#9c2450'],
+ secret:['#20e9e8','#c5ffff','#087f91'],free:['#57e6ff','#d7fbff','#2561a8']
+};
+let carArtSeq=0;
+function carArtwork(tier='any',large=false){
+ const uid='car'+(++carArtSeq);
+ const p=CAR_PAINTS[tier]||CAR_PAINTS.any;
+ const isSuper=['epic','legend','myth','secret'].includes(tier);
+ const roof=isSuper?'M166 142 L211 82 Q222 67 246 65 L342 65 Q364 67 382 91 L424 142':'M166 142 L207 91 Q220 75 244 75 L337 75 Q360 76 380 99 L420 142';
+ return '<svg class="car-art'+(large?' car-art-large':'')+'" viewBox="0 0 560 260" role="img" aria-label="Спортивный автомобиль" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="paint-'+tier+'-'+uid+'" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="'+p[1]+'"/><stop offset=".24" stop-color="'+p[0]+'"/><stop offset=".72" stop-color="'+p[2]+'"/><stop offset="1" stop-color="'+p[0]+'"/></linearGradient><linearGradient id="glass-'+tier+'-'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f5ff" stop-opacity=".9"/><stop offset=".45" stop-color="#526d91"/><stop offset="1" stop-color="#101b31"/></linearGradient><linearGradient id="shine-'+tier+'-'+uid+'" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><filter id="glow-'+tier+'-'+uid+'"><feGaussianBlur stdDeviation="7"/></filter></defs><ellipse cx="288" cy="213" rx="205" ry="20" fill="'+p[0]+'" opacity=".28" filter="url(#glow-'+tier+'-'+uid+')"/><path d="M75 173 Q91 148 140 143 L'+(isSuper?'168':'166')+' 142 '+roof.slice(roof.indexOf('M166')+1)+' L424 142 Q463 146 483 169 L494 190 Q494 202 474 205 L91 205 Q65 201 68 188Z" fill="url(#paint-'+tier+'-'+uid+')" stroke="'+p[1]+'" stroke-width="3"/><path d="'+roof+' L420 142 L166 142Z" fill="url(#glass-'+tier+'-'+uid+')" stroke="#d7eaff" stroke-opacity=".65" stroke-width="3"/><path d="M280 69 L280 142" stroke="#dcecff" stroke-opacity=".5" stroke-width="3"/><path d="M94 174 Q166 158 250 161 Q370 158 466 175" fill="none" stroke="url(#shine-'+tier+'-'+uid+')" stroke-width="7" opacity=".8"/><path d="M83 178 L131 169 L149 178 L134 186 L82 187Z" fill="#effaff"/><path d="M430 171 L478 180 L483 189 L438 188Z" fill="#ff416e"/><path d="M206 151 L365 151" stroke="#fff" stroke-opacity=".35" stroke-width="2"/><path d="M167 195 L401 195" stroke="#09111e" stroke-opacity=".65" stroke-width="5"/><path d="M245 190 L315 190" stroke="#eaf4ff" stroke-opacity=".8" stroke-width="3"/><circle cx="166" cy="198" r="34" fill="#080d17" stroke="#a9b8ce" stroke-width="5"/><circle cx="166" cy="198" r="20" fill="#34445e" stroke="#dce8f8" stroke-width="4"/><circle cx="166" cy="198" r="7" fill="#a9bdd7"/><circle cx="408" cy="198" r="34" fill="#080d17" stroke="#a9b8ce" stroke-width="5"/><circle cx="408" cy="198" r="20" fill="#34445e" stroke="#dce8f8" stroke-width="4"/><circle cx="408" cy="198" r="7" fill="#a9bdd7"/><path d="M107 151 Q140 132 173 132" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/><path d="M385 151 Q430 151 460 164" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><path d="M110 207 Q280 224 462 207" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/></svg>';
+}
+function paintCrateCars(){
+ document.querySelectorAll('.crate[data-tier]').forEach(card=>{
+  const tier=card.dataset.tier||'any',icon=card.querySelector('.crate-icon');
+  if(icon){icon.innerHTML=carArtwork(tier);icon.setAttribute('aria-label','Изображение автомобиля');}
+ });
+}
+paintCrateCars();
+function paintLobbyAndShowroomCars(){
+ const hero=document.querySelector('.lobby-car');
+ if(hero){hero.innerHTML=carArtwork('legend',true);hero.setAttribute('aria-label','Спортивный автомобиль');}
+ document.querySelectorAll('#cars .asset-card .asset-icon').forEach((el,i)=>{
+  const tiers=['unusual','epic','secret'];
+  el.innerHTML=carArtwork(tiers[i]||'legend',true);
+  el.setAttribute('aria-label','Автомобиль из автосалона');
+ });
+}
+paintLobbyAndShowroomCars();
+let caseResultPlaceholder=null,caseRollDone=false,caseLightCue=false,caseReelPosition=0;
+function resetCaseReel(){
+ const track=document.getElementById('caseReelTrack');if(!track)return;
+ track.innerHTML='';caseReelPosition=0;
+ for(let i=0;i<9;i++){const row=document.createElement('div');row.className='reel-row'+(i===4?' active':'');row.innerHTML='<span>'+randomPlate()+'</span><span class="reel-region">'+regions[Math.floor(Math.random()*regions.length)]+'</span>';track.appendChild(row);}
+ const rowHeight=window.matchMedia('(max-height:740px)').matches?54:64;track.style.transition='none';track.style.transform='translateY(-'+(4*rowHeight)+'px)';
+ document.getElementById('caseReelStatus').textContent='Барабан набирает скорость…';
+}
+function advanceCaseReel(plate,region,delay){
+ const track=document.getElementById('caseReelTrack');if(!track)return;
+ const old=track.lastElementChild;if(old)old.classList.remove('active');
+ const row=document.createElement('div');row.className='reel-row active';
+ row.innerHTML='<span>'+plate+'</span><span class="reel-region">'+region+'</span>';
+ track.appendChild(row);caseReelPosition++;
+ const compact=window.matchMedia('(max-height:740px)').matches,rowHeight=compact?54:64;
+ track.style.transition='transform '+Math.max(45,Math.round(delay*.82))+'ms cubic-bezier(.12,.72,.16,1)';
+ track.style.transform='translateY(-'+(caseReelPosition*rowHeight)+'px)';
+}
+function stopCaseReel(plate,region){
+ advanceCaseReel(plate,region,520);
+ document.getElementById('caseModal')?.classList.add('reel-stopped');
+ const status=document.getElementById('caseReelStatus');if(status)status.textContent='Номер зафиксирован!';
+}
+function finishCaseReveal(){
+ const modal=document.getElementById('caseModal');
+ if(!modal?.classList.contains('active')||!caseRollDone||!caseLightCue)return;
+ modal.classList.remove('opening');
+ document.getElementById('caseScene')?.classList.add('hidden');
+ document.getElementById('caseResultHost')?.querySelector('.result')?.classList.add('show');
+}
+function showCaseModal(type,freeSpin=false){
+ const modal=document.getElementById('caseModal'),scene=document.getElementById('caseScene'),big=document.getElementById('caseBig'),copy=document.getElementById('caseOpenCopy'),result=document.getElementById('result'),host=document.getElementById('caseResultHost');
+ const tier=freeSpin?'free':(type||'any');
+ caseRollDone=false;caseLightCue=false;modal.classList.remove('reel-stopped');resetCaseReel();
+ big.innerHTML=carArtwork(tier,true);
+ big.classList.remove('car-reveal');
+ copy.textContent=freeSpin?'Заводим мотор. Бесплатный заезд уже начинается…':'Двигатель набирает обороты. Готовим ваш автомобиль…';
+ modal.classList.add('active','opening');scene.classList.remove('hidden');
+ if(!caseResultPlaceholder)caseResultPlaceholder=document.createComment('case-result-home');
+ result.parentNode.insertBefore(caseResultPlaceholder,result);
+ host.appendChild(result);
+ result.classList.remove('show');
+ document.body.style.overflow='hidden';
+ window.setTimeout(()=>{if(!modal.classList.contains('active'))return;caseLightCue=true;big.classList.add('car-reveal');copy.textContent='Фары вспыхивают… номер проявляется!';finishCaseReveal();},2400);
+}
+function closeCaseModal(){
+ const modal=document.getElementById('caseModal'),result=document.getElementById('result');
+ if(caseResultPlaceholder?.parentNode)caseResultPlaceholder.parentNode.insertBefore(result,caseResultPlaceholder);
+ result.classList.remove('show');
+ modal.classList.remove('active','opening');
+ document.body.style.overflow='';
+}
+document.getElementById('caseClose')?.addEventListener('click',()=>{if(!isSpinning)closeCaseModal()});
+// The sell handler is attached in showCaseModal after the result node is moved into the modal.
+document.getElementById('listWonNumber')?.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();if(lastWonIndex>=0)openMarketForSale(lastWonIndex);});
+document.getElementById('caseModal')?.addEventListener('click',e=>{if(e.target.id==='caseModal'&&!isSpinning)closeCaseModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!isSpinning&&document.getElementById('caseModal')?.classList.contains('active'))closeCaseModal()});
+
+async function spin(type){
+ if(spinCount>1&&!window.__batchActive){const total=spinCount;window.__batchActive=true;spinCount=1;let left=total;const runNext=()=>{if(left<=0){window.__batchActive=false;spinCount=Number(document.querySelector('[data-count].active')?.dataset.count||1);return}left--;spin(type);const wait=()=>{if(isSpinning){setTimeout(wait,100)}else{setTimeout(runNext,180)}};wait()};runNext();return;}
  if(isSpinning)return;
- if(state.energy<1){toast('Недостаточно энергии');return}
+ const count=spinCount;
+ if(count===5&&Number(state.features?.profile?.vip_until||0)*1000<=Date.now()){toast('×5 доступно только VIP');return}
+ const freeSpin=type==='free';
+ if(freeSpin&&state.energy<count){toast('Недостаточно энергии для ×'+count);return}
+ const prices={any:50000,unusual:100000,rare:250000,epic:500000,legend:1000000,myth:2500000,secret:5000000};
+ const totalCost=freeSpin?0:(prices[type]||2000000)*count;
+ if(!freeSpin&&state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
  isSpinning=true;
+ const openingCrate=freeSpin?null:document.querySelector('.crate[data-tier="'+type+'"]');
+ let serverResult=null;
+ if(serverMode){try{serverResult=await apiAction('spin',{type,count});if(!Array.isArray(serverResult?.numbers)||!serverResult.numbers[0]){await refreshFeatureState().catch(()=>{});isSpinning=false;toast('Сервер не вернул точную стоимость выпавшего номера. Обнови гараж и проверь результат.');return;}}catch(e){isSpinning=false;toast(e.message);return}}
+ else if(!freeSpin)state.rub-=totalCost;
+ if(openingCrate){openingCrate.classList.add('opening');openingCrate.setAttribute('aria-busy','true');}
+ showCaseModal(type,freeSpin);
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
- state.energy--;
+ if(!serverMode&&freeSpin)state.energy-=count;
  sync();
 
- let r=Math.random(),tier='Обычный',cls='common',value=35000;
- let weights=type==='legend'?[.15,.25,.35,.20,.05]:type==='epic'?[.42,.35,.18,.045,.005]:type==='rare'?[.68,.25,.06,.009,.001]:[.88,.105,.014,.0009,.0001];
- let c=0;
- for(let i=0;i<weights.length;i++){
-  c+=weights[i];
-  if(r<c){
-   let a=[['Обычный','common',35000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000]][i];
-   [tier,cls,value]=a;break;
-  }
- }
- const finalPlate=randomPlate();
- const finalRegion=regions[Math.floor(Math.random()*regions.length)];
+ let r=Math.random(),tier='Обычный',cls='common',value=2000;
+ const payoutOutcomes=[{roi:4,p:.1095,rarity:'Обычный',cls:'common'},{roi:55,p:.35,rarity:'Необычный',cls:'unusual'},{roi:70,p:.25,rarity:'Редкий',cls:'rare'},{roi:90,p:.15,rarity:'Эпический',cls:'epic'},{roi:110,p:.07,rarity:'Легендарный',cls:'legend'},{roi:140,p:.0405,rarity:'Мифический',cls:'myth'},{roi:160,p:.015,rarity:'Секретный',cls:'secret'},{roi:200,p:.008,rarity:'Секретный',cls:'secret'},{roi:250,p:.004,rarity:'Секретный',cls:'secret'},{roi:300,p:.002,rarity:'Секретный',cls:'secret'},{roi:350,p:.001,rarity:'Секретный',cls:'secret'}];
+ let c=0;const casePrice=prices[type]||50000;
+ for(const outcome of payoutOutcomes){c+=outcome.p;if(r<c){tier=outcome.rarity;cls=outcome.cls;const jitter=outcome.roi===4||outcome.roi===350?0:(Math.random()-.5)*casePrice*.01;value=Math.max(Math.round(casePrice*.04),Math.min(Math.round(casePrice*3.5),Math.round(casePrice*outcome.roi/100+jitter)));break;}}
+ const serverNumber=serverMode?serverResult.numbers[0]:null;
+ const didWin=true;
+ const cashPrize=0;
+ if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
+ const finalPlate=serverNumber?.plate||randomPlate();
+ const finalRegion=serverNumber?.region||regions[Math.floor(Math.random()*regions.length)];
+ if(!serverNumber)value=Math.round(value*plateBlatMultiplier(finalPlate,finalRegion));
  const result=document.getElementById('result');
  const plateEl=result.querySelector('.plate');
  document.getElementById('wonplate').textContent=randomPlate();
@@ -178,33 +1190,70 @@ function spin(type){
  document.getElementById('wonrarity').className='rarity rare';
  document.getElementById('wonvalue').textContent='Подбираем номер...';
  document.getElementById('wonmsg').textContent='Цифры постепенно замедляются';
- result.classList.add('show');
+ result.classList.remove('show');
+ document.getElementById('caseOpenCopy').textContent='Номер вращается… цифры замедляются';
  plateEl.classList.add('rolling');
 
  let tick=0;
  const delays=[45,50,55,60,65,72,80,90,105,125,150,180,215,255,300];
  function roll(){
   if(tick<delays.length){
-   document.getElementById('wonplate').textContent=randomPlate();
+   const rollingPlate=randomPlate(),rollingRegion=regions[Math.floor(Math.random()*regions.length)];
+   document.getElementById('wonplate').textContent=rollingPlate;
    playTone(420+Math.random()*260,.055,'triangle',.018);
-   document.getElementById('wonregion').textContent=regions[Math.floor(Math.random()*regions.length)];
+   document.getElementById('wonregion').textContent=rollingRegion;
    const delay=delays[tick++];
-   setTimeout(roll,Math.max(18,Math.round(delay*(state.mode==='turbo'?.48:1))));
+   advanceCaseReel(rollingPlate,rollingRegion,delay);
+   setTimeout(roll,Math.max(12,Math.round(delay*((state.mode==='turbo'?.48:1)*(fastSpin?.38:1)))));
    return;
   }
+  caseRollDone=true;
+  stopCaseReel(finalPlate,finalRegion);
+  finishCaseReveal();
+  if(!didWin){
+   document.getElementById('wonplate').textContent='ДЕНЕЖНЫЙ ПРИЗ';
+   document.getElementById('wonregion').textContent='₽';
+   document.getElementById('wonrarity').textContent='ВОЗВРАТ';
+   document.getElementById('wonrarity').className='rarity cash';
+   document.getElementById('wonvalue').textContent='Получено: '+fmt(cashPrize)+' ₽';
+   const diff=cashPrize-(freeSpin?0:(prices[type]||0));
+   document.getElementById('wonmsg').textContent=freeSpin?'Бесплатное открытие · без денежного возврата':(diff>=0?'Ты в плюсе на '+fmt(diff)+' ₽':'Не вернулось '+fmt(-diff)+' ₽ от цены кейса');
+   result.classList.remove('win-flash','rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret');
+   result.classList.add('win-flash');
+   plateEl.classList.remove('rolling');
+   if(openingCrate){openingCrate.classList.remove('opening');openingCrate.removeAttribute('aria-busy');}
+   playTone(cashPrize>=(prices[type]||Infinity)?680:300,.25,'triangle',.045);
+   sync();
+   if(serverMode)refreshFeatureState().catch(()=>{});
+   isSpinning=false;
+   spinButtons.forEach(b=>b.disabled=false);
+   document.getElementById('quickspin').disabled=state.energy<1;
+   return;
+  }
+  caseRollDone=true;
+  finishCaseReveal();
   document.getElementById('wonplate').textContent=finalPlate;
   document.getElementById('wonregion').textContent=finalRegion;
   document.getElementById('wonrarity').textContent=tier.toUpperCase();
   document.getElementById('wonrarity').className='rarity '+cls;
-  document.getElementById('wonvalue').textContent='Стоимость: '+fmt(value)+' ₽';
-  document.getElementById('wonmsg').textContent='Номер добавлен в гараж';
-  result.classList.remove('win-flash');void result.offsetWidth;result.classList.add('win-flash');
+  document.getElementById('wonvalue').textContent='Стоимость номера: '+fmt(value)+' ₽';
+  document.getElementById('wonmsg').textContent='Номер уже в твоём гараже · окупаемость: '+(freeSpin?'бесплатное открытие':Math.round(value/(prices[type]||50000)*100)+'%')+'. Решай, что делать с находкой.';
+ const resultActions=document.querySelector('#caseModal .result .row');
+ if(resultActions&&!document.getElementById('keepWonNumber')){const keep=document.createElement('button');keep.id='keepWonNumber';keep.className='keep-number';keep.type='button';keep.textContent='✓ Оставить в гараже';keep.addEventListener('click',closeCaseModal);resultActions.insertAdjacentElement('afterend',keep);}
+  result.classList.remove('win-flash');result.classList.remove('rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret','rarity-glow','common','unusual','rare','epic','legend','myth','secret');result.classList.add('rarity-glow',cls);void result.offsetWidth;if(['epic','legend','myth','secret'].includes(cls))result.classList.add('rarity-win-'+cls);result.classList.add('win-flash');
   playTone(cls==='myth'?880:cls==='legend'?740:cls==='epic'?620:520,.24,'sine',.055);
   setTimeout(()=>playTone(880,.3,'triangle',.04),130);
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
-  state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
+  if(openingCrate){openingCrate.classList.remove('opening');openingCrate.removeAttribute('aria-busy');}
+  lastWonNumber={plate:finalPlate,region:finalRegion,rarity:tier,cls,value:Number(value)};
+  lastWonIndex=serverMode?state.garage.findIndex(x=>x.plate===finalPlate&&x.region===finalRegion&&Number(x.value)===Number(value)&&x.cls===cls):-1;
+  if(!serverMode){state.garage.unshift({...lastWonNumber});lastWonIndex=0;}
+  const sellWon=document.getElementById('sellWonNumber'),listWon=document.getElementById('listWonNumber');
+  if(sellWon){sellWon.disabled=!lastWonNumber;sellWon.textContent='Продать за '+fmt(lastWonNumber.value)+' ₽';}
+  if(listWon)listWon.disabled=lastWonIndex<0;
   sync();
+  if(serverMode)refreshFeatureState().catch(()=>{});
   isSpinning=false;
   spinButtons.forEach(b=>b.disabled=false);
   document.getElementById('quickspin').disabled=state.energy<1;
@@ -212,6 +1261,35 @@ function spin(type){
  setTimeout(roll,80);
 }
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{let p=b.dataset.page;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p))}));
+document.querySelectorAll('[data-rarity]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-rarity]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.crate').forEach(c=>{c.style.display=b.dataset.rarity==='any'||c.dataset.tier===b.dataset.rarity?'block':'none'});toast('Выбрана категория: '+b.textContent.trim())}));
+setInterval(()=>sync(),15000);
 sync();
+hydrateServerState();
 </script>
 </body></html>
+<style>
+
+/* Fix: keep the case result and its action buttons in the first screen */
+#caseModal{align-items:flex-start!important;padding:7px 10px calc(7px + env(safe-area-inset-bottom))!important}
+#caseModal .case-modal-inner{min-height:0!important;height:auto!important;width:min(100%,500px);justify-content:flex-start!important;gap:7px!important;padding-top:38px!important;padding-bottom:8px}
+#caseModal .case-headline{margin:0!important}
+#caseModal .case-scene.hidden{height:clamp(88px,14vh,118px)!important;min-height:0!important;flex:0 0 auto!important;gap:0!important;overflow:hidden}
+#caseModal .case-scene.hidden .case-big{height:clamp(88px,14vh,118px)!important;width:min(100%,390px)!important}
+#caseModal .case-result-host{flex:0 0 auto!important;width:100%;margin:0!important}
+#caseModal .result.show{padding:12px 13px 13px!important;gap:7px!important;margin:0!important}
+#caseModal .result .plate{min-height:62px!important;margin:1px auto!important}
+#caseModal .result h2{font-size:17px!important;line-height:1.2;margin:0!important}
+#caseModal .result .sub{font-size:11px!important;line-height:1.25!important}
+#caseModal .result .row{margin-top:5px!important;gap:8px!important}
+#caseModal .result .btn{min-height:52px!important;padding:10px 8px!important;font-size:14px!important;touch-action:manipulation}
+#caseModal .case-footer-glow{display:none!important}
+#caseModal .case-close{top:3px!important;right:3px!important}
+@media(max-height:740px){
+ #caseModal .case-modal-inner{padding-top:34px!important;gap:4px!important}
+ #caseModal .case-scene.hidden,#caseModal .case-scene.hidden .case-big{height:clamp(76px,12vh,96px)!important}
+ #caseModal .result.show{padding:9px 11px 10px!important;gap:5px!important}
+ #caseModal .result .plate{min-height:54px!important}
+ #caseModal .result .btn{min-height:50px!important}
+}
+
+</style>

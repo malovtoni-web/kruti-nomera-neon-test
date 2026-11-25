@@ -1,0 +1,1 @@
+ALTER TABLE player_profile ADD COLUMN vip_until INTEGER NOT NULL DEFAULT 0;
