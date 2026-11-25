@@ -89,10 +89,13 @@ function adminKeyboard() {
 }
 
 async function adminStats(db) {
-  const row = await db.prepare(
-    "SELECT COUNT(*) AS players, COALESCE(SUM(balance),0) AS balance, COALESCE(SUM(energy),0) AS energy FROM players"
-  ).first();
-  return row || { players: 0, balance: 0, energy: 0 };
+  const [players,spins,payments,vip] = await Promise.all([
+    db.prepare("SELECT COUNT(*) AS players,COALESCE(SUM(balance),0) AS balance,COALESCE(SUM(energy),0) AS energy FROM players").first(),
+    db.prepare("SELECT COUNT(*) AS total,COALESCE(SUM(value),0) AS estimated_value FROM spin_history").first(),
+    db.prepare("SELECT COUNT(*) AS total,COALESCE(SUM(total_amount),0) AS stars FROM star_payments").first(),
+    db.prepare("SELECT COUNT(*) AS active FROM player_profile WHERE vip_until>unixepoch()").first()
+  ]);
+  return {players:players?.players||0,balance:players?.balance||0,energy:players?.energy||0,spins:spins?.total||0,estimatedValue:spins?.estimated_value||0,payments:payments?.total||0,stars:payments?.stars||0,activeVip:vip?.active||0};
 }
 
 async function adminPlayer(db, id) {
@@ -270,9 +273,10 @@ function setGameActionsEnabled(enabled) {
       const daily=await env.DB.prepare("SELECT * FROM player_daily WHERE telegram_id=?").bind(telegramId).first();
       const tasks=await env.DB.prepare("SELECT * FROM player_tasks WHERE telegram_id=? AND task_date=?").bind(telegramId,day).first();
       const history=await env.DB.prepare("SELECT plate,region,rarity,cls,value,crate_type,created_at FROM spin_history WHERE telegram_id=? ORDER BY created_at DESC,id DESC LIMIT 25").bind(telegramId).all();
+      const purchases=await env.DB.prepare("SELECT product_id,total_amount,created_at FROM star_payments WHERE telegram_id=? ORDER BY created_at DESC LIMIT 20").bind(telegramId).all();
       const cosmetics=await env.DB.prepare("SELECT cosmetic_id FROM player_cosmetics WHERE telegram_id=? ORDER BY purchased_at DESC").bind(telegramId).all();
       const profile=await env.DB.prepare("SELECT equipped_plate,equipped_effect,equipped_theme,vip_until FROM player_profile WHERE telegram_id=?").bind(telegramId).first();
-      return Response.json({ok:true,player:{telegramId:p.telegram_id,balance:p.balance,coins:p.coins,stars:p.stars,energy:p.energy,energyUpdatedAt:p.energy_updated_at,trialAt:p.trial_at,garage:JSON.parse(p.garage_json||'[]'),houseLevel:p.house_level,cars:JSON.parse(p.cars_json||'[]')},features:{daily:daily||{},tasks:tasks||{},history:history.results||[],cosmetics:(cosmetics.results||[]).map(x=>x.cosmetic_id),profile:profile||{vip_until:0},products:Object.entries(STAR_PRODUCTS).map(([id,x])=>({id,title:x.title,description:x.description,stars:x.stars,kind:x.kind,cosmetic:x.cosmetic||null}))}});
+      return Response.json({ok:true,player:{telegramId:p.telegram_id,balance:p.balance,coins:p.coins,stars:p.stars,energy:p.energy,energyUpdatedAt:p.energy_updated_at,trialAt:p.trial_at,garage:JSON.parse(p.garage_json||'[]'),houseLevel:p.house_level,cars:JSON.parse(p.cars_json||'[]')},features:{daily:daily||{},tasks:tasks||{},history:history.results||[],purchases:purchases.results||[],cosmetics:(cosmetics.results||[]).map(x=>x.cosmetic_id),profile:profile||{vip_until:0},products:Object.entries(STAR_PRODUCTS).map(([id,x])=>({id,title:x.title,description:x.description,stars:x.stars,kind:x.kind,cosmetic:x.cosmetic||null}))}});
     }
 
     if (url.pathname === '/api/stars/invoice') {
@@ -501,8 +505,12 @@ function setGameActionsEnabled(enabled) {
             const stats = await adminStats(env.DB);
             responseText = "📊 Статистика тестовой игры\n\n" +
               "Игроков: " + stats.players + "\n" +
-              "Денег на балансах: " + Number(stats.balance).toLocaleString("ru-RU") + "\n" +
-              "Энергии у игроков: " + Number(stats.energy).toLocaleString("ru-RU");
+              "Денег на балансах: " + Number(stats.balance).toLocaleString("ru-RU") + " ₽\n" +
+              "Энергии у игроков: " + Number(stats.energy).toLocaleString("ru-RU") + "\n" +
+              "Открытий: " + Number(stats.spins).toLocaleString("ru-RU") + "\n" +
+              "Оценочная стоимость дропов: " + Number(stats.estimatedValue).toLocaleString("ru-RU") + " ₽\n" +
+              "Платежей Stars: " + stats.payments + " (" + stats.stars + " ★)\n" +
+              "Активных VIP: " + stats.activeVip;
           } else if (callback.data === "admin:help") {
             responseText = "🛠 Команды администратора\n\n" +
               "/admin — открыть панель\n" +
