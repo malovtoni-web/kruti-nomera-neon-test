@@ -57,7 +57,7 @@ export default {
       if(action==='trial'){
         if(now-p.trial_at<3600) return Response.json({error:'Trial energy cooldown',player:{energy:p.energy,trialAt:p.trial_at}},{status:429});
         const energy=Math.min(25,p.energy+10);
-        await save('UPDATE players SET energy=?,trial_at=?,updated_at=? WHERE telegram_id=?',[energy,now,now,telegramId]);
+        const changed=await save('UPDATE players SET energy=?,trial_at=?,updated_at=? WHERE telegram_id=? AND trial_at<=?',[energy,now,now,telegramId,now-3600]); if(!changed.meta?.changes) return Response.json({error:'Trial energy cooldown'},{status:429});
       } else if(action==='spin'){
         const prices={any:2000000,unusual:4000000,rare:7000000,epic:19000000,legend:45000000,myth:100000000,secret:250000000};
         const weights={secret:[0,0,0,.08,.42,.35,.15],myth:[0,0,.03,.17,.35,.35,.10],legend:[.02,.08,.22,.35,.25,.075,.005],epic:[.08,.22,.35,.25,.08,.018,.002],rare:[.18,.37,.30,.12,.025,.004,.001],unusual:[.38,.42,.16,.035,.004,.0009,.0001],any:[.58,.27,.11,.032,.007,.0009,.0001]};
@@ -71,7 +71,7 @@ export default {
           const w=weights[type], roll=Math.random(); let sum=0,index=0;
           for(let i=0;i<w.length;i++){sum+=w[i];if(roll<sum){index=i;break;}}
           const letters='АВЕКМНОРСТУХ', regions=['77','97','99','178','777','05','116','02','174','750'];
-          const plate=Array.from({length:3},()=>letters[Math.floor(Math.random()*letters.length)]).join('').replace(/^(.)(.)(.)$/,(_,a,b,c)=>a+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+b+c);
+          const plate=letters[Math.floor(Math.random()*letters.length)]+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+Math.floor(Math.random()*10)+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)];
           const [rarity,cls,value]=tiers[index];
           numbers.push({plate,region:regions[Math.floor(Math.random()*regions.length)],rarity,cls,value});
         }
@@ -81,7 +81,7 @@ export default {
       } else if(action==='upgradeHouse'){
         const costs=[500000,2500000,12000000,50000000,150000000], level=p.house_level;
         if(level>=5||p.balance<costs[level-1]) return Response.json({error:'Недостаточно денег или максимальный уровень'},{status:409});
-        await save('UPDATE players SET balance=balance-?,house_level=house_level+1,updated_at=? WHERE telegram_id=? AND balance>=? AND house_level=?',[costs[level-1],now,telegramId,costs[level-1],level]);
+        const changed=await save('UPDATE players SET balance=balance-?,house_level=house_level+1,updated_at=? WHERE telegram_id=? AND balance>=? AND house_level=?',[costs[level-1],now,telegramId,costs[level-1],level]); if(!changed.meta?.changes) return Response.json({error:'Недостаточно денег или дом уже улучшен'},{status:409});
       } else if(action==='buyCar'){
         const cars={'Городской седан':{cost:1200000,emoji:'🚗'},'Спорткар':{cost:12000000,emoji:'🏎️'},'Премиум внедорожник':{cost:35000000,emoji:'🚙'}};
         const car=cars[body.name]; if(!car||p.balance<car.cost) return Response.json({error:'Недостаточно денег или неизвестная машина'},{status:409});
