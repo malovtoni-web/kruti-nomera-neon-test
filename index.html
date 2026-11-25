@@ -88,6 +88,29 @@ const tgUserId = (() => {
  catch (_) { return 'local'; }
 })();
 const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
+const tgInitData = window.Telegram?.WebApp?.initData || '';
+let serverMode = Boolean(tgInitData);
+async function apiAction(action,extra={}) {
+ const res=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData,action,...extra})});
+ const data=await res.json().catch(()=>({error:'Ошибка ответа сервера'}));
+ if(!res.ok||!data.ok) throw new Error(data.error||'Ошибка сервера');
+ if(data.player) applyServerPlayer(data.player);
+ return data;
+}
+function applyServerPlayer(p){
+ state.rub=Number(p.balance);state.coins=Number(p.coins);state.stars=Number(p.stars);
+ state.energy=Number(p.energy);state.energyAt=Number(p.energyUpdatedAt)*1000;
+ state.trialAt=Number(p.trialAt)*1000;state.garage=Array.isArray(p.garage)?p.garage:[];
+ state.houseLevel=Number(p.houseLevel)||1;state.cars=Array.isArray(p.cars)?p.cars:[];
+}
+async function hydrateServerState(){
+ if(!serverMode)return;
+ try{const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
+ const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'Ошибка загрузки');
+ applyServerPlayer(data.player);sync();
+ }catch(e){serverMode=false;toast('Серверная игра недоступна: '+e.message+'. Действия отключены.');document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.car-buy').forEach(b=>b.disabled=true);}
+}
+
 const DEFAULT_STATE = {rub:240364,coins:1250,stars:0,energy:25,garage:[],energyAt:Date.now(),trialAt:0,houseLevel:1,cars:[]};
 function loadState(){
  try {
@@ -147,14 +170,14 @@ const names=['А','В','Е','К','М','Н','О','Р','С','Т','У','Х'];
 const regions=['77','97','99','178','777','05','116','02','174','750'];
 const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2100)}
-document.getElementById('testEnergy').addEventListener('click',()=>{if(isSpinning){toast('Дождись окончания прокрутки');return}if(Date.now()-(state.trialAt||0)<3600000){toast('Пробная энергия ещё не восстановилась');return}state.energy=Math.min(25,state.energy+10);state.trialAt=Date.now();sync();toast('⚡ +10 пробной энергии')});
+document.getElementById('testEnergy').addEventListener('click',async()=>{if(isSpinning){toast('Дождись окончания прокрутки');return}if(Date.now()-(state.trialAt||0)<3600000){toast('Пробная энергия ещё не восстановилась');return}if(serverMode){try{await apiAction('trial');sync();toast('⚡ Пробная энергия начислена')}catch(e){toast(e.message)}return}state.energy=Math.min(25,state.energy+10);state.trialAt=Date.now();sync();toast('⚡ +10 пробной энергии')});
 function applyEnergyRegen(){const now=Date.now();if(state.energy<25){const elapsed=Math.max(0,now-(state.energyAt||now));const gained=Math.floor(elapsed/300000);if(gained>0){state.energy=Math.min(25,state.energy+gained);state.energyAt=(state.energyAt||now)+gained*300000;}}else state.energyAt=now;}
 function sync(){applyEnergyRegen();saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 25 ⚡';document.getElementById('energybar').style.width=(state.energy*4)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage();renderHouse();renderCars()}
 const houses=[{name:'Старый сарай',emoji:'🛖',cost:500000,desc:'Небольшое укрытие. Первый шаг к собственному дому.'},{name:'Уютный дом',emoji:'🏠',cost:2500000,desc:'Тёплый дом с небольшим участком.'},{name:'Загородный коттедж',emoji:'🏡',cost:12000000,desc:'Просторный коттедж с красивым двором.'},{name:'Особняк',emoji:'🏛️',cost:50000000,desc:'Роскошная недвижимость для настоящего коллекционера.'},{name:'Вилла',emoji:'🏰',cost:150000000,desc:'Вершина недвижимости — твоя собственная вилла.'}];
 function renderHouse(){const i=Math.min(4,Math.max(0,(state.houseLevel||1)-1)),x=houses[i];document.getElementById('houseName').textContent=x.name;document.getElementById('houseLevel').textContent='Уровень '+(i+1)+' · '+(i===4?'Максимальный уровень':'Улучши свою недвижимость');document.getElementById('houseEmoji').textContent=x.emoji;document.getElementById('houseDesc').textContent=x.desc;const btn=document.getElementById('upgradeHouse');if(i===4){document.getElementById('houseCost').textContent='MAX';btn.textContent='Максимальный уровень';btn.disabled=true}else{document.getElementById('houseCost').textContent=fmt(x.cost)+' ₽';btn.textContent='Улучшить до: '+houses[i+1].name;btn.disabled=state.rub<x.cost}}
-document.getElementById('upgradeHouse').addEventListener('click',()=>{const i=Math.min(4,(state.houseLevel||1)-1),x=houses[i];if(i>=4)return;if(state.rub<x.cost){toast('Не хватает денег');return}state.rub-=x.cost;state.houseLevel=i+2;sync();toast('🏡 Дом улучшен: '+houses[i+1].name)});
+document.getElementById('upgradeHouse').addEventListener('click',async()=>{if(serverMode){try{await apiAction('upgradeHouse');sync();toast('🏡 Дом улучшен')}catch(e){toast(e.message)}return}const i=Math.min(4,(state.houseLevel||1)-1),x=houses[i];if(i>=4)return;if(state.rub<x.cost){toast('Не хватает денег');return}state.rub-=x.cost;state.houseLevel=i+2;sync();toast('🏡 Дом улучшен: '+houses[i+1].name)});
 function renderCars(){document.getElementById('carCount').textContent=(state.cars||[]).length+' машин';document.getElementById('carCollection').innerHTML=(state.cars||[]).length?state.cars.map(c=>'<div class="listrow"><span>'+c.emoji+' '+c.name+'</span><b>'+fmt(c.cost)+' ₽</b></div>').join(''):'Пока здесь пусто — выбери первую машину ниже.'}
-function buyCar(name,emoji,cost){if(state.rub<cost){toast('Не хватает денег');return}state.rub-=cost;state.cars=state.cars||[];state.cars.push({name:name,emoji:emoji,cost:cost});sync();toast('🚘 Покупка: '+name)}
+async function buyCar(name,emoji,cost){if(serverMode){try{await apiAction('buyCar',{name});sync();toast('🚘 Покупка: '+name)}catch(e){toast(e.message)}return}if(state.rub<cost){toast('Не хватает денег');return}state.rub-=cost;state.cars=state.cars||[];state.cars.push({name:name,emoji:emoji,cost:cost});sync();toast('🚘 Покупка: '+name)}
 function renderGarage(){let el=document.getElementById('inventory');el.innerHTML=state.garage.length?state.garage.map(x=>`<div class="item"><span class="rarity ${x.cls}">${x.rarity}</span><div class="plate"><span class="mainnum">${x.plate}</span><span class="region">${x.region}<span class="rus">RUS</span></span></div><strong>${fmt(x.value)} ₽</strong></div>`).join(''):'<div class="card sub" style="grid-column:1/-1;text-align:center;padding:28px">Пока пусто. Открой контейнер, чтобы получить первый номер.</div>'}
 let isSpinning=false,spinCount=1,fastSpin=false;
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
@@ -165,7 +188,7 @@ function randomPlate(){
  const c=names[Math.floor(Math.random()*names.length)];
  return a+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+String(Math.floor(Math.random()*10))+b+c;
 }
-function spin(type){
+async function spin(type){
  if(spinCount>1&&!window.__batchActive){const total=spinCount;window.__batchActive=true;spinCount=1;let left=total;const runNext=()=>{if(left<=0){window.__batchActive=false;spinCount=Number(document.querySelector('[data-count].active')?.dataset.count||1);return}left--;spin(type);const wait=()=>{if(isSpinning){setTimeout(wait,100)}else{setTimeout(runNext,180)}};wait()};runNext();return;}
  if(isSpinning)return;
  const count=spinCount;
@@ -174,12 +197,14 @@ function spin(type){
  const prices={any:2000000,unusual:4000000,rare:7000000,epic:19000000,legend:45000000,myth:100000000,secret:250000000};
  const totalCost=(prices[type]||2000000)*count;
  if(state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
- state.rub-=totalCost;
+ let serverResult=null;
+ if(serverMode){try{serverResult=await apiAction('spin',{type,count});}catch(e){toast(e.message);return}}
+ else state.rub-=totalCost;
  isSpinning=true;
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
- state.energy-=count;
+ if(!serverMode)state.energy-=count;
  sync();
 
  let r=Math.random(),tier='Обычный',cls='common',value=35000;
@@ -187,8 +212,10 @@ function spin(type){
  let c=0;
  const tierData=[['Обычный','common',35000],['Необычный','unusual',80000],['Редкий','rare',180000],['Эпический','epic',850000],['Легендарный','legend',4500000],['Мифический','myth',25000000],['Секретный','secret',100000000]];
  for(let i=0;i<weights.length;i++){c+=weights[i];if(r<c){[tier,cls,value]=tierData[i];break;}}
- const finalPlate=randomPlate();
- const finalRegion=regions[Math.floor(Math.random()*regions.length)];
+ const serverNumber=serverResult?.numbers?.[0];
+ if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
+ const finalPlate=serverNumber?.plate||randomPlate();
+ const finalRegion=serverNumber?.region||regions[Math.floor(Math.random()*regions.length)];
  const result=document.getElementById('result');
  const plateEl=result.querySelector('.plate');
  document.getElementById('wonplate').textContent=randomPlate();
@@ -222,7 +249,7 @@ function spin(type){
   setTimeout(()=>playTone(880,.3,'triangle',.04),130);
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
-  state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
+  if(!serverMode)state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
   sync();
   isSpinning=false;
   spinButtons.forEach(b=>b.disabled=false);
@@ -234,5 +261,6 @@ document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',(
 document.querySelectorAll('[data-rarity]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-rarity]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.crate').forEach(c=>{c.style.display=b.dataset.rarity==='any'||c.dataset.tier===b.dataset.rarity?'block':'none'});toast('Выбрана категория: '+b.textContent.trim())}));
 setInterval(()=>sync(),15000);
 sync();
+hydrateServerState();
 </script>
 </body></html>
