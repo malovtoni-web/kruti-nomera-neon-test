@@ -52,7 +52,7 @@ export default {
       let body; try { body=await request.json(); } catch (_) { return Response.json({error:'Invalid JSON'},{status:400}); }
       const telegramId=await verifyTelegramInitData(body.initData,env.BOT_TOKEN);
       if(!telegramId) return Response.json({error:'Telegram authentication required'},{status:401});
-      const p=await loadPlayer(env.DB,telegramId), now=Math.floor(Date.now()/1000), action=body.action;
+      const p=await loadPlayer(env.DB,telegramId), now=Math.floor(Date.now()/1000), action=body.action; let actionNumbers=[];
       const save=async (sql,args)=>env.DB.prepare(sql).bind(...args).run();
       if(action==='trial'){
         if(now-p.trial_at<3600) return Response.json({error:'Trial energy cooldown',player:{energy:p.energy,trialAt:p.trial_at}},{status:429});
@@ -75,7 +75,7 @@ export default {
           const [rarity,cls,value]=tiers[index];
           numbers.push({plate,region:regions[Math.floor(Math.random()*regions.length)],rarity,cls,value});
         }
-        const garage=[...JSON.parse(p.garage_json||'[]'),...numbers].slice(-500);
+        actionNumbers=numbers; const garage=[...JSON.parse(p.garage_json||'[]'),...numbers].slice(-500);
         const result=await save('UPDATE players SET balance=balance-?,energy=energy-?,garage_json=?,updated_at=? WHERE telegram_id=? AND balance>=? AND energy>=?',[cost,count,JSON.stringify(garage),now,telegramId,cost,count]);
         if(!result.meta?.changes) return Response.json({error:'Недостаточно ресурсов'},{status:409});
       } else if(action==='upgradeHouse'){
@@ -89,7 +89,7 @@ export default {
         await save('UPDATE players SET balance=balance-?,cars_json=?,updated_at=? WHERE telegram_id=? AND balance>=?',[car.cost,JSON.stringify(owned),now,telegramId,car.cost]);
       } else return Response.json({error:'Unknown action'},{status:400});
       const updated=await loadPlayer(env.DB,telegramId);
-      return Response.json({ok:true,player:{telegramId:updated.telegram_id,balance:updated.balance,coins:updated.coins,stars:updated.stars,energy:updated.energy,energyUpdatedAt:updated.energy_updated_at,trialAt:updated.trial_at,garage:JSON.parse(updated.garage_json||'[]'),houseLevel:updated.house_level,cars:JSON.parse(updated.cars_json||'[]')}});
+      return Response.json({ok:true,numbers:actionNumbers,player:{telegramId:updated.telegram_id,balance:updated.balance,coins:updated.coins,stars:updated.stars,energy:updated.energy,energyUpdatedAt:updated.energy_updated_at,trialAt:updated.trial_at,garage:JSON.parse(updated.garage_json||'[]'),houseLevel:updated.house_level,cars:JSON.parse(updated.cars_json||'[]')}});
     }
 
     // Настройка webhook
