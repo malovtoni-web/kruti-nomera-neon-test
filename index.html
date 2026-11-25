@@ -520,7 +520,7 @@ async function spin(type){
   document.getElementById('wonrarity').className='rarity '+cls;
   document.getElementById('wonvalue').textContent='Стоимость номера: '+fmt(value)+' ₽';
   document.getElementById('wonmsg').textContent='Номер добавлен в гараж. Продай его сразу или выставь на рынок.';
-  result.classList.remove('win-flash');result.classList.remove('rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret');void result.offsetWidth;if(['epic','legend','myth','secret'].includes(cls))result.classList.add('rarity-win-'+cls);result.classList.add('win-flash');
+  result.classList.remove('win-flash');result.classList.remove('rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret','rarity-glow','common','unusual','rare','epic','legend','myth','secret');result.classList.add('rarity-glow',cls);void result.offsetWidth;if(['epic','legend','myth','secret'].includes(cls))result.classList.add('rarity-win-'+cls);result.classList.add('win-flash');
   playTone(cls==='myth'?880:cls==='legend'?740:cls==='epic'?620:520,.24,'sine',.055);
   setTimeout(()=>playTone(880,.3,'triangle',.04),130);
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
