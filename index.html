@@ -1037,7 +1037,7 @@ window.sellWonNumberNow=async function(event){
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
 function plateBlatMultiplier(plate,region){
- const digits=String(plate||'').replace(/\\D/g,'').split('');
+ const digits=String(plate||'').replace(/\D/g,'').split('');
  const letters=String(plate||'').replace(/[0-9]/g,'').split('');
  const d=digits.join(''),l=letters.join('');
  if((d==='000'||d==='777')&&l.length===3&&new Set(l).size===1&&String(region)==='77')return 20;
