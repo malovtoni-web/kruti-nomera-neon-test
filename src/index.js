@@ -137,7 +137,7 @@ function setGameActionsEnabled(enabled) {
       }
       // Surface browser-side startup failures instead of leaving the connection label stuck.
       // Mark whether the game's inline script actually begins execution.
-      html = html.replace(/<script>\s*(?=const tg = window\.Telegram\?\.WebApp;)/, '<script>\nwindow.__krutiMainStarted=true;\n');
+      html = html.replace(/<script>\s*(?=(?:const|let) tg = window\.Telegram\?\.WebApp;)/, '<script>\nwindow.__krutiMainStarted=true;\n');
       const startupProbe = `<script>
       (function(){
         var pendingError='';
