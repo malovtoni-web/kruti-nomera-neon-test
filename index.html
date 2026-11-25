@@ -976,11 +976,16 @@ document.getElementById('rouletteClose').addEventListener('click',()=>{document.
 
 async function sellGarageNumber(index){
  const item=state.garage[index];if(!item)return;
- if(!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(item.value)+' ₽?'))return;
+ const expectedValue=Number(item.value);
+ if(!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(expectedValue)+' ₽?'))return;
  try{
-  if(serverMode)await apiAction('sellNumber',{index,plate:item.plate,region:item.region});
-  else{state.garage.splice(index,1);state.rub+=Number(item.value)||0;sync();}
-  lastWonIndex=-1;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(item.value)+' ₽ зачислено на баланс.');
+  let actualValue=expectedValue;
+  if(serverMode){
+   const sold=await apiAction('sellNumber',{index,plate:item.plate,region:item.region,expectedValue});
+   actualValue=Number(sold.soldNumber?.value);
+   if(!Number.isSafeInteger(actualValue)||actualValue<1)throw new Error('Сервер не подтвердил сумму продажи. Обнови гараж.');
+  }else{state.garage.splice(index,1);state.rub+=expectedValue;sync();}
+  lastWonIndex=-1;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
  }catch(e){toast(e.message);}
 }
 document.getElementById('sellWonNumber').addEventListener('click',()=>{if(lastWonIndex>=0)sellGarageNumber(lastWonIndex);});
