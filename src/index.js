@@ -50,6 +50,18 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    if (url.pathname === "/api/game") {
+      const assetUrl = new URL("/", url);
+      const assetResponse = await env.ASSETS.fetch(new Request(assetUrl, request));
+      if (!assetResponse.ok) return assetResponse;
+      const html = await assetResponse.text();
+      const patched = html.replace("<head>", '<head><script src="https://telegram.org/js/telegram-web-app.js"></script>');
+      const headers = new Headers(assetResponse.headers);
+      headers.set("Content-Type", "text/html; charset=utf-8");
+      headers.delete("Content-Length");
+      return new Response(patched, { status: assetResponse.status, headers });
+    }
+
     if (url.pathname === "/api/health") {
       return Response.json({
         ok: true,
@@ -256,7 +268,7 @@ export default {
       } else if (chatId && command === "/start") {
         await sendMessage(env.BOT_TOKEN, chatId,
           "Добро пожаловать в «Крути Номера»! 🎮\n\nНажми кнопку ниже, чтобы открыть игру внутри Telegram и создать игровой профиль.",
-          { inline_keyboard: [[{ text: "🎮 Играть", web_app: { url: "https://kruti-nomera-neon-test.malovtoni.workers.dev" } }]] });
+          { inline_keyboard: [[{ text: "🎮 Играть", web_app: { url: "https://kruti-nomera-neon-test.malovtoni.workers.dev/api/game" } }]] });
       } else if (chatId && command === "/help") {
         await sendMessage(env.BOT_TOKEN, chatId,
           "Помощь по игре «Крути Номера» 🎮\n/start — запуск бота\nОткрой игру по ссылке из сообщения /start.");
