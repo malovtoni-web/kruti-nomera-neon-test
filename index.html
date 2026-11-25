@@ -102,6 +102,13 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
 .result.rarity-glow{border-color:var(--rarity-glow);box-shadow:0 0 0 1px var(--rarity-soft),0 0 28px var(--rarity-soft)}
 .result.rarity-glow .plate{box-shadow:0 0 22px var(--rarity-soft),0 0 44px var(--rarity-soft)}
 
+
+.profile-card{background:linear-gradient(145deg,#27213a,#191923 72%);border-color:#55456d}
+.profile-head{display:flex;align-items:center;gap:12px}.profile-avatar{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(145deg,#b99aff,#6842b7);font-size:23px;font-weight:950;color:white;box-shadow:0 6px 24px #9477ff44}.profile-head>div:nth-child(2){flex:1;min-width:0}.profile-head b{font-size:15px}.profile-head .rarity{font-size:9px}
+.profile-xp{margin-top:19px}.profile-track{height:9px;background:#100f18;border-radius:99px;overflow:hidden;margin-top:8px}.profile-track i{display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#8e67ff,#34d7d0);box-shadow:0 0 15px #9477ff88;transition:width .3s}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.profile-stat{margin:0}.profile-stat small{display:block;color:var(--muted);font-size:9px;font-weight:700;letter-spacing:.5px}.profile-stat b{display:block;font-size:19px;margin-top:6px;overflow-wrap:anywhere}
+.rarity-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #ffffff0d}.rarity-row:last-child{border:0}.rarity-dot{width:9px;height:9px;border-radius:50%;background:var(--rarity-glow);box-shadow:0 0 12px var(--rarity-glow)}.rarity-row span:nth-child(2){flex:1;font-size:13px}.rarity-row b{font-size:13px}
+
 </style><script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -110,7 +117,7 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
 <main class="app">
  <header class="top"><div><div class="brand">КРУТИ <span>НОМЕРА</span></div><div class="sub">Коллекционируй редкость</div></div><div class="avatar">К</div></header>
  <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">1 000 000 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
- <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="home">Дом</button><button class="tab" data-page="cars">Авто</button><button class="tab" data-page="shop">Магазин</button><button class="tab" data-page="bonuses">Бонусы</button><button class="tab" data-page="history">История</button></nav>
+ <nav class="tabs" id="tabs"><button class="tab active" data-page="spin">Крутить</button><button class="tab" data-page="garage">Гараж</button><button class="tab" data-page="market">Рынок</button><button class="tab" data-page="rating">Рейтинг</button><button class="tab" data-page="home">Дом</button><button class="tab" data-page="cars">Авто</button><button class="tab" data-page="shop">Магазин</button><button class="tab" data-page="bonuses">Бонусы</button><button class="tab" data-page="history">История</button><button class="tab" data-page="profile">Профиль</button></nav>
  <section class="page active" id="spin">
   <div class="hero plate-hero rarity-glow common"><div class="hero-row"><span class="hero-kicker">Крути номера · сезон</span><span class="sub">Удача ×<b id="luck">1,0</b></span></div><div class="hero-title">Твой следующий номер уже близко</div><div class="hero-sub">Выбери контейнер и испытай удачу</div><div class="hero-plate-wrap"><div class="hero-plate"><span>А777АА</span><span class="plate-region">77<small>RUS</small></span></div></div><div class="hero-plate-caption">СОБЕРИ СВОЮ КОЛЛЕКЦИЮ</div></div>
   <div class="feature-controls"><button class="sound-toggle" id="soundToggle" type="button">🔊 Звук: ВКЛ</button><span class="sub">Режим:</span><button class="mode-btn active" data-mode="classic" type="button">Классика</button><button class="mode-btn" data-mode="turbo" type="button">Турбо</button><button class="mode-btn" data-mode="celebration" type="button">Праздник</button></div>
@@ -151,7 +158,24 @@ body.theme-royal .hero,body.theme-royal .card{border-color:#c49a48;box-shadow:0 
   <div class="section-title">Ежедневные задания</div><div class="card" id="dailyTasks"><div class="task-line"><span class="task-icon">🎰</span><div style="flex:1"><b>Открой 3 контейнера</b><div class="sub" id="spinTaskProgress">0 / 3 · Награда: 250 монет + 25 000 ₽</div></div><button class="btn secondary" id="claimSpinTask" disabled>Забрать</button></div><div class="task-line"><span class="task-icon">🎡</span><div style="flex:1"><b>Испытай колесо удачи</b><div class="sub" id="wheelTaskProgress">0 / 1 · Награда: 100 монет + 10 000 ₽</div></div><button class="btn secondary" id="claimWheelTask" disabled>Забрать</button></div></div>
   <div class="section-title">Промокод</div><div class="card"><div class="sub" style="margin-bottom:9px">Введи код и получи бонус на баланс или монеты.</div><div class="promo-row"><input id="promoCode" maxlength="32" placeholder="Например, START777" autocomplete="off"><button class="btn gold" id="redeemPromo" style="width:auto;padding:10px 14px">Активировать</button></div></div>
  </section>
- <section class="page" id="history"><div class="section-title">История выпадений</div><div class="sub">Последние 25 результатов открытий — включая пустые кейсы.</div><div class="card" id="spinHistory"><div class="sub">История пока пуста. Открой первый контейнер!</div></div><div class="section-title">История покупок</div><div class="sub">Покупки в Telegram Stars.</div><div class="card" id="purchaseHistory"><div class="sub">Покупок пока нет.</div></div></section>
+ <section class="page" id="profile">
+ <div class="section-title">Профиль игрока</div>
+ <div class="card profile-card">
+  <div class="profile-head"><div class="profile-avatar" id="profileAvatar">К</div><div><b id="profileName">Коллекционер номеров</b><div class="sub" id="profileStatus">Начинающий коллекционер</div></div><span class="rarity epic" id="profileLevel">УРОВЕНЬ 1</span></div>
+  <div class="profile-xp"><div class="row"><span class="sub">Прогресс коллекционера</span><b id="profileXpLabel">0 / 10 номеров</b></div><div class="profile-track"><i id="profileXpBar"></i></div></div>
+ </div>
+ <div class="profile-grid">
+  <div class="card profile-stat"><small>НОМЕРОВ В ГАРАЖЕ</small><b id="profileNumbers">0</b></div>
+  <div class="card profile-stat"><small>СТОИМОСТЬ КОЛЛЕКЦИИ</small><b id="profileValue">0 ₽</b></div>
+  <div class="card profile-stat"><small>РЕДКИЕ И ВЫШЕ</small><b id="profileRare">0</b></div>
+  <div class="card profile-stat"><small>СЕКРЕТНЫЕ</small><b id="profileSecret">0</b></div>
+ </div>
+ <div class="section-title">Состав коллекции</div>
+ <div class="card" id="profileRarities"></div>
+ <div class="section-title">Аккаунт</div>
+ <div class="card"><div class="listrow"><span class="sub">Баланс</span><b id="profileBalance">0 ₽</b></div><div class="listrow"><span class="sub">Монеты</span><b id="profileCoins">0 ◈</b></div><div class="listrow"><span class="sub">Энергия</span><b id="profileEnergy">0 / 25</b></div><div class="listrow"><span class="sub">VIP</span><b id="profileVip">Не активен</b></div></div>
+</section>
+<section class="page" id="history"><div class="section-title">История выпадений</div><div class="sub">Последние 25 результатов открытий — включая пустые кейсы.</div><div class="card" id="spinHistory"><div class="sub">История пока пуста. Открой первый контейнер!</div></div><div class="section-title">История покупок</div><div class="sub">Покупки в Telegram Stars.</div><div class="card" id="purchaseHistory"><div class="sub">Покупок пока нет.</div></div></section>
 </main>
 <nav class="nav"><button class="active" data-page="spin"><span>▤</span>Крутить</button><button data-page="garage"><span>⌂</span>Гараж</button><button data-page="market"><span>▣</span>Рынок</button><button data-page="rating"><span>♜</span>Рейтинг</button><button data-page="home"><span>⌂</span>Дом</button><button data-page="cars"><span>🚘</span>Авто</button><button data-page="shop"><span>▢</span>Магазин</button></nav>
 <script>
@@ -347,7 +371,22 @@ const fmt=n=>Math.round(n).toLocaleString('ru-RU');
 function toast(t){let el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2100)}
 document.getElementById('testEnergy').addEventListener('click',async()=>{if(isSpinning){toast('Дождись окончания прокрутки');return}if(Date.now()-(state.trialAt||0)<3600000){toast('Пробная энергия ещё не восстановилась');return}if(serverMode){try{await apiAction('trial');sync();toast('⚡ Пробная энергия начислена')}catch(e){toast(e.message)}return}state.energy=Math.min(25,state.energy+10);state.trialAt=Date.now();sync();toast('⚡ +10 пробной энергии')});
 function applyEnergyRegen(){const now=Date.now();if(state.energy<25){const elapsed=Math.max(0,now-(state.energyAt||now));const gained=Math.floor(elapsed/300000);if(gained>0){state.energy=Math.min(25,state.energy+gained);state.energyAt=(state.energyAt||now)+gained*300000;}}else state.energyAt=now;}
-function sync(){applyEnergyRegen();saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 25 ⚡';document.getElementById('energybar').style.width=(state.energy*4)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage();renderHouse();renderCars()}
+function renderProfile(){
+ const g=Array.isArray(state.garage)?state.garage:[],counts={common:0,unusual:0,rare:0,epic:0,legend:0,myth:0,secret:0};
+ let total=0;g.forEach(n=>{const c=counts[n.cls]!==undefined?n.cls:'common';counts[c]++;total+=Number(n.value)||0;});
+ const level=Math.max(1,Math.floor(g.length/10)+1),current=g.length%10,progress=current*10;
+ const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+ set('profileLevel','УРОВЕНЬ '+level);set('profileXpLabel',current+' / 10 номеров');set('profileNumbers',fmt(g.length));set('profileValue',fmt(total)+' ₽');
+ set('profileRare',fmt(counts.rare+counts.epic+counts.legend+counts.myth+counts.secret));set('profileSecret',fmt(counts.secret));
+ set('profileBalance',fmt(state.rub)+' ₽');set('profileCoins',fmt(state.coins)+' ◈');set('profileEnergy',state.energy+' / 25');
+ const vip=Number(state.features?.profile?.vip_until||0)*1000>Date.now();set('profileVip',vip?'Активен до '+new Date(Number(state.features.profile.vip_until)*1000).toLocaleDateString('ru-RU'):'Не активен');
+ set('profileStatus',g.length===0?'Начинающий коллекционер':g.length<10?'Собирает первые номера':g.length<50?'Уверенный коллекционер':'Мастер коллекции');
+ const bar=document.getElementById('profileXpBar');if(bar)bar.style.width=progress+'%';
+ const name=tg?.initDataUnsafe?.user?.first_name||'Коллекционер номеров';set('profileName',name);set('profileAvatar',(name.trim()[0]||'К').toUpperCase());
+ const rows=[['common','Обычные'],['unusual','Необычные'],['rare','Редкие'],['epic','Эпические'],['legend','Легендарные'],['myth','Мифические'],['secret','Секретные']];
+ const el=document.getElementById('profileRarities');if(el)el.innerHTML=rows.map(([cls,label])=>'<div class="rarity-row rarity-glow '+cls+'"><i class="rarity-dot"></i><span>'+label+'</span><b>'+fmt(counts[cls])+'</b></div>').join('');
+}
+function sync(){applyEnergyRegen();saveState();document.getElementById('rub').textContent=fmt(state.rub)+' ₽';document.getElementById('coins').textContent=fmt(state.coins)+' ◈';document.getElementById('stars').textContent=state.stars+' ★';document.getElementById('energy').textContent=state.energy+' / 25 ⚡';document.getElementById('energybar').style.width=(state.energy*4)+'%';document.getElementById('quickspin').disabled=state.energy<1;document.getElementById('garagecount').textContent=state.garage.length+' номеров';document.getElementById('myrating').textContent=fmt(state.rub)+' ₽';renderGarage();renderHouse();renderCars();renderProfile()}
 const houses=[{name:'Старый сарай',emoji:'🛖',cost:100000,desc:'Небольшое укрытие. Первый шаг к собственному дому.'},{name:'Уютный дом',emoji:'🏠',cost:500000,desc:'Тёплый дом с небольшим участком.'},{name:'Загородный коттедж',emoji:'🏡',cost:2000000,desc:'Просторный коттедж с красивым двором.'},{name:'Особняк',emoji:'🏛️',cost:8000000,desc:'Роскошная недвижимость для настоящего коллекционера.'},{name:'Вилла',emoji:'🏰',cost:25000000,desc:'Вершина недвижимости — твоя собственная вилла.'}];
 function renderHouse(){const i=Math.min(4,Math.max(0,(state.houseLevel||1)-1)),x=houses[i];document.getElementById('houseName').textContent=x.name;document.getElementById('houseLevel').textContent='Уровень '+(i+1)+' · '+(i===4?'Максимальный уровень':'Улучши свою недвижимость');document.getElementById('houseEmoji').textContent=x.emoji;document.getElementById('houseDesc').textContent=x.desc;const btn=document.getElementById('upgradeHouse');if(i===4){document.getElementById('houseCost').textContent='MAX';btn.textContent='Максимальный уровень';btn.disabled=true}else{document.getElementById('houseCost').textContent=fmt(x.cost)+' ₽';btn.textContent='Улучшить до: '+houses[i+1].name;btn.disabled=state.rub<x.cost}}
 document.getElementById('upgradeHouse').addEventListener('click',async()=>{if(serverMode){try{await apiAction('upgradeHouse');sync();toast('🏡 Дом улучшен')}catch(e){toast(e.message)}return}const i=Math.min(4,(state.houseLevel||1)-1),x=houses[i];if(i>=4)return;if(state.rub<x.cost){toast('Не хватает денег');return}state.rub-=x.cost;state.houseLevel=i+2;sync();toast('🏡 Дом улучшен: '+houses[i+1].name)});
