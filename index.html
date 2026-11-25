@@ -25,6 +25,7 @@
 .podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;align-items:end;text-align:center}.podium-person{background:linear-gradient(180deg,#29243b,#191925);border:1px solid #54466e;border-radius:16px;padding:12px 5px}.podium-person.first{padding-top:20px;border-color:#c49a48;box-shadow:0 0 24px #ffc34b22}.podium-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin:0 auto 7px;background:linear-gradient(145deg,#b98cff,#56358c);font-weight:950;font-size:19px}.podium-person.first .podium-avatar{background:linear-gradient(145deg,#ffe38c,#b87b25)}.podium-rank{font-size:21px}.podium-name{font-weight:900;font-size:12px;overflow-wrap:anywhere}.podium-score{font-size:10px;color:#b9afce;margin-top:4px}.asset-card{background:linear-gradient(145deg,#25243a,#171722);border:1px solid #49405f;border-radius:18px;padding:14px;margin:10px 0}.asset-icon{font-size:42px;text-align:center;padding:12px}.asset-price{font-size:18px;font-weight:950;color:#d4b8ff}.asset-card .btn{font-size:13px;padding:10px;margin-top:8px}.house-scene{border-radius:18px;min-height:145px;display:grid;place-items:center;background:linear-gradient(180deg,#18294a,#302345 60%,#171722);border:1px solid #64518c}.house-emoji{font-size:76px;filter:drop-shadow(0 0 18px #b58aff88)}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#171721ed;backdrop-filter:blur(16px);border-top:1px solid #343440;display:flex;justify-content:space-around;padding:9px max(8px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{background:none;border:0;color:#858596;font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:55px}.nav button span{font-size:21px}.nav button.active{color:#aa91ff}
 .toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#29253a;border:1px solid #6954a7;padding:10px 15px;border-radius:20px;z-index:9;display:none;white-space:nowrap}.toast.show{display:block}
+.connection-status{margin:0 0 14px;padding:11px 13px;border:1px solid #6b5730;border-radius:13px;background:#302719;color:#ffe0a0;font-size:12px;line-height:1.45}.connection-status.ok{border-color:#286b4b;background:#142b22;color:#9cf0bd}.connection-status.error{border-color:#8b3e50;background:#321923;color:#ffb6c3}.connection-status b{display:block;margin-bottom:3px;font-size:13px}
 @media(min-width:520px){.app{padding-top:28px}.plate .mainnum{font-size:46px}}
 .feature-controls{display:flex;gap:8px;align-items:center;margin:0 0 14px;flex-wrap:wrap}
 .sound-toggle,.mode-btn{border:1px solid #49405f;background:#201b2d;color:#d9c9ff;border-radius:12px;padding:9px 12px;font-weight:800;font-size:12px}
@@ -55,6 +56,7 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
 </head>
 <body>
 <div class="toast" id="toast"></div>
+<div class="connection-status" id="connectionStatus" role="status" aria-live="polite"><b>Проверка подключения…</b>Ожидаем ответ Telegram и игрового сервера.</div>
 <main class="app">
  <header class="top"><div><div class="brand">КРУТИ <span>НОМЕРА</span></div><div class="sub">Коллекционируй редкость</div></div><div class="avatar">К</div></header>
  <section class="stats"><div class="stat"><small>БАЛАНС</small><b id="rub">240 364 ₽</b></div><div class="stat"><small>МОНЕТЫ</small><b id="coins">1 250 ◈</b></div><div class="stat"><small>ЗВЁЗДЫ</small><b class="star" id="stars">0 ★</b></div></section>
@@ -84,13 +86,24 @@ body{background:radial-gradient(ellipse at 12% 18%,#273e75aa 0,transparent 28%),
 </main>
 <nav class="nav"><button class="active" data-page="spin"><span>▤</span>Крутить</button><button data-page="garage"><span>⌂</span>Гараж</button><button data-page="market"><span>▣</span>Рынок</button><button data-page="rating"><span>♜</span>Рейтинг</button><button data-page="home"><span>⌂</span>Дом</button><button data-page="cars"><span>🚘</span>Авто</button><button data-page="shop"><span>▢</span>Магазин</button></nav>
 <script>
+const tg = window.Telegram?.WebApp;
+try { tg?.ready(); tg?.expand(); } catch (_) {}
 const tgUserId = (() => {
- try { return window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'local'; }
+ try { return tg?.initDataUnsafe?.user?.id || 'local'; }
  catch (_) { return 'local'; }
 })();
 const SAVE_KEY = 'kruti_nomera_state_' + tgUserId;
-const tgInitData = window.Telegram?.WebApp?.initData || '';
-let serverMode = Boolean(tgInitData);
+const tgInitData = typeof tg?.initData === 'string' ? tg.initData : '';
+let serverMode = false;
+function connectionStatus(title, message, kind='error') {
+ const el=document.getElementById('connectionStatus');
+ if(!el)return;
+ el.className='connection-status '+kind;
+ el.innerHTML='<b>'+title+'</b>'+message;
+}
+function setGameActionsEnabled(enabled) {
+ document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.asset-card .btn').forEach(b=>b.disabled=!enabled);
+}
 async function apiAction(action,extra={}) {
  const res=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData,action,...extra})});
  const data=await res.json().catch(()=>({error:'Ошибка ответа сервера'}));
@@ -105,11 +118,31 @@ function applyServerPlayer(p){
  state.houseLevel=Number(p.houseLevel)||1;state.cars=Array.isArray(p.cars)?p.cars:[];
 }
 async function hydrateServerState(){
- if(!serverMode)return;
- try{const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
- const data=await res.json();if(!res.ok||!data.ok)throw new Error(data.error||'Ошибка загрузки');
- applyServerPlayer(data.player);sync();
- }catch(e){serverMode=false;toast('Серверная игра недоступна: '+e.message+'. Действия отключены.');document.querySelectorAll('.crate .btn,#quickspin,#testEnergy,#upgradeHouse,.car-buy').forEach(b=>b.disabled=true);}
+ setGameActionsEnabled(false);
+ if(!tg) {
+  connectionStatus('Telegram WebApp SDK не найден','Страница открыта не во встроенном режиме Telegram. Открой игру кнопкой «🎮 Играть» в сообщении бота.');
+  return;
+ }
+ if(!tgInitData) {
+  connectionStatus('Telegram не передал данные авторизации','initData пустой. Скорее всего, игра открыта как обычная ссылка, а не через WebApp-кнопку. Вернись в чат с ботом и нажми «🎮 Играть».');
+  return;
+ }
+ connectionStatus('Данные Telegram получены','Проверяем подпись и загружаем игровой профиль с тестового сервера…','');
+ try {
+  const res=await fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tgInitData})});
+  const data=await res.json().catch(()=>({error:'Сервер вернул некорректный ответ'}));
+  if(!res.ok||!data.ok) {
+   if(res.status===401) throw new Error('Сервер отклонил подпись Telegram. Нужно проверить связку токена бота и WebApp.');
+   if(res.status===503) throw new Error('На тестовом сервере не настроена база данных или токен бота.');
+   throw new Error(data.error||('HTTP '+res.status));
+  }
+  serverMode=true;
+  applyServerPlayer(data.player);sync();setGameActionsEnabled(true);sync();
+  connectionStatus('Подключено к серверу','Профиль загружен. Баланс и энергия теперь берутся из тестовой базы данных.','ok');
+ } catch(e) {
+  serverMode=false;setGameActionsEnabled(false);
+  connectionStatus('Ошибка подключения к игровому серверу',e.message+' Игровые действия отключены, чтобы не сохранять прогресс локально.');
+ }
 }
 
 const DEFAULT_STATE = {rub:240364,coins:1250,stars:0,energy:25,garage:[],energyAt:Date.now(),trialAt:0,houseLevel:1,cars:[]};
