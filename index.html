@@ -159,7 +159,31 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opac
 .btn{border-radius:13px}
 @media(max-width:380px){.hero.plate-hero{min-height:350px}.lobby-car{font-size:78px}.lobby-shortcuts button{padding:9px 7px}.lobby-shortcuts button b{font-size:10px}.stats .stat{padding:8px 5px}}
 @media(prefers-reduced-motion:reduce){.lobby-car{animation:none}.page{animation:none}}
-.world-links{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:3px 1px 10px;margin:0 0 10px;scrollbar-width:none}.world-links::-webkit-scrollbar{display:none}.world-links>span{flex:0 0 auto;color:#9288ad;font-size:9px;font-weight:900;letter-spacing:1px;margin-right:2px}.world-links button{flex:0 0 auto;border:1px solid #443b60;border-radius:10px;background:#151728;color:#d7c8f4;padding:8px 10px;font-size:10px;font-weight:800}</style><script src="https://telegram.org/js/telegram-web-app.js"></script>
+.world-links{display:flex;align-items:center;gap:7px;overflow-x:auto;padding:3px 1px 10px;margin:0 0 10px;scrollbar-width:none}.world-links::-webkit-scrollbar{display:none}.world-links>span{flex:0 0 auto;color:#9288ad;font-size:9px;font-weight:900;letter-spacing:1px;margin-right:2px}.world-links button{flex:0 0 auto;border:1px solid #443b60;border-radius:10px;background:#151728;color:#d7c8f4;padding:8px 10px;font-size:10px;font-weight:800}
+/* Premium case opening experience */
+.crate{position:relative;overflow:hidden;isolation:isolate;transition:transform .22s,border-color .22s,box-shadow .22s}
+.crate:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 0%,#a879ff20,transparent 58%)}
+.crate-icon{position:relative;isolation:isolate;overflow:hidden;height:116px;border:1px solid #6d5b94;border-radius:15px;background:radial-gradient(ellipse at 50% 80%,#a879ff25,transparent 62%),linear-gradient(145deg,#282341,#111626);box-shadow:inset 0 1px #ffffff20,0 8px 18px #0005;text-shadow:0 0 18px #d4b0ff;transition:transform .35s,filter .35s,border-color .35s}
+.crate-icon:before{content:"";position:absolute;z-index:-1;width:68px;height:58px;left:50%;top:50%;transform:translate(-50%,-40%);border-radius:8px 8px 12px 12px;border:2px solid #d5c4ff;background:linear-gradient(135deg,#a77aff 0%,#6336a8 42%,#281b4b 100%);box-shadow:inset 0 3px 8px #fff5,0 0 22px #9b63ff88,0 10px 20px #0008}
+.crate-icon:after{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:13px;height:57px;transform:translate(-50%,-39%);background:linear-gradient(90deg,#ffdf88,#fff0b7 48%,#bd7b24);box-shadow:0 0 12px #ffc65d99}
+.crate:nth-child(2) .crate-icon:before{filter:hue-rotate(70deg)}.crate:nth-child(3) .crate-icon:before{filter:hue-rotate(145deg)}.crate:nth-child(4) .crate-icon:before{filter:hue-rotate(205deg)}.crate:nth-child(5) .crate-icon:before{filter:hue-rotate(255deg)}.crate:nth-child(6) .crate-icon:before{filter:hue-rotate(300deg)}.crate:nth-child(7) .crate-icon:before{filter:hue-rotate(170deg) brightness(1.25)}
+.crate h3{font-size:15px;letter-spacing:.1px}.crate .odds{min-height:30px;color:#a9a2c2}
+.crate .meter{height:5px;border-radius:8px;background:#29243c;overflow:hidden}.crate .meter i{border-radius:8px;box-shadow:0 0 12px #bd91ff}
+.crate .btn{width:100%;font-weight:900;letter-spacing:.15px;box-shadow:0 4px 0 #090b18,0 0 15px #8e58e844}
+.crate.opening{transform:translateY(-3px) scale(1.015);border-color:#e3c2ff;box-shadow:0 0 0 1px #c18cff66,0 0 28px #a45cff99,0 12px 28px #0009}
+.crate.opening .crate-icon{animation:caseShake .13s ease-in-out infinite alternate;filter:brightness(1.45) saturate(1.3);border-color:#fff0bd;box-shadow:inset 0 0 25px #fff5,0 0 28px #d29aff}
+.crate.opening .crate-icon:before{animation:caseLid .55s ease-in-out infinite alternate}
+.crate.opening .crate-icon:after{filter:brightness(1.7);box-shadow:0 0 22px #ffe9a4}
+@keyframes caseShake{from{transform:translateX(-2px) rotate(-1.5deg)}to{transform:translateX(2px) rotate(1.5deg)}}
+@keyframes caseLid{from{transform:translate(-50%,-40%) rotate(0)}to{transform:translate(-50%,-53%) rotate(-5deg)}}
+.result.show{position:relative;overflow:hidden;border:1px solid #9470cb;background:radial-gradient(ellipse at 50% 0%,#7d4cb844,transparent 56%),linear-gradient(145deg,#171b2d,#211633);box-shadow:0 0 0 1px #bd91ff22,0 0 32px #8b4cff55}
+.result.show:before{content:"";position:absolute;pointer-events:none;left:50%;top:62px;width:210px;height:210px;transform:translateX(-50%);border-radius:50%;border:1px solid #c59cff55;box-shadow:0 0 0 14px #b88aff0a,0 0 0 30px #b88aff08,0 0 42px #9c64ff33;animation:revealHalo 2.4s ease-out infinite}
+.result.show>*{position:relative;z-index:1}
+@keyframes revealHalo{0%{transform:translateX(-50%) scale(.82);opacity:.25}50%{opacity:.9}100%{transform:translateX(-50%) scale(1.18);opacity:.15}}
+#result .plate{margin:12px auto;max-width:350px;box-shadow:0 0 24px #a879ff55,0 0 50px #9a5dff22}
+#result .sub:first-child{font-size:10px;font-weight:950;letter-spacing:2.2px;color:#ddc8ff}
+@media(prefers-reduced-motion:reduce){.crate.opening .crate-icon,.crate.opening .crate-icon:before,.result.show:before{animation:none}}
+</style><script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 <div class="toast" id="toast"></div>
@@ -609,9 +633,11 @@ async function spin(type){
  const totalCost=freeSpin?0:(prices[type]||2000000)*count;
  if(!freeSpin&&state.rub<totalCost){toast('Не хватает денег: нужно '+fmt(totalCost)+' ₽');return}
  isSpinning=true;
+ const openingCrate=freeSpin?null:document.querySelector('.crate[data-tier="'+type+'"]');
  let serverResult=null;
  if(serverMode){try{serverResult=await apiAction('spin',{type,count});}catch(e){isSpinning=false;toast(e.message);return}}
  else if(!freeSpin)state.rub-=totalCost;
+ if(openingCrate){openingCrate.classList.add('opening');openingCrate.setAttribute('aria-busy','true');}
  playTone(330,.07,'triangle',.025);
  const spinButtons=[...document.querySelectorAll('.crate .btn, #quickspin')];
  spinButtons.forEach(b=>b.disabled=true);
@@ -662,6 +688,7 @@ async function spin(type){
    result.classList.remove('win-flash','rarity-win-epic','rarity-win-legend','rarity-win-myth','rarity-win-secret');
    result.classList.add('win-flash');
    plateEl.classList.remove('rolling');
+   if(openingCrate){openingCrate.classList.remove('opening');openingCrate.removeAttribute('aria-busy');}
    playTone(cashPrize>=(prices[type]||Infinity)?680:300,.25,'triangle',.045);
    sync();
    if(serverMode)refreshFeatureState().catch(()=>{});
@@ -681,6 +708,7 @@ async function spin(type){
   setTimeout(()=>playTone(880,.3,'triangle',.04),130);
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
+  if(openingCrate){openingCrate.classList.remove('opening');openingCrate.removeAttribute('aria-busy');}
   if(!serverMode)state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});
   lastWonIndex=serverMode?state.garage.length-1:0;
   const sellWon=document.getElementById('sellWonNumber'),listWon=document.getElementById('listWonNumber');
