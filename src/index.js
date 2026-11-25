@@ -336,10 +336,14 @@ function setGameActionsEnabled(enabled) {
         if(!code) return Response.json({error:'Введи промокод'},{status:400});
         const promo=await env.DB.prepare("SELECT * FROM promo_codes WHERE code=?").bind(code).first();
         if(!promo||promo.uses>=promo.max_uses||(promo.expires_at&&promo.expires_at<now)) return Response.json({error:'Промокод недействителен или закончился'},{status:404});
-        try { await env.DB.prepare("INSERT INTO promo_redemptions(code,telegram_id,redeemed_at) VALUES(?,?,?)").bind(code,telegramId,now).run(); }
-        catch(_) { return Response.json({error:'Ты уже использовал этот промокод'},{status:409}); }
-        const updated=await env.DB.prepare("UPDATE promo_codes SET uses=uses+1 WHERE code=? AND uses<max_uses").bind(code).run();
-        if(!updated.meta?.changes) return Response.json({error:'Промокод уже закончился'},{status:409});
+        let redemption;
+        try {
+          redemption=await env.DB.batch([
+            env.DB.prepare("UPDATE promo_codes SET uses=uses+1 WHERE code=? AND uses<max_uses AND (expires_at IS NULL OR expires_at>=?)").bind(code,now),
+            env.DB.prepare("INSERT INTO promo_redemptions(code,telegram_id,redeemed_at) SELECT ?,?,? WHERE changes()=1").bind(code,telegramId,now)
+          ]);
+        } catch(_) { return Response.json({error:'Ты уже использовал этот промокод'},{status:409}); }
+        if(!redemption?.[0]?.meta?.changes||!redemption?.[1]?.meta?.changes) return Response.json({error:'Промокод уже закончился'},{status:409});
         if(promo.reward_type==='coins') await save("UPDATE players SET coins=coins+?,updated_at=? WHERE telegram_id=?",[promo.reward_amount,now,telegramId]);
         else await save("UPDATE players SET balance=balance+?,updated_at=? WHERE telegram_id=?",[promo.reward_amount,now,telegramId]);
       } else if(action==='equipCosmetic'){
