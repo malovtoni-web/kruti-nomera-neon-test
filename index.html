@@ -926,7 +926,7 @@ document.getElementById('marketListBtn').addEventListener('click',async()=>{
  catch(e){toast(e.message);}
 });
 
-let isSpinning=false,spinCount=1,fastSpin=false,lastWonIndex=-1;
+let isSpinning=false,spinCount=1,fastSpin=false,lastWonIndex=-1,lastWonNumber=null;
 let rouletteSelectedIndex=null,rouletteBusy=false;
 const rouletteChances={common:55,unusual:45,rare:35,epic:25,legend:18,myth:10};
 function openRouletteForNumber(index){
@@ -974,21 +974,21 @@ document.getElementById('rouletteSell').addEventListener('click',async()=>{if(la
 document.getElementById('rouletteMarket').addEventListener('click',()=>{if(lastWonIndex>=0){openMarketForSale(lastWonIndex);document.getElementById('roulettePrizeActions').style.display='none';}});
 document.getElementById('rouletteClose').addEventListener('click',()=>{document.getElementById('rouletteResult').style.display='none';document.getElementById('rouletteEmpty').style.display='block';document.getElementById('rouletteSelected').style.display='none';document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='garage'));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page==='garage'));});
 
-async function sellGarageNumber(index){
- const item=state.garage[index];if(!item)return;
+async function sellGarageNumber(index,exactNumber=null){
+ const item=exactNumber||state.garage[index];if(!item)return;
  const expectedValue=Number(item.value);
  if(!confirm('Продать номер '+item.plate+' · '+item.region+' за '+fmt(expectedValue)+' ₽?'))return;
  try{
   let actualValue=expectedValue;
   if(serverMode){
-   const sold=await apiAction('sellNumber',{index,plate:item.plate,region:item.region,expectedValue});
+   const sold=await apiAction('sellNumber',{plate:item.plate,region:item.region,expectedValue});
    actualValue=Number(sold.soldNumber?.value);
    if(!Number.isSafeInteger(actualValue)||actualValue<1)throw new Error('Сервер не подтвердил сумму продажи. Обнови гараж.');
   }else{state.garage.splice(index,1);state.rub+=expectedValue;sync();}
-  lastWonIndex=-1;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
+  lastWonIndex=-1;lastWonNumber=null;await refreshFeatureState();renderGarage();toast('Номер продан. '+fmt(actualValue)+' ₽ зачислено на баланс.');
  }catch(e){toast(e.message);}
 }
-document.getElementById('sellWonNumber').addEventListener('click',()=>{if(lastWonIndex>=0)sellGarageNumber(lastWonIndex);});
+document.getElementById('sellWonNumber').addEventListener('click',()=>{if(lastWonNumber)sellGarageNumber(lastWonIndex,lastWonNumber);});
 document.getElementById('listWonNumber').addEventListener('click',()=>{if(lastWonIndex>=0)openMarketForSale(lastWonIndex);});
 document.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{if(b.disabled)return;spinCount=Number(b.dataset.count);document.querySelectorAll('[data-count]').forEach(x=>x.classList.toggle('active',x===b));}));
 document.getElementById('speedToggle').addEventListener('click',()=>{fastSpin=!fastSpin;document.getElementById('speedState').textContent=fastSpin?'ВКЛ':'ВЫКЛ';document.getElementById('speedToggle').style.borderColor=fastSpin?'#c49aff':'#49405f';});
@@ -1077,7 +1077,7 @@ async function spin(type){
  isSpinning=true;
  const openingCrate=freeSpin?null:document.querySelector('.crate[data-tier="'+type+'"]');
  let serverResult=null;
- if(serverMode){try{serverResult=await apiAction('spin',{type,count});}catch(e){isSpinning=false;toast(e.message);return}}
+ if(serverMode){try{serverResult=await apiAction('spin',{type,count});if(!Array.isArray(serverResult?.numbers)||!serverResult.numbers[0]){await refreshFeatureState().catch(()=>{});isSpinning=false;toast('Сервер не вернул точную стоимость выпавшего номера. Обнови гараж и проверь результат.');return;}}catch(e){isSpinning=false;toast(e.message);return}}
  else if(!freeSpin)state.rub-=totalCost;
  if(openingCrate){openingCrate.classList.add('opening');openingCrate.setAttribute('aria-busy','true');}
  showCaseModal(type,freeSpin);
@@ -1091,7 +1091,7 @@ async function spin(type){
  const payoutOutcomes=[{roi:4,p:.1095,rarity:'Обычный',cls:'common'},{roi:55,p:.35,rarity:'Необычный',cls:'unusual'},{roi:70,p:.25,rarity:'Редкий',cls:'rare'},{roi:90,p:.15,rarity:'Эпический',cls:'epic'},{roi:110,p:.07,rarity:'Легендарный',cls:'legend'},{roi:140,p:.0405,rarity:'Мифический',cls:'myth'},{roi:160,p:.015,rarity:'Секретный',cls:'secret'},{roi:200,p:.008,rarity:'Секретный',cls:'secret'},{roi:250,p:.004,rarity:'Секретный',cls:'secret'},{roi:300,p:.002,rarity:'Секретный',cls:'secret'},{roi:350,p:.001,rarity:'Секретный',cls:'secret'}];
  let c=0;const casePrice=prices[type]||50000;
  for(const outcome of payoutOutcomes){c+=outcome.p;if(r<c){tier=outcome.rarity;cls=outcome.cls;const jitter=outcome.roi===4||outcome.roi===350?0:(Math.random()-.5)*casePrice*.01;value=Math.max(Math.round(casePrice*.04),Math.min(Math.round(casePrice*3.5),Math.round(casePrice*outcome.roi/100+jitter)));break;}}
- const serverNumber=serverResult?.numbers?.[0];
+ const serverNumber=serverMode?serverResult.numbers[0]:null;
  const didWin=true;
  const cashPrize=0;
  if(serverNumber){tier=serverNumber.rarity;cls=serverNumber.cls;value=serverNumber.value;}
@@ -1158,10 +1158,11 @@ async function spin(type){
   if(state.mode==='celebration'||cls==='legend'||cls==='myth')confetti();
   plateEl.classList.remove('rolling');
   if(openingCrate){openingCrate.classList.remove('opening');openingCrate.removeAttribute('aria-busy');}
+  lastWonNumber={plate:finalPlate,region:finalRegion,rarity:tier,cls,value:Number(value)};
   lastWonIndex=serverMode?state.garage.findIndex(x=>x.plate===finalPlate&&x.region===finalRegion&&Number(x.value)===Number(value)&&x.cls===cls):-1;
-  if(!serverMode){state.garage.unshift({plate:finalPlate,region:finalRegion,rarity:tier,cls,value});lastWonIndex=0;}
+  if(!serverMode){state.garage.unshift({...lastWonNumber});lastWonIndex=0;}
   const sellWon=document.getElementById('sellWonNumber'),listWon=document.getElementById('listWonNumber');
-  if(sellWon){sellWon.disabled=lastWonIndex<0;sellWon.textContent='Продать за '+fmt(value)+' ₽';}
+  if(sellWon){sellWon.disabled=!lastWonNumber;sellWon.textContent='Продать за '+fmt(lastWonNumber.value)+' ₽';}
   if(listWon)listWon.disabled=lastWonIndex<0;
   sync();
   if(serverMode)refreshFeatureState().catch(()=>{});
