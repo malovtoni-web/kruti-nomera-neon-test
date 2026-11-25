@@ -1079,7 +1079,7 @@ function resetCaseReel(){
  const track=document.getElementById('caseReelTrack');if(!track)return;
  track.innerHTML='';caseReelPosition=0;
  for(let i=0;i<9;i++){const row=document.createElement('div');row.className='reel-row'+(i===4?' active':'');row.innerHTML='<span>'+randomPlate()+'</span><span class="reel-region">'+regions[Math.floor(Math.random()*regions.length)]+'</span>';track.appendChild(row);}
- track.style.transition='none';track.style.transform='translateY(-'+(4*64)+'px)';
+ const rowHeight=window.matchMedia('(max-height:740px)').matches?54:64;track.style.transition='none';track.style.transform='translateY(-'+(4*rowHeight)+'px)';
  document.getElementById('caseReelStatus').textContent='Барабан набирает скорость…';
 }
 function advanceCaseReel(plate,region,delay){
@@ -1091,7 +1091,6 @@ function advanceCaseReel(plate,region,delay){
  const compact=window.matchMedia('(max-height:740px)').matches,rowHeight=compact?54:64;
  track.style.transition='transform '+Math.max(45,Math.round(delay*.82))+'ms cubic-bezier(.12,.72,.16,1)';
  track.style.transform='translateY(-'+(caseReelPosition*rowHeight)+'px)';
- while(track.children.length>18)track.removeChild(track.firstElementChild);
 }
 function stopCaseReel(plate,region){
  advanceCaseReel(plate,region,520);
